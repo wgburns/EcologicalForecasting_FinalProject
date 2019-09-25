@@ -95,15 +95,19 @@ sensitivityFUN <- function(A) {
 
 moose_sensitivity <- sensitivityFUN(matrix)
 moose_sensitivity
+diag(moose_sensitivity[-1,-ncol(moose_sensitivity)])
 
 ```
 
-The sensitivity of the matrix tells us how small changes in a parameter affect the long-term growth rate/eigenvalue for this population. The larger the sensitivity value, the larger the effect on the eigenvalue. The results for this moose population suggest that small changes in the survival rates of the youngest age class would have the biggest impact on the eigenvalue of the population. 
+The sensitivity of the matrix tells us how small changes in each parameter affect the long-term growth rate/eigenvalue for this population. The larger the sensitivity value, the larger the effect on the eigenvalue. We are interested in how hunting different age classes, and thus moose survival for each age classes, affects the population growth rate (right eigenvalue). The sensitivities for the survival rates lie on the subdiagonal of the matrix. If we pull them out and put them in their own vector (from youngest to oldest age class), they are as follow:
 
+`r diag(moose_sensitivity[-1,-ncol(moose_sensitivity)])` 
+
+The results for this moose population suggest that small changes in the survival rates of the youngest age class would have the biggest impact on the eigenvalue of the population, and their is less and less effect as classes increase in age.
 
 ### Elasticity is the proportional sensitivity for each age class
 
-This calculation makes our values more comparable to one another since it's the proportional sensitivity to small perturbations. I found a package that has functions for elasticity: `popbio`. I used it to calculate elasticity but also used it to check how I calculated sensitivity in the previous part of the problem and it was the same. 
+This calculation makes our values more comparable to one another since it's the proportional sensitivity to small perturbations. I found a package that has functions for elasticity: `popbio`. We used it to calculate elasticity but also used it to check how we calculated sensitivity in the previous part of the problem and it was the same. 
 
 ```{r,}
 
@@ -115,15 +119,18 @@ moose_elasticity
 #checking moose_sensitivity the function I made above ! 
 moose_sensitivity2 <- sensitivity(matrix)
 moose_sensitivity2
+diag(moose_sensitivity2[-1,-ncol(moose_sensitivity2)])
 
 ```
 
-The elasticity results suggest that the age classes 1 and 2 have the highest proportional sensitivity to changes in survivorship (0.19 and 0.18). Elasticity decreasing with increasing age class, meaning that a small change in survivorship for those age classes would have a smaller effect on the long-term growth of this population of moose. 
+The elasticity results suggest that the age classes 1 and 2 have the highest proportional sensitivity to changes in survivorship (0.17). Elasticity decreasing with increasing age class, meaning that a small change in survivorship for those age classes would have a smaller effect on the long-term growth of this population of moose. This trend matches what we saw for sensitivity.
 
 
 ## **D)** Now, to address our questions from B):
 
 ### What happens if we stop hunting each age class?
+
+We model a hunting ban on each age class by setting changing that class's survival rate to 0.99 and looking at the effect on the eigenvalue (population growth rate).
 
 ```{r}
 matrix = comadre$mat[921][[1]]$matA
@@ -138,7 +145,7 @@ plot(1:6,moose_eigens, type = "p", main = "Eigenvalue for total hunting ban on e
 abline(h=1)
 ```
 
-This tells us that banning hunting on one year old Moose and/or two year old Moose would allow the population to grow by allowing the eigenvalue to rise above 1. Banning hunting on any of the older age classes by itself would not be enough to stop the population from declining.
+This tells us that banning hunting on one year old  and/or two year old male moose would allow the population to grow by allowing the eigenvalue to rise above 1. Banning hunting on any of the older age classes by itself would not be enough to stop the population from declining. This matches our conclusions from examining sensitivity and elasticity.
 
 ### How many one year old Moose need to survive to bring the eigenvalue over 1? 
 
@@ -151,4 +158,4 @@ for(i in seq(matrix[2,1],0.99,0.01)){
 }
 ```
 
-Only about 55% of one year old Moose need to survive to bring the eigenvalue above one, and thus begin to see a growing population. So some kind of hunting regulation could be devised to limit hunting on one year old Moose without a total ban being necessary.
+Only about 55% of one year old moose need to survive to bring the eigenvalue above one, and thus begin to see a growing population. So some kind of hunting regulation could be devised to limit hunting on one year old Moose without a total ban being necessary.
