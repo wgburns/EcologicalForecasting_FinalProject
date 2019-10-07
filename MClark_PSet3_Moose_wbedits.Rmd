@@ -6,6 +6,7 @@ output:
   pdf_document: default
   html_document:
     df_print: paged
+header-includes: \usepackage{xcolor}
 ---
 
 ```{r setup, include=FALSE}
@@ -24,7 +25,7 @@ Here is the link for the original study: https://onlinelibrary.wiley.com/doi/ful
 #wb computer:
 #load("~/Desktop/01RProjects/Quantitative Reasoning/COMADRE_v.3.0.0.RData")
 #mc computer:
-load("~/Desktop/QuantReasoning/COMADRE_v.3.0.0.RData")
+load("COMADRE_v.3.0.0.RData")
 
 #common name 
 comadre$metadata$CommonName[921]
@@ -156,7 +157,7 @@ This tells us that banning hunting on one year old  and/or two year old male moo
 
 ### How many one year old moose need to survive to bring the eigenvalue over 1? 
 
-```{r}
+```{r, fig.cap='Can insert figure captions as well. This also labels each figure with a number. You can refer to this figure in the text by including a\\label{fig:my_figure} command'}
 matrix = comadre$mat[921][[1]]$matA
 plot(matrix[2,1], eigen(matrix)$values[1], main = "Eigenvalue for Increasing Survivorship of Age Class 1", xlab = "Survivorship of Age Class 1", ylab = "Eignevalue", ylim = c(0.9,1.15), xlim = c(0.4,1.), abline(h=1))
 for(i in seq(matrix[2,1],0.99,0.01)){
@@ -165,4 +166,12 @@ for(i in seq(matrix[2,1],0.99,0.01)){
 }
 ```
 
-Only about 55% of one year old moose need to survive to bring the eigenvalue above one, and thus begin to see a growing population. So some kind of hunting regulation could be devised to limit hunting on one year old moose without a total ban being necessary.
+Only about 55% of one year old moose need to survive to bring the eigenvalue above one, and thus begin to see a growing population (Fig. \ref{fig:my_figure} - \textcolor{red}{Note that I included a figure reference here}). So some kind of hunting regulation could be devised to limit hunting on one year old moose without a total ban being necessary.
+
+
+## \textcolor{red}{Easton comments}
+
+
+- Really nice job on this assignment overall. I think it is great that you added an additional, interesting analysis in part (d). It does a really nice job at addressing your original question
+- The plots also really help illustrate your findings
+- Be sure to use "relative paths" when pulling in data files if you are working with collaborators. In the first code chunk, you write ``load("~/Desktop/01RProjects/Quantitative Reasoning/COMADRE_v.3.0.0.RData")``. I don't have the same file structure as you, so this code wouldn't work on my computer
