@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Research goal 
 
-Better understand the drivers of cyanobacteria blooms in Missisquoi and St. Albans Bays in 2017, 2018, and 2019 using high-frequency buoy sensor data.
+Better understand the drivers of cyanobacteria blooms in Missisquoi and St. Albans Bays in 2017, 2018, and 2019 using high-frequency buoy sensor data. And make beautiful documents in R markdown.
 
 #### Personal research goals
 -	Learn ecological forecasting model techniques
