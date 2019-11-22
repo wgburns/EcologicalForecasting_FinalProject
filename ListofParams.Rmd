@@ -1,0 +1,105 @@
+---
+title: "ListofParams"
+author: "WB"
+date: "11/21/2019"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Figuring out which parameters we want to include for the feature importance tests
+
+### Preliminaries 
+
+```{r, message=FALSE, warning = FALSE}
+#load the column headers
+params <-  c("TempMean", 
+             "SpCondMean", 
+             "pHMean", 
+             "ODOMean", 
+             "ChlMean", 
+             "TurbMean", 
+             "DeltaDOMean", 
+             "DeltaTempMean",
+             "PCMean1", 
+             "PCMean2",
+             "PCMean3",
+             "PCMean4", 
+             "PCMean5", 
+             "PCMean6",
+             "PCMean7",
+             "ws",
+             "wd",
+             "solar",
+             "temp",
+             "discharge")
+```
+
+### Set 1  
+
+```{r, message=FALSE, warning = FALSE}
+
+set1_0 <- c(params[2:5], params[8:9], params[16:20])
+set1_1 <- c(params[2:5], params[8], params[10], params[16:20])
+set1_2 <- c(params[2:5], params[8], params[11], params[16:20])
+set1_3 <- c(params[2:5], params[8], params[12], params[16:20])
+set1_4 <- c(params[2:5], params[8], params[13], params[16:20])
+set1_5 <- c(params[2:5], params[8], params[14], params[16:20])
+set1_6 <- c(params[2:5], params[8], params[15], params[16:20])
+
+```
+
+
+**Set 1 includes:** *`r params[2:5]`*, *`r params[8]`*, *`r params[16:20]`*
+
+**Set 1 does not include:**
+
+- *`r params[1]`* (water temp) --> going to use air temp instead
+- *`r params[6]`* (turbidity) --> too closely correlated with PCMeans
+- *`r params[7]`* (dissolved oxygen stratification) --> going to use deltaTempMean instead which is a better proxy for stratification (DeltaDO is affected by biological activity too much)
+
+The subsequent runs in **Set 1** have the lag times incorporated for PC: 
+
+- Predicting PC for that day (Set1_0): *`r set1_0`*
+- Predicting PC 1 day out (Set1_1): *`r set1_1`*
+- Predicting PC 2 days out (Set1_2): *`r set1_2`*
+- Predicting PC 3 days out (Set1_3): *`r set1_3`*
+- Predicting PC 4 days out (Set1_4): *`r set1_4`*
+- Predicting PC 5 days out (Set1_5): *`r set1_5`*
+- Predicting PC 6 days out (Set1_6): *`r set1_6`*
+
+### Set 2
+
+```{r, message=FALSE, warning = FALSE}
+
+set2_0 <- c(params[3:5], params[8:9], params[16], params[18:20])
+set2_1 <- c(params[3:5], params[8], params[10], params[16], params[18:20])
+set2_2 <- c(params[3:5], params[8], params[11], params[16], params[18:20])
+set2_3 <- c(params[3:5], params[8], params[12], params[16], params[18:20])
+set2_4 <- c(params[3:5], params[8], params[13], params[16], params[18:20])
+set2_5 <- c(params[3:5], params[8], params[14], params[16], params[18:20])
+set2_6 <- c(params[3:5], params[8], params[15], params[16], params[18:20])
+
+```
+
+
+**Set 2 includes:** *`r params[3:5]`*, *`r params[8]`*, *`r params[16]`*, *`r params[18:20]`*
+
+**Set 2 does not include:**
+
+- *`r params[2]`* (specific conductivity) --> i don't think this actually affects PC and it might be giving a false importance signal
+- *`r params[17]`* (wind direction) --> i'm not sure it's useful to have wind direction in as a continuous variable so it might cloud other relationships...
+- *`r params[1]`*(water temp) --> going to use air temp instead
+- *`r params[6]`* (turbidity) --> too closely correlated with PCMeans
+- *`r params[7]`* (dissolved oxygen stratification) --> going to use deltaTempMean instead which is a better proxy for stratification (DeltaDO is affected by biological activity too much)
+
+
+Runs in **Set 2** have the lag times incorporated for PC: 
+
+- Predicting PC for that day (Set2_0): *`r set2_0`*
+- Predicting PC 1 day out (Set1_1): *`r set2_1`*
+- Predicting PC 2 days out (Set1_2): *`r set2_2`*
+- Predicting PC 3 days out (Set1_3): *`r set2_3`*
+- Predicting PC 4 days out (Set1_4): *`r set2_4`*
+- Predicting PC 5 days out (Set1_5): *`r set2_5`*
+- Predicting PC 6 days out (Set1_6): *`r set2_6`*

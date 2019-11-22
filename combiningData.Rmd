@@ -1,0 +1,343 @@
+---
+title: "Combining Data"
+author: "WB"
+date: "11/20/2019"
+output: html_document
+editor_options:
+  chunk_output_type: console
+---
+
+# Combining the daily values we want to run in our forecasting model
+
+## Preliminaries
+
+```{r, message=FALSE, warning = FALSE}
+library(lubridate)
+library(tidyr)
+library(dplyr)
+library(reshape2)
+library(ggplot2)
+library(openair)
+library(PerformanceAnalytics)
+library(stringr)
+library(RColorBrewer)
+
+```
+
+
+## Buoy sensor data:
+
+- (Mahalia can fill out here the process she went through to get daily means, why we didn't go with max's, doing the time lags, etc.)
+
+```{r, message=FALSE, warning = FALSE}
+##########--------missisquoi bay--------##########
+mb17.raw <- read.csv("MB17_daily.csv", 
+                 header = T)
+mb17 <- mb17.raw %>% 
+  select(-c(X)) %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%Y-%m-%d", tz = "Etc/GMT-4")))
+
+mb18.raw <- read.csv("MB18_daily.csv", 
+                 header = T)
+mb18 <- mb18.raw %>% 
+  select(-c(X)) %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%Y-%m-%d", tz = "Etc/GMT-4")))
+##################################################
+
+##########--------st. albans bay--------##########
+ab17.raw <- read.csv("SA17_daily.csv", 
+                 header = T)
+ab17 <- ab17.raw %>% 
+  select(-c(X)) %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%Y-%m-%d", tz = "Etc/GMT-4")))
+
+ab18.raw <- read.csv("SA18_daily.csv", 
+                 header = T)
+ab18 <- ab18.raw %>% 
+  select(-c(X)) %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%Y-%m-%d", tz = "Etc/GMT-4")))
+##################################################
+
+```
+
+
+## Meterological data: 
+
+- going to use St AB HOBO met station data for both bays and both years because of inconsistencies with the MB met station (see `QAQC_MET_2017and02018.Rmd` for analysis)
+- air temperature (C)
+- wind speed (m/s)
+- wind direction (m/s)
+- solar radiation (W/m2) 
+- other notes: its important to use package `openair` when getting averages for wind speed and direction because it takes into account the wind vectors
+
+```{r, message=FALSE, warning = FALSE}
+
+met17.raw <- read.csv("QAQC_dailyStABmet2017.csv", 
+                      header = T)
+
+met17 <- met17.raw %>% 
+  select(-c(X)) %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%Y-%m-%d", tz = "Etc/GMT-4")))
+
+met18.raw <- read.csv("QAQC_dailyStABmet2018.csv", 
+                      header = T)
+
+met18 <- met18.raw %>% 
+  select(-c(X)) %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%Y-%m-%d", tz = "Etc/GMT-4")))
+
+
+```
+
+## Discharge data: 
+
+- discharge from USGS gages: Missisquoi River (USGS Station 04294000) and Jewett Brook (USGS Station 04292810)
+
+
+```{r, message=FALSE, warning = FALSE}
+##########--------missisquoi river--------##########
+mriv17.raw <- read.csv("mriv17_daily.csv", 
+                      header = T)
+mriv17 <- mriv17.raw %>% 
+  select(-c(X)) %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%Y-%m-%d", tz = "Etc/GMT-4"))) %>% 
+  rename(discharge = DISCHARGE.rate)
+
+
+mriv18.raw <- read.csv("mriv18_daily.csv", 
+                      header = T)
+mriv18 <- mriv18.raw %>% 
+  select(-c(X)) %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%Y-%m-%d", tz = "Etc/GMT-4"))) %>% 
+  rename(discharge = discharge.rate)
+
+#just to check 
+# plot(mriv17$date, mriv17$DISCHARGE.rate, type = "l")
+# plot(mriv18$date, mriv18$discharge.rate, type = "l")
+##################################################
+
+##########--------jewett brook--------##########
+jb17.raw <- read.csv("jb17_daily.csv", 
+                      header = T)
+jb17 <- jb17.raw %>% 
+  select(-c(X)) %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%Y-%m-%d", tz = "Etc/GMT-4"))) %>% 
+  rename(discharge = DISCHARGE.rate)
+
+
+jb18.raw <- read.csv("jb18_daily.csv", 
+                      header = T)
+jb18 <- jb18.raw %>% 
+  select(-c(X)) %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%Y-%m-%d", tz = "Etc/GMT-4"))) %>% 
+  rename(discharge = discharge.rate)
+
+#just to check
+#plot(jb17$date, jb17$DISCHARGE.rate, type = "l")
+#plot(jb18$date, jb18$discharge.rate, type = "l")
+##################################################
+
+```
+
+# Combining into two data frames for each bay 
+
+
+```{r, message=FALSE, warning = FALSE}
+##########--------missisquoi bay--------##########
+mbAll17 <- merge(mb17, met17, by = "date")
+mbAll17 <- merge(mbAll17, mriv17, by = "date")
+#sometimes when using merge it'll duplicate dates so i'm going to run the `distint` funciton just in case 
+mbAll17 <- mbAll17 %>% 
+  distinct(date, .keep_all= TRUE)
+write.csv(mbAll17, "mbAll17.csv")
+summary(mbAll17[,-1])
+
+mbAll18 <- merge(mb18, met18, by = "date")
+mbAll18 <- merge(mbAll18, mriv18, by = "date")
+
+#sometimes when using merge it'll duplicate dates so i'm going to run the `distint` funciton just in case 
+mbAll18 <- mbAll18 %>% 
+  distinct(date, .keep_all= TRUE)
+write.csv(mbAll18, "mbAll18.csv")
+summary(mbAll18[,-1])
+##################################################
+
+##########--------st. albans bay--------##########
+abAll17 <- merge(ab17, met17, by = "date")
+abAll17 <- merge(abAll17, jb17, by = "date")
+#sometimes when using merge it'll duplicate dates so i'm going to run the `distint` funciton just in case 
+abAll17 <- abAll17 %>% 
+  distinct(date, .keep_all= TRUE)
+write.csv(abAll17, "abAll17.csv")
+
+abAll18 <- merge(ab18, met18, by = "date")
+abAll18 <- merge(abAll18, jb18, by = "date")
+#sometimes when using merge it'll duplicate dates so i'm going to run the `distint` funciton just in case 
+abAll18 <- abAll18 %>% 
+  distinct(date, .keep_all= TRUE)
+write.csv(abAll18, "abAll18.csv")
+##################################################
+
+parameters <- colnames(mbAll17)
+print(parameters)
+```
+
+
+
+# Basic visualizations for these data 
+
+
+```{r, message=FALSE, warning = FALSE}
+#first get data into long format
+
+#missisquoi bay 
+mbAll17_long <- mbAll17 %>% 
+  mutate(year = year(date), 
+         site = rep("MB")) %>% 
+  gather(key = "parameter", value = "value", c(TempMean:discharge))
+
+mbAll18_long <- mbAll18 %>% 
+  mutate(year = year(date), 
+         site = rep("MB")) %>% 
+  gather(key = "parameter", value = "value", c(TempMean:discharge))
+
+mbAll <- rbind(mbAll17_long, mbAll18_long)
+mbAll$doy <- strftime(mbAll$date, format = "%j", tz = "Etc/GMT-4")
+mb <- c("#FB9A99", "#E31A1C")
+
+
+##########--------time series --------##########
+mbAll %>% 
+  filter(parameter == "PCMean1" | 
+           parameter == "SpCondMean" | 
+           parameter == "pHMean" | 
+           parameter == "ODOMean" | 
+           parameter == "ChlMean" | 
+           parameter == "DeltaTempMean" |
+           parameter == "ws" | 
+           parameter == "solar" | 
+           parameter == "temp" | 
+           parameter == "discharge") %>% 
+  ggplot(aes(x = doy, 
+             y = value, 
+             color = as.factor(year),
+             group = as.factor(year))) + 
+  geom_line()+
+  scale_color_manual(values = mb)+
+  theme_bw()+
+  theme(text = element_text(size=14),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank())+
+  facet_wrap(~parameter, scales = "free_y") +
+  scale_x_discrete(breaks = seq(120,310,30)) +
+  xlab("Day of year")+
+  labs(color = "Year")
+##################################################
+
+
+##########--------boxplots--------##########
+mbAll %>% 
+  filter(parameter == "PCMean1" | 
+           parameter == "SpCondMean" | 
+           parameter == "pHMean" | 
+           parameter == "ODOMean" | 
+           parameter == "ChlMean" | 
+           parameter == "DeltaTempMean" |
+           parameter == "ws" | 
+           parameter == "solar" | 
+           parameter == "temp" | 
+           parameter == "discharge") %>% 
+  ggplot(aes(x = as.factor(year), 
+             y = value)) + 
+  geom_boxplot(aes(color = as.factor(year)))+
+  scale_color_manual(values = mb)+
+  theme_bw()+
+  theme(text = element_text(size=14),
+        legend.title=element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size = 12), 
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        strip.text = element_text(size = 12))+
+  facet_wrap(~parameter, scales = "free")
+##################################################
+
+#st albans bay 
+abAll17_long <- abAll17 %>% 
+  mutate(year = year(date), 
+         site = rep("StAB")) %>% 
+  gather(key = "parameter", value = "value", c(TempMean:discharge))
+
+abAll18_long <- abAll18 %>% 
+  mutate(year = year(date), 
+         site = rep("StAB")) %>% 
+  gather(key = "parameter", value = "value", c(TempMean:discharge))
+
+abAll <- rbind(abAll17_long, abAll18_long)
+abAll$doy <- strftime(abAll$date, format = "%j", tz = "Etc/GMT-4")
+ab <- c(brewer.pal(3, "Paired")[c(1,2, 3)])
+
+
+##########--------time series --------##########
+abAll %>% 
+  filter(parameter == "PCMean1" | 
+           parameter == "SpCondMean" | 
+           parameter == "pHMean" | 
+           parameter == "ODOMean" | 
+           parameter == "ChlMean" | 
+           parameter == "DeltaTempMean" |
+           parameter == "ws" | 
+           parameter == "solar" | 
+           parameter == "temp" | 
+           parameter == "discharge") %>% 
+  ggplot(aes(x = doy, 
+             y = value, 
+             color = as.factor(year),
+             group = as.factor(year))) + 
+  geom_line()+
+  scale_color_manual(values = ab)+
+  theme_bw()+
+  theme(text = element_text(size=14),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank())+
+  facet_wrap(~parameter, scales = "free_y") +
+  scale_x_discrete(breaks = seq(120,310,30)) +
+  xlab("Day of year")+
+  labs(color = "Year")
+##################################################
+
+
+##########--------boxplots--------##########
+abAll %>% 
+  filter(parameter == "PCMean1" | 
+           parameter == "SpCondMean" | 
+           parameter == "pHMean" | 
+           parameter == "ODOMean" | 
+           parameter == "ChlMean" | 
+           parameter == "DeltaTempMean" |
+           parameter == "ws" | 
+           parameter == "solar" | 
+           parameter == "temp" | 
+           parameter == "discharge") %>% 
+  ggplot(aes(x = as.factor(year), 
+             y = value)) + 
+  geom_boxplot(aes(color = as.factor(year)))+
+  scale_color_manual(values = ab)+
+  theme_bw()+
+  theme(text = element_text(size=14),
+        legend.title=element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size = 12), 
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        strip.text = element_text(size = 12))+
+  facet_wrap(~parameter, scales = "free")
+##################################################
+
+```
