@@ -1,8 +1,10 @@
 ---
-title: "EcologicalForecasting_draft"
+title: "Ecological Forecasting Final Project Draft"
 author: "WB"
 date: "12/2/2019"
-output: pdf_document
+output: 
+  pdf_document:
+    citation_package: natbib
 bibliography: EcologicalForecastingRefs.bib
 csl: limnology-and-oceanography.csl
 ---
@@ -41,6 +43,7 @@ csl: limnology-and-oceanography.csl
 ## References 
 
 INFO ON HOW TO CITE in .Rmd from https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html : 
+
 * Citations go inside square brackets and are separated by semicolons. Each citation must have a key, composed of ‘@’ + the citation identifier from the database, and may optionally have a prefix, a locator, and a suffix. Here are some examples:
   + Blah blah [@isles_modeling_2017].
 * Then in Zotero create a `.BibTex` file by going to File --> Export Library --> change to BibTex
