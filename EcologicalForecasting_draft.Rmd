@@ -45,7 +45,7 @@ How does lake size (area/depth) affect which drivers may be relatively important
 
 
 
-## Methods 
+## 2. Methods 
 
 * study sites 
 * data used and how prepped 
@@ -55,16 +55,20 @@ How does lake size (area/depth) affect which drivers may be relatively important
 * data analysis - feature important (HC)
 
 
-## Results  
+## 3. Results  
 
 * fig of time series of the parameters to set the scene? 
 * which set of feature importance do we want to use? 
 
-#### Brief results 
+Next steps for today 12/2/19: 
+- figure out way to make figure that is easy to digest --> take out Chl, pH, and ODO and then have a stacked bar graph with y axis of feature importance (all add up to 1) and x axis being days in future (0 - 6)
+- need to sep feature importance by bay and year AND figure out how to make a table with the results so i can make the stacked bar graph 
+
+#### Brief typed out results for easier interpretation 
 
 1) St AB both years 
 
-- 0 day lag: pH, spCond
+- 0 day lag: pH, spCond, temp, discharge, deltaTemp
 - 1 day lag: pH, spCond, discharge, temp 
 - 2 day lag: pH, spCond, discharge, ODO
 - 3 day lag: pH, spCond, discharge, deltaTemp
@@ -124,11 +128,9 @@ LOOK INTO
 
 ## Discussion 
 
-- 6 days out, pH is IMPORTANT for PC but the next step is figuring out if it's PREDICTIVE of a bloom. 
-- We should include chlorophyll because for predictive models it's important 
-
-- IMPORTANT POINT: there is a difference between mechanistic models and predictive models and if we were just looking at   
-
+- what we know right now is that 6 days out, pH is IMPORTANT for PC but the next step is figuring out if it's PREDICTIVE of a bloom --> need to build model 
+- We got kinda hung up on the fact that there were parameters in the feature analysis results that were highly correlated with PC (response variable) but Easton reminded us that if our main goal is to predict a bloom, Chl or PC levels 6 days before is important to include if we are building a predictive model because that's still useful info ! Like it'd be great if we could predict if a bloom would start in 6 days just by knowing PC or Chl levels. 
+- IMPORTANT POINT: there is a difference between mechanistic models and predictive models. Depending on how we decide to move forward (ie. which model we choose) we might not really need to understand the mechanisms driving the blooms because we might just try throwing all the data into a machine learning algorithm that tells us the relative predictive power of each of the parameters (I think...). 
 
 ## Future work 
 
