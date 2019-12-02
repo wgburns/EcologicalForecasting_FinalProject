@@ -1,3 +1,4 @@
+# Load required packages
 library(dplyr)
 library(ggplot2)
 #install.packages("openair")
@@ -5,12 +6,14 @@ library(ggplot2)
 library(PerformanceAnalytics)
 library(openair)
 
-#Load in data
+# Load data
 MB17 <- read.csv("AllDepthData/MB17_allDepths.csv", header = T)
 MB18 <- read.csv("AllDepthData/MB18_allDepths.csv", header = T)
 SA17 <- read.csv("AllDepthData/SA17_allDepths.csv", header = T)
 SA18 <- read.csv("AllDepthData/SA18_allDepths.csv", header = T)
 
+# Function that takes a df of hourly data and returns a df of daily averages,
+# including daily PC with time lags of 0-6 days (foolishly named PC1-7).
 dailify <- function(df_in, time_header){
   df_out <- df_in %>%
     select(c(time_header, TEMP_0.5m, SPCOND_0.5m, PH_0.5m, ODO_CONC_0.5m, 
@@ -48,6 +51,8 @@ dailify <- function(df_in, time_header){
   return(df_out)
 }
 
+
+# Dailify our data
 MB17_daily <- dailify(MB17, "TIMESTAMP")
 write.csv(MB17_daily, "MB17_daily.csv")
 
@@ -60,6 +65,7 @@ write.csv(SA17_daily, "SA17_daily.csv")
 SA18_daily <- dailify(SA18, "timestamp")
 write.csv(SA18_daily, "SA18_daily.csv")
 
+#Function that creates a timeplot of the df (with unlagged PC)
 plotify <- function(df){
   timePlot(df, pollutant = c("PCMean1",
                                      "TempMean", 
@@ -73,9 +79,14 @@ plotify <- function(df){
            y.relation = "free")
 }
 
-#plotify(MB17_daily)
-#plotify(MB18_daily)
-#plotify(SA17_daily)
-#plotify(SA18_daily)
+# Plot the data
+plotify(MB17_daily)
+plotify(MB18_daily)
+plotify(SA17_daily)
+plotify(SA18_daily)
 
-#chart.Correlation(SA18_daily[,2:16], histogram = T)
+# Look at correlations
+chart.Correlation(MB17_daily[,2:16], histogram = T)
+chart.Correlation(MB18_daily[,2:16], histogram = T)
+chart.Correlation(SA17_daily[,2:16], histogram = T)
+chart.Correlation(SA18_daily[,2:16], histogram = T)
