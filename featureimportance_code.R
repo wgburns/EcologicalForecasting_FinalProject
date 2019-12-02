@@ -83,7 +83,7 @@ xgb.ggplot.importance(importance_matrix = importance)
 # get information on how important each feature is
 importance <- xgb.importance(names(without_bloom_matrix), model = model)
 
-#Here is code to generate cute graphs for publication
+#Here is code to generate cute graphs for publication - Result will be in directory in tiff format
 tiff("feature_importances_HF_stAB18_Clean.tiff", units="in", width=5, height=5, res=300)
 
 xgb.plot.importance(importance)
