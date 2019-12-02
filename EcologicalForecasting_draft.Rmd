@@ -9,15 +9,41 @@ bibliography: EcologicalForecastingRefs.bib
 csl: limnology-and-oceanography.csl
 ---
 
-## Introduction 
+## 1. Introduction 
 
-* why important to study 
+GENERAL NOTES:  
+
+* why important to study? 
 * cite a few other studies doing similar work 
 * end intro with "in this study" paragraph to set up reader to how we plan to attack the problem 
 * hypotheses? 
 * Figs for this section: 
   + map of study area 
   + bar graph of cyanobacteria bloom timing being different every year (long-term monitoring)
+  
+Anthropogenic eutrophication, meaning increases in nutrients entering aquatic systems due to human activity, of natural water bodies is a global phenomenon that often leads to decreased utility of affected ecosystems (eg. Reynolds 1987; Paerl 1988; Paerl et al. 2011). One problem associated with eutrophication is that harmful cyanobacteria blooms are becoming more prevalent in coastal oceans and thousands of inland lakes and ponds (Paerl et al. 2001, 2011; Paerl and Huisman 2008). Phytoplankton play an integral role as the base of aquatic food webs in both freshwater and marine systems, however, when cyanobacteria growth is unchecked, blooms can be detrimental to organisms living in and around freshwater ecosystems and often cause problems that propogate up the food web (add REFS). The climate is changing, and environmental conditions are becoming more favorable for bloom-forming harmful cyanobacteria (Jöhnk et al. 2006; Paerl and Huisman 2008; Jeppesen et al. 2011; Huisman et al. 2018). Therefore, it is becoming increasingly important to understand cyanobacteria bloom onset and senescence. Understanding why and when severe cyanobacteria blooms occur will help inform mitigation efforts. 
+
+### 1.1 Factors that drive cyanobacteria blooms 
+
+**Goal with this section: Develop what is known from what is not known or what has conflicting attributions (and why), and how this leads you to your research question. This driver – that is, different watersheds and connectivity – needs to be developed in the Intro to show the reader this is a valid research question/hypothesis to pursue.**
+
+- Eutrophication (can mention watershed bay interactions in this section)
+- Warm temperatures
+- Water column stratification (leads to internal loading of nutrients)
+- Increased CO2 in the atmosphere (some types of cyanobacteria more efficiently produce organic matter 
+- Rain and wind events (mix up water column prohibiting internal loading of nutrients and also giving advantage to larger phytoplankton, like diatoms, that need turbulence to get mixed up into the photic zone)
+- Cyanobacteria are physiologically diverse and have developed multiple strategies to outcompete other types of phytoplankton: N-fixation, CO2 concentrating mechanisms, buoyancy regulation, toxin production, predator avoidance 
+- Top-down grazing by zooplankton – however, many studies have shown that cyanobacteria often avoid grazing by forming dense colonies and toxin production (DeMott 1986; Lemaire et al. 2012)
+- Viral lysis or fungal infection – often don’t result in long-lasting effects on cyanobacteria populations (Yoshida et al. 2008; Van Wichelen et al. 2016)
+- Filter feeders like mussels - effect they have on cyanobacteria blooms is lake-specific (Reeders et al. 1989; Vanderploeg et al. 2001)
+- Competition from other, non-harmful, phytoplankton 
+
+How does lake size (area/depth) affect which drivers may be relatively important (shallow vs deep)? Lake trophic status? 
+
+
+
+
+
 
 ## Methods 
 
@@ -34,10 +60,78 @@ csl: limnology-and-oceanography.csl
 * fig of time series of the parameters to set the scene? 
 * which set of feature importance do we want to use? 
 
+#### Brief results 
+
+1) St AB both years 
+
+- 0 day lag: pH, spCond
+- 1 day lag: pH, spCond, discharge, temp 
+- 2 day lag: pH, spCond, discharge, ODO
+- 3 day lag: pH, spCond, discharge, deltaTemp
+- 4 day lag: pH, spCond, deltaTemp, ws
+- 5 day lag: pH, spCond, deltaTemp, wd, ODO 
+- 6 day lag: pH, spCond, ODO, ws, discharge
+
+
+2) MB both years 
+
+- 0 day lag: pH, ODO, discharge, wd (deltaTEmp last)
+- 1 day lag: pH, dishcarge, ODO, spCond, wd (deltaTemp moves up)
+- 2 day lag: pH, ODO, wd, solar, spCond, 
+- 3 day lag: pH, spCond, temp, wd, deltaTemp
+- 4 day lag: spCond, pH, temp, ODO, ws, deltaTemp
+- 5 day lag: spCond, temp, pH, ODO, deltaTemp, wd
+- 6 day lag: spCond, temp, pH, ODO, wd, discharge, deltaTemp
+
+
+3) 2017 both bays 
+
+- 0 day lag: dishcarge, spCond, pH, ODO 
+- 1 day lag: spCond, ODO, discharge, pH, solar 
+- 2 day lag: pH, spCond, discharge, ws, ODO
+- 3 day lag: spCond, ODO, discharge, solar
+- 4 day lag: spCond, ODO, solar, wd, temp 
+- 5 day lag: spCond, deltaTemp, solar, wd, temp 
+- 6 day lag: deltaTemp, spCond, ODO, wd, discharge
+
+4) 2018 both bays 
+
+- 0 day lag: pH, spCond, ODO, discharge 
+- 1 day lag: pH, spCond, discharge, ODO 
+- 2 day lag: pH, discharge, temp, spCond
+- 3 day lag: pH, ODO, discharge, spCond, temp 
+- 4 day lag: pH, spCond, discharge, temp, deltaTemp 
+- 5 day lag: pH, spCond, temp, discharge, ODO
+- 6 day lag: pH, spCond, temp, solar, ODO 
+
+5) both bays both years 
+
+- 0 day lag: pH, spCond, year, discharge, solar
+- 1 day lag: pH, spCond, year, discharge, temp
+- 2 day lag: pH, spCond, discharge, year, deltaTemp
+- 3 day lag: pH, spCond, discharge, year, ODO 
+- 4 day lag: pH, spCond, year, discharge, ODO 
+- 5 day lag: pH, spCond, temp, ODO, year, discharge 
+- 6 day lag: pH, spCond, temp, year, deltaTemp, ODO 
+
+
+
+LOOK INTO 
+- is spCond just super highly correlated with PC? Why is it such an important feature? What is it highly correlated with? are the units different between the bays? 
+- wd (not speed) is important for mb! let's look at correlations 
+- should we run without pH? 
+- what's the significance in the difference in the cluster numbers?? 
+
 ## Discussion 
+
+- 6 days out, pH is IMPORTANT for PC but the next step is figuring out if it's PREDICTIVE of a bloom. 
+- We should include chlorophyll because for predictive models it's important 
+
+- IMPORTANT POINT: there is a difference between mechanistic models and predictive models and if we were just looking at   
 
 
 ## Future work 
+
 
 
 ## References 
