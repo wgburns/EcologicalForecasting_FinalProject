@@ -54,6 +54,11 @@ How does lake size (area/depth) affect which drivers may be relatively important
   + discharge data (WB)
 * data analysis - feature important (HC)
 
+### 2.2.1 Preparing the high frequency buoy data (MC)
+
+In order to run a forcasting model or look at feature importance with time lags, we first needed to collapse our hourly data into daily data, so that daily cycles would not confound predictions or time lags. At this point, we explored whether to use daily averages or daily maximums. R was used to calculate daily averages and maximums for each buoy variable. It was also used to create timeplots of the daily and hourly data. After inspecting the timeplots, we decided to use daily averages rather than daily maximums, as the later were unduly influenced by sudden peaks and fluctuations in the hourly data. 
+
+Since the buoys have sensors at multiple depths, we also considered whether to focus on surface-level measurements or to aggregate data from whatever depth had the highest concentration of PC at a given time.
 
 ## 3. Results  
 
