@@ -41,3 +41,65 @@ Data: intensity of different spectral bands: visible, IR, and indices combining 
 -	See how well our model/forecast matches long term monitoring data! Like, if we have our model trained with the buoy data, and we put in the long term data on water temp & concentrations, will it predict blooms when there were blooms? Or would it only work for short term forecasting with high frequency data? In that case, Wilton could still try to forecast blooms next summer!
 Personal Goals:
 -	Learn more modeling! Maybe some machine learning stuff? Practice working with data in R (or python?) and working with satellite imagery/data.
+
+#### Results 
+
+1) St AB both years 
+
+- 0 day lag: pH, spCond
+- 1 day lag: pH, spCond, discharge, temp 
+- 2 day lag: pH, spCond, discharge, ODO
+- 3 day lag: pH, spCond, discharge, deltaTemp
+- 4 day lag: pH, spCond, deltaTemp, ws
+- 5 day lag: pH, spCond, deltaTemp, wd, ODO 
+- 6 day lag: pH, spCond, ODO, ws, discharge
+
+
+2) MB both years 
+
+- 0 day lag: pH, ODO, discharge, wd (deltaTEmp last)
+- 1 day lag: pH, dishcarge, ODO, spCond, wd (deltaTemp moves up)
+- 2 day lag: pH, ODO, wd, solar, spCond, 
+- 3 day lag: pH, spCond, temp, wd, deltaTemp
+- 4 day lag: spCond, pH, temp, ODO, ws, deltaTemp
+- 5 day lag: spCond, temp, pH, ODO, deltaTemp, wd
+- 6 day lag: spCond, temp, pH, ODO, wd, discharge, deltaTemp
+
+
+3) 2017 both bays 
+
+- 0 day lag: dishcarge, spCond, pH, ODO 
+- 1 day lag: spCond, ODO, discharge, pH, solar 
+- 2 day lag: pH, spCond, discharge, ws, ODO
+- 3 day lag: spCond, ODO, discharge, solar
+- 4 day lag: spCond, ODO, solar, wd, temp 
+- 5 day lag: spCond, deltaTemp, solar, wd, temp 
+- 6 day lag: deltaTemp, spCond, ODO, wd, discharge
+
+4) 2018 both bays 
+
+- 0 day lag: pH, spCond, ODO, discharge 
+- 1 day lag: pH, spCond, discharge, ODO 
+- 2 day lag: pH, discharge, temp, spCond
+- 3 day lag: pH, ODO, discharge, spCond, temp 
+- 4 day lag: pH, spCond, discharge, temp, deltaTemp 
+- 5 day lag: pH, spCond, temp, discharge, ODO
+- 6 day lag: pH, spCond, temp, solar, ODO 
+
+5) both bays both years 
+
+- 0 day lag: pH, spCond, year, discharge, solar
+- 1 day lag: pH, spCond, year, discharge, temp
+- 2 day lag: pH, spCond, discharge, year, deltaTemp
+- 3 day lag: pH, spCond, discharge, year, ODO 
+- 4 day lag: pH, spCond, year, discharge, ODO 
+- 5 day lag: pH, spCond, temp, ODO, year, discharge 
+- 6 day lag: pH, spCond, temp, year, deltaTemp, ODO 
+
+
+
+LOOK INTO 
+- is spCond just super highly correlated with PC? Why is it such an important feature? What is it highly correlated with? are the units different between the bays? 
+- wd (not speed) is important for mb! let's look at correlations 
+- should we run without pH? 
+- what's the significance in the difference in the cluster numbers?? 
