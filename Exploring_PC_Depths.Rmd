@@ -1,0 +1,229 @@
+---
+title: "Exploring PC Levels over All Depths"
+author: "Mahalia Clark"
+date: "12/2/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Exploring PC levels and maximums across depths
+
+We begin by loading the relevant packages and data.
+
+```{r, warning=FALSE, message=FALSE}
+#Load relevant packages
+library(dplyr)
+library(tidyr)
+library(openair)
+library(ggplot2)
+library(viridis)
+library(PerformanceAnalytics)
+
+#Load Data
+MB17 <- read.csv("data/AllDepthData/MB17_allDepths.csv", header = T)
+MB18 <- read.csv("data/AllDepthData/MB18_allDepths.csv", header = T)
+SA17 <- read.csv("data/AllDepthData/SA17_allDepths.csv", header = T)
+SA18 <- read.csv("data/AllDepthData/SA18_allDepths.csv", header = T)
+```
+
+# MB17
+
+First, we pull out the PC data for all depths and tidy it. We can also look at correlations between the PC levels at different depths.
+
+```{r}
+#Pull out relevant data (PC for each depth)
+MB17_depths <- MB17 %>% 
+  select(c(TIMESTAMP,
+           PC_RFU_0.5m, 
+           PC_RFU_1.0m, 
+           PC_RFU_1.5m, 
+           PC_RFU_2.0m, 
+           PC_RFU_depthBottom)) %>% 
+mutate(timestamp = as.POSIXct(strptime(TIMESTAMP, format = "%m/%d/%Y %H:%M", tz = "Etc/GMT-4")),
+         date = as.Date(timestamp))
+
+#Tidy
+MB17_tidyDepths <- gather(MB17_depths, "PC_RFU_0.5m":"PC_RFU_depthBottom", key = "Depth", value = "PC_RFU")
+
+#Correlations of PC levels across depths (Pearson's Correlation)
+chart.Correlation(MB17_depths[,2:6], histogram = T)
+```
+The PC levels are at least moderately correlated at all levels, so if we focus on the surface data it should be representative of trends in the entire water column. 
+
+Next, we want to find the maximum PC value at each time point and examine what depth it's at. We can use boxplots to visualize the levels of these maximums across depths.
+
+```{r}
+#Pick out the maximum PC value at each timepoint and see what depth it's at. We can use boxplots to compare how high those max levels are.
+MB17_maxDepths <- MB17_tidyDepths %>% 
+  group_by(timestamp) %>% 
+  slice(which.max(PC_RFU)) 
+boxplot(MB17_maxDepths$PC_RFU ~ MB17_maxDepths$Depth)
+```
+
+Max PC levels are similar across depths. Maybe very slightly higher at the surface.
+
+We can also count how often the maximum lies at each depth:
+
+```{r}
+#Count how often the max PC level is found at each depth
+MB17_MaxDepthCounts <- MB17_maxDepths %>% 
+  group_by(Depth) %>% 
+  count(Depth)
+print(MB17_MaxDepthCounts)
+```
+
+The maximum PC level is most often at the surface.
+
+We can also visualize this another way, by plotting the maximum PC value (over depth) for each timepoint, and color coding what depth it's at. This shows us the highest PC level in the water column at any given time and how deep it is.
+
+```{r}
+#Plot max PC levels over time. 
+ggplot(MB17_maxDepths, aes( x = timestamp, y = PC_RFU, group = Depth, color = Depth)) + geom_point() + labs(title = "Max PC level (max over depth)") + xlab("Time") + ylab("Max PC (over depth)") 
+```
+When PC levels are low, it doesn't really matter what depth has the max level, because they're all similar. When PC levels rise, the max level is often at the surface, but not always.
+
+We can also just graph PC levels at all depths over time, although the points cover eachother up a bit and make it harder to see what's going on.
+```{r}
+#PC levels at all depths and times
+ggplot(MB17_tidyDepths, aes( x = timestamp, y = PC_RFU, group = Depth, color = Depth)) + geom_point(size = 0.75) + labs(title = " PC over time for all depths") + xlab("Time") + ylab("PC") 
+```
+It looks like when levels are overall high, levels near the surface are often higher.
+
+# MB18
+
+```{r, echo=FALSE}
+MB18_depths <- MB18 %>% 
+  select(c(TIMESTAMP,
+           PC_RFU_0.5m, 
+           PC_RFU_1.0m, 
+           PC_RFU_1.5m, 
+           PC_RFU_2.0m, 
+           PC_RFU_depthBottom)) %>% 
+  mutate(timestamp = as.POSIXct(strptime(TIMESTAMP, format = "%m/%d/%Y %H:%M", tz = "Etc/GMT-4")),
+         date = as.Date(timestamp))
+#Tidy
+MB18_tidyDepths <- gather(MB18_depths, "PC_RFU_0.5m":"PC_RFU_depthBottom", key = "Depth", value = "PC_RFU") 
+#Correlation
+chart.Correlation(MB18_depths[,2:6], histogram = T)
+```
+PC levels are highly correlated for all depths. More so than in 2017.
+
+```{r, echo = FALSE}
+#Boxplot
+MB18_maxDepths <- MB18_tidyDepths%>% 
+  group_by(timestamp) %>% 
+  slice(which.max(PC_RFU))
+
+#Count
+MB18_MaxDepthCounts <- MB18_maxDepths %>% 
+  group_by(Depth) %>% 
+  count(Depth)
+
+print(MB18_MaxDepthCounts)
+boxplot(MB18_maxDepths$PC_RFU ~ MB18_maxDepths$Depth)
+
+```
+The maximum PC levels are most often at shallower depths, and the values of these max levels also tend to be higher near the surface. (So blooms are most often near the surface).
+
+```{r, echo = FALSE}
+#Plot max PC levels over time. 
+ggplot(MB18_maxDepths, aes( x = timestamp, y = PC_RFU, group = Depth, color = Depth)) + geom_point() + labs(title = "Max PC level (max over depth)") + xlab("Time") + ylab("Max PC (over depth)") 
+```
+When PC levels are high, they are highest at or near the surface. When they are low, values are similar at all depths.
+
+# SA17
+
+```{r, echo=FALSE}
+SA17_depths <- SA17 %>% 
+  select(c(timestamp,
+           PC_RFU_0.5m, 
+           PC_RFU_1.0m, 
+           PC_RFU_1.5m, 
+           PC_RFU_2.0m, 
+           PC_RFU_2.5m, 
+           PC_RFU_3.0m,
+           PC_RFU_3.5m,
+           PC_RFU_4.0m,
+           PC_RFU_depthBottom)) %>% 
+  mutate(timestamp = as.POSIXct(strptime(timestamp, format = "%m/%d/%Y %H:%M", tz = "Etc/GMT-4")),
+         date = as.Date(timestamp))
+
+SA17_tidyDepths <- gather(SA17_depths, "PC_RFU_0.5m":"PC_RFU_depthBottom", key = "Depth", value = "PC_RFU") 
+
+chart.Correlation(SA17_depths[,2:6], histogram = T)
+```
+PC levels are highly correlated for all depths.
+
+```{r, echo = FALSE}
+SA17_maxDepths <- SA17_tidyDepths%>% 
+  group_by(timestamp) %>% 
+  slice(which.max(PC_RFU))
+
+SA17_MaxDepthCounts <- SA17_maxDepths %>% 
+  group_by(Depth) %>% 
+  count(Depth)
+
+print(SA17_MaxDepthCounts)
+boxplot(SA17_maxDepths$PC_RFU ~ SA17_maxDepths$Depth)
+```
+Max PC levels are most often found at shallower depths. Max PC values tend to be slightly higher at the surface than when the max PC is deeper. There seems to be an outlier at 1m depth.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+#Plot max PC levels over time. 
+ggplot(SA17_maxDepths, aes( x = timestamp, y = PC_RFU, group = Depth, color = Depth)) + geom_point(size = 0.75) + labs(title = "Max PC level (max over depth)") + xlab("Time") + ylab("Max PC (over depth)") 
+
+#PC levels at all depths and times
+ggplot(SA17_tidyDepths, aes( x = timestamp, y = PC_RFU, group = Depth, color = Depth)) + geom_point(size = 0.75) + labs(title = " PC over time for all depths") + xlab("Time") + ylab("PC") 
+```
+Again, it looks like the depth with the highest level of PC is at or near the surface during periods with higher PC levels. And there is one extremely high value at 1m. 
+
+# SA18
+```{r, echo = FALSE}
+SA18_depths <- SA18 %>% 
+  select(c(timestamp,
+           PC_RFU_0.5m, 
+           PC_RFU_1.0m, 
+           PC_RFU_1.5m, 
+           PC_RFU_2.0m, 
+           PC_RFU_2.5m, 
+           PC_RFU_3.0m,
+           PC_RFU_3.5m,
+           PC_RFU_4.0m,
+           PC_RFU_depthBottom)) %>% 
+  mutate(timestamp = as.POSIXct(strptime(timestamp, format = "%m/%d/%Y %H:%M", tz = "Etc/GMT-4")),
+         date = as.Date(timestamp))
+
+SA18_tidyDepths <- gather(SA18_depths, "PC_RFU_0.5m":"PC_RFU_depthBottom", key = "Depth", value = "PC_RFU") 
+
+chart.Correlation(SA18_depths[,2:6], histogram = T)
+```
+PC levels are very highly correlated for all depths! 
+
+```{r, echo = FALSE}
+SA18_maxDepths <- SA18_tidyDepths%>% 
+  group_by(timestamp) %>% 
+  slice(which.max(PC_RFU))
+
+SA18_MaxDepthCounts <- SA18_maxDepths %>% 
+  group_by(Depth) %>% 
+  count(Depth)
+
+print(SA18_MaxDepthCounts)
+boxplot(SA18_maxDepths$PC_RFU ~ SA18_maxDepths$Depth)
+
+```
+
+There is a general trend of the highest PC level in the water column being at the surface most often, and less and less often at lower depths. The exception is at the bottom, where we actually find the maximum PC level most often. However, we can see from the boxplot that the actual PC levels at bottom are some of the lowest, meaning that the max PC level at a given time may lie at the bottom, but only during periods of relatively low PC in the water column. The boxplot shows that when PC levels are generally high, the highest levels are nearest the surface.
+
+```{r, echo = FALSE}
+#Plot max PC levels over time. 
+ggplot(SA18_maxDepths, aes( x = timestamp, y = PC_RFU, group = Depth, color = Depth)) + geom_point(size = 0.75) + labs(title = "Max PC level (max over depth)") + xlab("Time") + ylab("Max PC (over depth)") 
+
+#PC levels at all depths and times
+ggplot(SA18_tidyDepths, aes( x = timestamp, y = PC_RFU, group = Depth, color = Depth)) + geom_point(size = 0.75) + labs(title = " PC over time for all depths") + xlab("Time") + ylab("PC") 
+```
+These plots basically reiterate the same thing. When PC levels are high, they are highest at the surface. When they are low, they could be low anywhere, perhaps particularly at the bottom. There is one interesting peak at the bottom slightly after the major blooms. One potential explanation could be that the algae is sinking to the bottom when it dies after a bloom.
+
