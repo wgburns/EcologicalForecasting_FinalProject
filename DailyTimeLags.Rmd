@@ -1,5 +1,5 @@
 ---
-title: "DailyTimeLags"
+title: "Daily Time Lags"
 author: "Mahalia Clark"
 date: "12/2/2019"
 output: pdf_document
@@ -23,10 +23,10 @@ library(PerformanceAnalytics)
 library(openair)
 
 # Load data
-MB17 <- read.csv("AllDepthData/MB17_allDepths.csv", header = T)
-MB18 <- read.csv("AllDepthData/MB18_allDepths.csv", header = T)
-SA17 <- read.csv("AllDepthData/SA17_allDepths.csv", header = T)
-SA18 <- read.csv("AllDepthData/SA18_allDepths.csv", header = T)
+MB17 <- read.csv("data/AllDepthData/MB17_allDepths.csv", header = T)
+MB18 <- read.csv("data/AllDepthData/MB18_allDepths.csv", header = T)
+SA17 <- read.csv("data/AllDepthData/SA17_allDepths.csv", header = T)
+SA18 <- read.csv("data/AllDepthData/SA18_allDepths.csv", header = T)
 
 # Function that takes a df of hourly data and returns a df of daily averages,
 # including columns with daily PC 0-6 days into the future (foolishly named PC1-7).
