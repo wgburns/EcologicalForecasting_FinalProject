@@ -109,7 +109,7 @@ MB18_tidyDepths <- gather(MB18_depths, "PC_RFU_0.5m":"PC_RFU_depthBottom", key =
 #Correlation
 chart.Correlation(MB18_depths[,2:6], histogram = T)
 ```
-PC levels are highly correlated for all depths. More so than in 2017.
+PC levels are correlated for all depths. More so than in 2017.
 
 ```{r, echo = FALSE}
 #Boxplot
@@ -153,9 +153,9 @@ SA17_depths <- SA17 %>%
 
 SA17_tidyDepths <- gather(SA17_depths, "PC_RFU_0.5m":"PC_RFU_depthBottom", key = "Depth", value = "PC_RFU") 
 
-chart.Correlation(SA17_depths[,2:6], histogram = T)
+chart.Correlation(SA17_depths[,2:10], histogram = T)
 ```
-PC levels are highly correlated for all depths.
+PC levels are correlated for all depths.
 
 ```{r, echo = FALSE}
 SA17_maxDepths <- SA17_tidyDepths%>% 
@@ -198,9 +198,9 @@ SA18_depths <- SA18 %>%
 
 SA18_tidyDepths <- gather(SA18_depths, "PC_RFU_0.5m":"PC_RFU_depthBottom", key = "Depth", value = "PC_RFU") 
 
-chart.Correlation(SA18_depths[,2:6], histogram = T)
+chart.Correlation(SA18_depths[,2:10], histogram = T)
 ```
-PC levels are very highly correlated for all depths! 
+PC levels are correlated for all depths.
 
 ```{r, echo = FALSE}
 SA18_maxDepths <- SA18_tidyDepths%>% 
