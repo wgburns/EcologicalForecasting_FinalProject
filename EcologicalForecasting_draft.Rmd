@@ -9,7 +9,7 @@ bibliography: EcologicalForecastingRefs.bib
 csl: limnology-and-oceanography.csl
 ---
 
-## 1. Introduction 
+## 1. Introduction (WB)
 
 GENERAL NOTES:  
 
@@ -47,10 +47,10 @@ How does lake size (area/depth) affect which drivers may be relatively important
 
 ## 2. Methods 
 
-* study sites 
+* study sites (WB)
 * data used and how prepped 
   + buoy sensor data (MC)
-  + meteorological station data (WB): air temp, solar radiation, wind speed, wind direction
+  + meteorological station data (WB): air temp, solar radiation, wind speed, wind direction (WB)
   + discharge data (WB)
 * data analysis - feature important (HC)
 
@@ -64,7 +64,7 @@ In order to run a forecasting model or look at feature importance with time lags
 
 In addition to collapsing our hourly buoy data into daily averages for each environmental variable, we wanted to explore how water quality data related to PC values over different time lags. In order to include this lag, we used R to append the daily average PC levels 1-6 days in the future to the data for each time step.
 
-## 3. Results  
+## 3. Results (WB) 
 
 * fig of time series of the parameters to set the scene? 
 * which set of feature importance do we want to use? 
@@ -73,7 +73,7 @@ Next steps for today 12/2/19:
 - figure out way to make figure that is easy to digest --> take out Chl, pH, and ODO and then have a stacked bar graph with y axis of feature importance (all add up to 1) and x axis being days in future (0 - 6)
 - need to sep feature importance by bay and year AND figure out how to make a table with the results so i can make the stacked bar graph 
 
-#### Brief typed out results for easier interpretation 
+#### Brief typed out results for easier interpretation (NOT GOING TO INCLUDE)
 
 1) St AB both years 
 
