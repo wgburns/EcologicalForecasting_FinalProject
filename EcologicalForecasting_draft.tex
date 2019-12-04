@@ -1,0 +1,538 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Ecological Forecasting Final Project Draft},
+            pdfauthor={WB},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{natbib}
+\bibliographystyle{plainnat}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Ecological Forecasting Final Project Draft}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{WB}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{12/2/2019}
+
+
+\begin{document}
+\maketitle
+
+\hypertarget{introduction-wb}{%
+\subsection{1. Introduction (WB)}\label{introduction-wb}}
+
+GENERAL NOTES:
+
+\begin{itemize}
+\tightlist
+\item
+  why important to study?
+\item
+  cite a few other studies doing similar work
+\item
+  end intro with ``in this study'' paragraph to set up reader to how we
+  plan to attack the problem
+\item
+  hypotheses?
+\item
+  Figs for this section:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    map of study area
+  \item
+    bar graph of cyanobacteria bloom timing being different every year
+    (long-term monitoring)
+  \end{itemize}
+\end{itemize}
+
+Anthropogenic eutrophication, meaning increases in nutrients entering
+aquatic systems due to human activity, of natural water bodies is a
+global phenomenon that often leads to decreased utility of affected
+ecosystems (eg. Reynolds 1987; Paerl 1988; Paerl et al.~2011). One
+problem associated with eutrophication is that harmful cyanobacteria
+blooms are becoming more prevalent in coastal oceans and thousands of
+inland lakes and ponds (Paerl et al.~2001, 2011; Paerl and Huisman
+2008). Phytoplankton play an integral role as the base of aquatic food
+webs in both freshwater and marine systems, however, when cyanobacteria
+growth is unchecked, blooms can be detrimental to organisms living in
+and around freshwater ecosystems and often cause problems that propagate
+up the food web (add REFS). The climate is changing, and environmental
+conditions are becoming more favorable for bloom-forming harmful
+cyanobacteria (Jöhnk et al.~2006; Paerl and Huisman 2008; Jeppesen et
+al.~2011; Huisman et al.~2018). Therefore, it is becoming increasingly
+important to understand cyanobacteria bloom onset and senescence.
+Understanding why and when severe cyanobacteria blooms occur will help
+inform mitigation efforts.
+
+\hypertarget{factors-that-drive-cyanobacteria-blooms}{%
+\subsubsection{1.1 Factors that drive cyanobacteria
+blooms}\label{factors-that-drive-cyanobacteria-blooms}}
+
+\textbf{Goal with this section: Develop what is known from what is not
+known or what has conflicting attributions (and why), and how this leads
+you to your research question. This driver -- that is, different
+watersheds and connectivity -- needs to be developed in the Intro to
+show the reader this is a valid research question/hypothesis to pursue.}
+
+\begin{itemize}
+\tightlist
+\item
+  Eutrophication (can mention watershed bay interactions in this
+  section)
+\item
+  Warm temperatures
+\item
+  Water column stratification (leads to internal loading of nutrients)
+\item
+  Increased CO2 in the atmosphere (some types of cyanobacteria more
+  efficiently produce organic matter
+\item
+  Rain and wind events (mix up water column prohibiting internal loading
+  of nutrients and also giving advantage to larger phytoplankton, like
+  diatoms, that need turbulence to get mixed up into the photic zone)
+\item
+  Cyanobacteria are physiologically diverse and have developed multiple
+  strategies to out compete other types of phytoplankton: N-fixation,
+  CO2 concentrating mechanisms, buoyancy regulation, toxin production,
+  predator avoidance
+\item
+  Top-down grazing by zooplankton -- however, many studies have shown
+  that cyanobacteria often avoid grazing by forming dense colonies and
+  toxin production (DeMott 1986; Lemaire et al.~2012)
+\item
+  Viral lysis or fungal infection -- often don't result in long-lasting
+  effects on cyanobacteria populations (Yoshida et al.~2008; Van
+  Wichelen et al.~2016)
+\item
+  Filter feeders like mussels - effect they have on cyanobacteria blooms
+  is lake-specific (Reeders et al.~1989; Vanderploeg et al.~2001)
+\item
+  Competition from other, non-harmful, phytoplankton
+\end{itemize}
+
+How does lake size (area/depth) affect which drivers may be relatively
+important (shallow vs deep)? Lake trophic status?
+
+\hypertarget{methods}{%
+\subsection{2. Methods}\label{methods}}
+
+\begin{itemize}
+\tightlist
+\item
+  study sites (WB)
+\item
+  data used and how prepped
+
+  \begin{itemize}
+  \tightlist
+  \item
+    buoy sensor data (MC)
+  \item
+    meteorological station data (WB): air temp, solar radiation, wind
+    speed, wind direction (WB)
+  \item
+    discharge data (WB)
+  \end{itemize}
+\item
+  data analysis - feature important
+\end{itemize}
+
+Feature importance Is a way of understanding the factors that most
+contribute to the mechanisms of a system. In our studty we used XGBOOST
+a machine learning technique that has been shown to be most accurate in
+tabular and structured data. It replaces Multiple Additive Regression
+Trees(MARTs) and uses gradient boosted decision trees and is built for
+speed and perfomance and hence is more accurate than alternatives.
+\includegraphics{"/Users/chege/Desktop/EcologicalForecasting_FinalProject/SpeedFigure.png"}
+
+\hypertarget{preparing-the-high-frequency-buoy-data-mc}{%
+\subsubsection{2.2.1 Preparing the high frequency buoy data
+(MC)}\label{preparing-the-high-frequency-buoy-data-mc}}
+
+High frequency water quality data was collected from May through October
+in 2017 and 2018 by sensors on two buoys in Lake Champlain: one in
+St.~Albans Bay, and one in Missisquoi Bay. Each buoy had sensors at
+multiple depths, placed every 0.5m from a depth of 0.5m to the bottom
+(2.5m depth in Missisquoi Bay, 4.5m depth in St.~Albans Bay). Sensors
+measured temperature, conductivity, pH, dissolved oxygen, chlorophyll
+(Chl), phycocyanin (PC), and turbidity. DeltaTemp was also calculated
+for each time point as a measure of lake stratification by subtracting
+the temperature at the bottom from that at the surface.
+
+Since the buoys collect data at multiple depths, we first considered
+whether to focus exclusively on the sensors nearest the surface, or to
+aggregate data from whichever depth had the highest concentration of PC
+at a given time, so as to track a bloom as it moves up and down in the
+water column. For each bay and year, we explored how PC values varied
+with depth. First, for each bay and year, we used R to create a
+correlation matrix with Pearson correlation coefficients for the PC
+levels at each depth. We found PC levels across depths to be moderately
+to highly correlated in each case (0.38-1.00), indicating that PC levels
+near the surface would most likely be representative of those throughout
+the water column. We also used R to compare the PC levels across depths
+at each time point, and find out at what depth the PC level was
+maximized. We found that for periods of low PC levels, the maximum might
+be found at any depth, but for periods of high PC levels, such as during
+a cyanobacteria bloom, maximum PC levels where most often found near the
+surface. For these reasons, we decided to limit ourselves to the data
+collected by sensors nearest the surface (0.5m depth), augmented with
+the deltaTemp as a measure of stratification.
+
+In order to run a forecasting model or look at feature importance with
+time lags, we needed to collapse this hourly data into daily data, so
+that daily cycles would not confound predictions or time lags. We
+explored whether to use daily averages or daily maximums. R was used to
+calculate daily averages and maximums for each buoy variable, and to
+create time plots of the daily and hourly data. After inspecting the
+time plots, we decided to use daily averages rather than daily maximums,
+as the later were unduly influenced by sudden brief peaks or high-valued
+outliers in the hourly data.
+
+In addition to collapsing our hourly buoy data into daily averages for
+each environmental variable, we wanted to explore how water quality data
+related to PC values over different time lags. In order to include this
+lag, we used R to append the daily average PC levels 1-6 days in the
+future to the data for each time step.
+
+\hypertarget{results-wb}{%
+\subsection{3. Results (WB)}\label{results-wb}}
+
+\begin{itemize}
+\tightlist
+\item
+  fig of time series of the parameters to set the scene?
+\item
+  which set of feature importance do we want to use?
+\end{itemize}
+
+Next steps for today 12/2/19: - figure out way to make figure that is
+easy to digest --\textgreater{} take out Chl, pH, and ODO and then have
+a stacked bar graph with y axis of feature importance (all add up to 1)
+and x axis being days in future (0 - 6) - need to sep feature importance
+by bay and year AND figure out how to make a table with the results so i
+can make the stacked bar graph
+
+\hypertarget{brief-typed-out-results-for-easier-interpretation-not-going-to-include}{%
+\paragraph{Brief typed out results for easier interpretation (NOT GOING
+TO
+INCLUDE)}\label{brief-typed-out-results-for-easier-interpretation-not-going-to-include}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  St AB both years
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  0 day lag: pH, spCond, temp, discharge, deltaTemp
+\item
+  1 day lag: pH, spCond, discharge, temp
+\item
+  2 day lag: pH, spCond, discharge, ODO
+\item
+  3 day lag: pH, spCond, discharge, deltaTemp
+\item
+  4 day lag: pH, spCond, deltaTemp, ws
+\item
+  5 day lag: pH, spCond, deltaTemp, wd, ODO
+\item
+  6 day lag: pH, spCond, ODO, ws, discharge
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  MB both years
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  0 day lag: pH, ODO, discharge, wd (deltaTemp last)
+\item
+  1 day lag: pH, discharge, ODO, spCond, wd (deltaTemp moves up)
+\item
+  2 day lag: pH, ODO, wd, solar, spCond,
+\item
+  3 day lag: pH, spCond, temp, wd, deltaTemp
+\item
+  4 day lag: spCond, pH, temp, ODO, ws, deltaTemp
+\item
+  5 day lag: spCond, temp, pH, ODO, deltaTemp, wd
+\item
+  6 day lag: spCond, temp, pH, ODO, wd, discharge, deltaTemp
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  2017 both bays
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  0 day lag: discharge, spCond, pH, ODO
+\item
+  1 day lag: spCond, ODO, discharge, pH, solar
+\item
+  2 day lag: pH, spCond, discharge, ws, ODO
+\item
+  3 day lag: spCond, ODO, discharge, solar
+\item
+  4 day lag: spCond, ODO, solar, wd, temp
+\item
+  5 day lag: spCond, deltaTemp, solar, wd, temp
+\item
+  6 day lag: deltaTemp, spCond, ODO, wd, discharge
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  2018 both bays
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  0 day lag: pH, spCond, ODO, discharge
+\item
+  1 day lag: pH, spCond, discharge, ODO
+\item
+  2 day lag: pH, discharge, temp, spCond
+\item
+  3 day lag: pH, ODO, discharge, spCond, temp
+\item
+  4 day lag: pH, spCond, discharge, temp, deltaTemp
+\item
+  5 day lag: pH, spCond, temp, discharge, ODO
+\item
+  6 day lag: pH, spCond, temp, solar, ODO
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  both bays both years
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  0 day lag: pH, spCond, year, discharge, solar
+\item
+  1 day lag: pH, spCond, year, discharge, temp
+\item
+  2 day lag: pH, spCond, discharge, year, deltaTemp
+\item
+  3 day lag: pH, spCond, discharge, year, ODO
+\item
+  4 day lag: pH, spCond, year, discharge, ODO
+\item
+  5 day lag: pH, spCond, temp, ODO, year, discharge
+\item
+  6 day lag: pH, spCond, temp, year, deltaTemp, ODO
+\end{itemize}
+
+LOOK INTO - is spCond just super highly correlated with PC? Why is it
+such an important feature? What is it highly correlated with? are the
+units different between the bays? - wd (not speed) is important for MB!
+let's look at correlations - should we run without pH? - what's the
+significance in the difference in the cluster numbers??
+
+\hypertarget{discussion}{%
+\subsection{Discussion}\label{discussion}}
+
+\begin{itemize}
+\tightlist
+\item
+  what we know right now is that 6 days out, pH is IMPORTANT for PC but
+  the next step is figuring out if it's PREDICTIVE of a bloom
+  --\textgreater{} need to build model
+\item
+  We got kinda hung up on the fact that there were parameters in the
+  feature analysis results that were highly correlated with PC (response
+  variable) but Easton reminded us that if our main goal is to predict a
+  bloom, Chl or PC levels 6 days before is important to include if we
+  are building a predictive model because that's still useful info !
+  Like it'd be great if we could predict if a bloom would start in 6
+  days just by knowing PC or Chl levels.
+\item
+  IMPORTANT POINT: there is a difference between mechanistic models and
+  predictive models. Depending on how we decide to move forward (ie.
+  which model we choose) we might not really need to understand the
+  mechanisms driving the blooms because we might just try throwing all
+  the data into a machine learning algorithm that tells us the relative
+  predictive power of each of the parameters (I think\ldots).
+\end{itemize}
+
+\hypertarget{future-work-mc}{%
+\subsection{Future Work (MC)}\label{future-work-mc}}
+
+We could build on this work in a number of ways, by expanding our data
+set, correlating our phycocyanin measurements with satellite data or
+volunteer observations, identifying a bloom threshold, and most
+importantly, by using our high frequency data to create a forecasting
+model that could predict cyanobacteria blooms.
+
+First, we could expand our data set by including cumulative degree days
+as another environmental variable, indicative of temperatures
+experienced throughout the season up to a given time point. We could
+collect mean daily temperatures for 2017 and 2018 for the nearest
+weather stations to the two bays from wunderground.com, and calculate
+the cumulative degrees above freezing (or above a biologically relevant
+temperature threshold such as 4C) for each day. We could then include
+this variable in analyses such as correlations, feature importance, or a
+forecasting model.
+
+Second, we could correlate the buoys' measure of PC levels with other
+indicators of bloom presence such as volunteer observations and
+satellite data. There is an online data set publicly available with
+volunteer observations at the two bays: biweekly observations of bloom
+presence or absence throughout the 2017 and 2018 seasons. Comparing
+these observations with the daily average PC levels from our buoy
+sensors on the days of the observations could help us identify a
+threshold for what PC levels indicate a cyanobacteria bloom for
+management purposes.
+
+There is also satellite imagery available covering both bays, and it can
+be used to calculate a spectral index that's indicative of cyanobacteria
+presence. We could calculate this index at the position of each buoy for
+the time points of the available satellite imagery. We could then see
+how the index correlates with the daily average PC levels measured by
+the buoys, and examine whether there is a simple, consistent conversion
+between the two. If there are literature thresholds for what value of
+the spectral index constitutes a cyanobacteria bloom, we could then use
+a correlation or conversion to calculate an analogous bloom threshold
+for our buoy-measured PC levels. Having an accurate bloom threshold
+would be valuable for investigating bloom drivers and creating a
+forecasting model. It would give us the option to investigate continuous
+PC values directly, or convert them to categorical `Bloom'/`No Bloom'
+data in case the later is easier to forecast or more strongly correlated
+with certain drivers.
+
+Finally, our long term goal is to use this high frequency data to
+develop a forecasting model using machine learning techniques, in the
+hopes of predicting cyanobacteria blooms a few days before they occur.
+We would begin by inputting all available high frequency buoy, weather
+and discharge data, in order to predict PC levels (or a categorical
+variable for bloom presence or absence). If that proved successful, we
+would then begin to remove input variables one by one, to see what
+effect that has on the forecast accuracy. The goal would be to have a
+functional forecasting model with as few input variables as possible.
+
+\hypertarget{references}{%
+\subsection{References}\label{references}}
+
+INFO ON HOW TO CITE in .Rmd from
+\url{https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html}
+:
+
+\begin{itemize}
+\tightlist
+\item
+  Citations go inside square brackets and are separated by semicolons.
+  Each citation must have a key, composed of `@' + the citation
+  identifier from the database, and may optionally have a prefix, a
+  locator, and a suffix. Here are some examples:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Blah blah \citep{isles_modeling_2017}.
+  \end{itemize}
+\item
+  Then in Zotero create a \texttt{.BibTex} file by going to File
+  --\textgreater{} Export Library --\textgreater{} change to BibTex
+\end{itemize}
+
+\bibliography{EcologicalForecastingRefs.bib}
+
+
+\end{document}

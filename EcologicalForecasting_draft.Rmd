@@ -52,7 +52,11 @@ How does lake size (area/depth) affect which drivers may be relatively important
   + buoy sensor data (MC)
   + meteorological station data (WB): air temp, solar radiation, wind speed, wind direction (WB)
   + discharge data (WB)
-* data analysis - feature important (HC)
+* data analysis - feature important 
+
+Feature importance Is a way of understanding the factors that most contribute to the mechanisms of a system. In our studty we used XGBOOST a machine learning technique that has been shown to be most accurate in tabular and structured data. It replaces Multiple Additive Regression Trees(MARTs) and uses gradient boosted decision trees and is built for speed and perfomance and hence is more accurate than alternatives.
+![Caption for the picture.]("/Users/chege/Desktop/EcologicalForecasting_FinalProject/SpeedFigure.png")
+
 
 ### 2.2.1 Preparing the high frequency buoy data (MC)
 
