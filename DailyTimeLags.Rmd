@@ -1,5 +1,5 @@
 ---
-title: "DailyTimeLags"
+title: "Daily Time Lags"
 author: "Mahalia Clark"
 date: "12/2/2019"
 output: pdf_document
@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 First I read in the data: dataframes of hourly buoy data. I then created a function which that takes our hourly data and returns a dataframe of daily averages. It also appends columns with the PC averages 0-6 days into the future (so that all the environmental variables are lagged). Finally, I ran the function on our data so we could use daily averages for subsequent analyses.
 
-```{r daily}
+```{r daily, warning = FALSE, message = FALSE}
 # Load required packages
 library(dplyr)
 library(ggplot2)
@@ -23,10 +23,10 @@ library(PerformanceAnalytics)
 library(openair)
 
 # Load data
-MB17 <- read.csv("AllDepthData/MB17_allDepths.csv", header = T)
-MB18 <- read.csv("AllDepthData/MB18_allDepths.csv", header = T)
-SA17 <- read.csv("AllDepthData/SA17_allDepths.csv", header = T)
-SA18 <- read.csv("AllDepthData/SA18_allDepths.csv", header = T)
+MB17 <- read.csv("data/AllDepthData/MB17_allDepths.csv", header = T)
+MB18 <- read.csv("data/AllDepthData/MB18_allDepths.csv", header = T)
+SA17 <- read.csv("data/AllDepthData/SA17_allDepths.csv", header = T)
+SA18 <- read.csv("data/AllDepthData/SA18_allDepths.csv", header = T)
 
 # Function that takes a df of hourly data and returns a df of daily averages,
 # including columns with daily PC 0-6 days into the future (foolishly named PC1-7).
@@ -84,7 +84,7 @@ write.csv(SA18_daily, "SA18_daily.csv")
 
 ## Plotting the data
 
-Next, I made a function that creates timeplots of the data so we can visually inspect how PC varies with different environmental factors over time.
+Next, I made a function that creates (messy) timeplots of the data so we can just quickly visually inspect how PC varies with different environmental factors over time.
 
 ```{r}
 #Function that creates a timeplot of the df (with unlagged PC)

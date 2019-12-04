@@ -9,7 +9,7 @@ bibliography: EcologicalForecastingRefs.bib
 csl: limnology-and-oceanography.csl
 ---
 
-## 1. Introduction 
+## 1. Introduction (WB)
 
 GENERAL NOTES:  
 
@@ -21,7 +21,7 @@ GENERAL NOTES:
   + map of study area 
   + bar graph of cyanobacteria bloom timing being different every year (long-term monitoring)
   
-Anthropogenic eutrophication, meaning increases in nutrients entering aquatic systems due to human activity, of natural water bodies is a global phenomenon that often leads to decreased utility of affected ecosystems (eg. Reynolds 1987; Paerl 1988; Paerl et al. 2011). One problem associated with eutrophication is that harmful cyanobacteria blooms are becoming more prevalent in coastal oceans and thousands of inland lakes and ponds (Paerl et al. 2001, 2011; Paerl and Huisman 2008). Phytoplankton play an integral role as the base of aquatic food webs in both freshwater and marine systems, however, when cyanobacteria growth is unchecked, blooms can be detrimental to organisms living in and around freshwater ecosystems and often cause problems that propogate up the food web (add REFS). The climate is changing, and environmental conditions are becoming more favorable for bloom-forming harmful cyanobacteria (Jöhnk et al. 2006; Paerl and Huisman 2008; Jeppesen et al. 2011; Huisman et al. 2018). Therefore, it is becoming increasingly important to understand cyanobacteria bloom onset and senescence. Understanding why and when severe cyanobacteria blooms occur will help inform mitigation efforts. 
+Anthropogenic eutrophication, meaning increases in nutrients entering aquatic systems due to human activity, of natural water bodies is a global phenomenon that often leads to decreased utility of affected ecosystems (eg. Reynolds 1987; Paerl 1988; Paerl et al. 2011). One problem associated with eutrophication is that harmful cyanobacteria blooms are becoming more prevalent in coastal oceans and thousands of inland lakes and ponds (Paerl et al. 2001, 2011; Paerl and Huisman 2008). Phytoplankton play an integral role as the base of aquatic food webs in both freshwater and marine systems, however, when cyanobacteria growth is unchecked, blooms can be detrimental to organisms living in and around freshwater ecosystems and often cause problems that propagate up the food web (add REFS). The climate is changing, and environmental conditions are becoming more favorable for bloom-forming harmful cyanobacteria (Jöhnk et al. 2006; Paerl and Huisman 2008; Jeppesen et al. 2011; Huisman et al. 2018). Therefore, it is becoming increasingly important to understand cyanobacteria bloom onset and senescence. Understanding why and when severe cyanobacteria blooms occur will help inform mitigation efforts. 
 
 ### 1.1 Factors that drive cyanobacteria blooms 
 
@@ -32,7 +32,7 @@ Anthropogenic eutrophication, meaning increases in nutrients entering aquatic sy
 - Water column stratification (leads to internal loading of nutrients)
 - Increased CO2 in the atmosphere (some types of cyanobacteria more efficiently produce organic matter 
 - Rain and wind events (mix up water column prohibiting internal loading of nutrients and also giving advantage to larger phytoplankton, like diatoms, that need turbulence to get mixed up into the photic zone)
-- Cyanobacteria are physiologically diverse and have developed multiple strategies to outcompete other types of phytoplankton: N-fixation, CO2 concentrating mechanisms, buoyancy regulation, toxin production, predator avoidance 
+- Cyanobacteria are physiologically diverse and have developed multiple strategies to out compete other types of phytoplankton: N-fixation, CO2 concentrating mechanisms, buoyancy regulation, toxin production, predator avoidance 
 - Top-down grazing by zooplankton – however, many studies have shown that cyanobacteria often avoid grazing by forming dense colonies and toxin production (DeMott 1986; Lemaire et al. 2012)
 - Viral lysis or fungal infection – often don’t result in long-lasting effects on cyanobacteria populations (Yoshida et al. 2008; Van Wichelen et al. 2016)
 - Filter feeders like mussels - effect they have on cyanobacteria blooms is lake-specific (Reeders et al. 1989; Vanderploeg et al. 2001)
@@ -47,15 +47,24 @@ How does lake size (area/depth) affect which drivers may be relatively important
 
 ## 2. Methods 
 
-* study sites 
+* study sites (WB)
 * data used and how prepped 
   + buoy sensor data (MC)
-  + meteorological station data (WB): air temp, solar radiation, wind speed, wind direction
+  + meteorological station data (WB): air temp, solar radiation, wind speed, wind direction (WB)
   + discharge data (WB)
 * data analysis - feature important (HC)
 
+### 2.2.1 Preparing the high frequency buoy data (MC)
 
-## 3. Results  
+High frequency water quality data was collected from May through October in 2017 and 2018 by sensors on two buoys in Lake Champlain: one in St. Albans Bay, and one in Missisquoi Bay. Each buoy had sensors at multiple depths, placed every 0.5m from a depth of 0.5m to the bottom (2.5m depth in Missisquoi Bay, 4.5m depth in St. Albans Bay). Sensors measured temperature, conductivity, pH, dissolved oxygen, chlorophyll (Chl), phycocyanin (PC), and turbidity. DeltaTemp was also calculated for each time point as a measure of lake stratification by subtracting the temperature at the bottom from that at the surface.
+
+Since the buoys collect data at multiple depths, we first considered whether to focus exclusively on the sensors nearest the surface, or to aggregate data from whichever depth had the highest concentration of PC at a given time, so as to track a bloom as it moves up and down in the water column. For each bay and year, we explored how PC values varied with depth. First, for each bay and year, we used R to create a correlation matrix with Pearson correlation coefficients for the PC levels at each depth. We found PC levels across depths to be moderately to highly correlated in each case (0.38-1.00), indicating that PC levels near the surface would most likely be representative of those throughout the water column. We also used R to compare the PC levels across depths at each time point, and find out at what depth the PC level was maximized. We found that for periods of low PC levels, the maximum might be found at any depth, but for periods of high PC levels, such as during a cyanobacteria bloom, maximum PC levels where most often found near the surface. For these reasons, we decided to limit ourselves to the data collected by sensors nearest the surface (0.5m depth), augmented with the deltaTemp as a measure of stratification.
+
+In order to run a forecasting model or look at feature importance with time lags, we needed to collapse this hourly data into daily data, so that daily cycles would not confound predictions or time lags. We explored whether to use daily averages or daily maximums. R was used to calculate daily averages and maximums for each buoy variable, and to create time plots of the daily and hourly data. After inspecting the time plots, we decided to use daily averages rather than daily maximums, as the later were unduly influenced by sudden brief peaks or high-valued outliers in the hourly data.
+
+In addition to collapsing our hourly buoy data into daily averages for each environmental variable, we wanted to explore how water quality data related to PC values over different time lags. In order to include this lag, we used R to append the daily average PC levels 1-6 days in the future to the data for each time step.
+
+## 3. Results (WB) 
 
 * fig of time series of the parameters to set the scene? 
 * which set of feature importance do we want to use? 
@@ -64,7 +73,7 @@ Next steps for today 12/2/19:
 - figure out way to make figure that is easy to digest --> take out Chl, pH, and ODO and then have a stacked bar graph with y axis of feature importance (all add up to 1) and x axis being days in future (0 - 6)
 - need to sep feature importance by bay and year AND figure out how to make a table with the results so i can make the stacked bar graph 
 
-#### Brief typed out results for easier interpretation 
+#### Brief typed out results for easier interpretation (NOT GOING TO INCLUDE)
 
 1) St AB both years 
 
@@ -79,8 +88,8 @@ Next steps for today 12/2/19:
 
 2) MB both years 
 
-- 0 day lag: pH, ODO, discharge, wd (deltaTEmp last)
-- 1 day lag: pH, dishcarge, ODO, spCond, wd (deltaTemp moves up)
+- 0 day lag: pH, ODO, discharge, wd (deltaTemp last)
+- 1 day lag: pH, discharge, ODO, spCond, wd (deltaTemp moves up)
 - 2 day lag: pH, ODO, wd, solar, spCond, 
 - 3 day lag: pH, spCond, temp, wd, deltaTemp
 - 4 day lag: spCond, pH, temp, ODO, ws, deltaTemp
@@ -90,7 +99,7 @@ Next steps for today 12/2/19:
 
 3) 2017 both bays 
 
-- 0 day lag: dishcarge, spCond, pH, ODO 
+- 0 day lag: discharge, spCond, pH, ODO 
 - 1 day lag: spCond, ODO, discharge, pH, solar 
 - 2 day lag: pH, spCond, discharge, ws, ODO
 - 3 day lag: spCond, ODO, discharge, solar
@@ -122,7 +131,7 @@ Next steps for today 12/2/19:
 
 LOOK INTO 
 - is spCond just super highly correlated with PC? Why is it such an important feature? What is it highly correlated with? are the units different between the bays? 
-- wd (not speed) is important for mb! let's look at correlations 
+- wd (not speed) is important for MB! let's look at correlations 
 - should we run without pH? 
 - what's the significance in the difference in the cluster numbers?? 
 
@@ -132,9 +141,17 @@ LOOK INTO
 - We got kinda hung up on the fact that there were parameters in the feature analysis results that were highly correlated with PC (response variable) but Easton reminded us that if our main goal is to predict a bloom, Chl or PC levels 6 days before is important to include if we are building a predictive model because that's still useful info ! Like it'd be great if we could predict if a bloom would start in 6 days just by knowing PC or Chl levels. 
 - IMPORTANT POINT: there is a difference between mechanistic models and predictive models. Depending on how we decide to move forward (ie. which model we choose) we might not really need to understand the mechanisms driving the blooms because we might just try throwing all the data into a machine learning algorithm that tells us the relative predictive power of each of the parameters (I think...). 
 
-## Future work 
+## Future Work (MC)
 
+We could build on this work in a number of ways, by expanding our data set, correlating our phycocyanin measurements with satellite data or volunteer observations, identifying a bloom threshold, and most importantly, by using our high frequency data to create a forecasting model that could predict cyanobacteria blooms.
 
+First, we could expand our data set by including cumulative degree days as another environmental variable, indicative of temperatures experienced throughout the season up to a given time point. We could collect mean daily temperatures for 2017 and 2018 for the nearest weather stations to the two bays from wunderground.com, and calculate the cumulative degrees above freezing (or above a biologically relevant temperature threshold such as 4C) for each day. We could then include this variable in analyses such as correlations, feature importance, or a forecasting model.
+
+Second, we could correlate the buoys' measure of PC levels with other indicators of bloom presence such as volunteer observations and satellite data. There is an online data set publicly available with volunteer observations at the two bays: biweekly observations of bloom presence or absence throughout the 2017 and 2018 seasons. Comparing these observations with the daily average PC levels from our buoy sensors on the days of the observations could help us identify a threshold for what PC levels indicate a cyanobacteria bloom for management purposes. 
+
+There is also satellite imagery available covering both bays, and it can be used to calculate a spectral index that's indicative of cyanobacteria presence. We could calculate this index at the position of each buoy for the time points of the available satellite imagery. We could then see how the index correlates with the daily average PC levels measured by the buoys, and examine whether there is a simple, consistent conversion between the two. If there are literature thresholds for what value of the spectral index constitutes a cyanobacteria bloom, we could then use a correlation or conversion to calculate an analogous bloom threshold for our buoy-measured PC levels. Having an accurate bloom threshold would be valuable for investigating bloom drivers and creating a forecasting model. It would give us the option to investigate continuous PC values directly, or convert them to categorical 'Bloom'/'No Bloom' data in case the later is easier to forecast or more strongly correlated with certain drivers.
+
+Finally, our long term goal is to use this high frequency data to develop a forecasting model using machine learning techniques, in the hopes of predicting cyanobacteria blooms a few days before they occur. We would begin by inputting all available high frequency buoy, weather and discharge data, in order to predict PC levels (or a categorical variable for bloom presence or absence). If that proved successful, we would then begin to remove input variables one by one, to see what effect that has on the forecast accuracy. The goal would be to have a functional forecasting model with as few input variables as possible.
 
 ## References 
 
