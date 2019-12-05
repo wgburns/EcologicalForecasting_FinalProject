@@ -1,6 +1,6 @@
 ---
-title: "Ecological Forecasting Final Project Draft"
-author: "WB"
+title: "Examining drivers of cyanobacteria blooms in two shallow, eutrophic bays in Lake Champlain"
+author: "Wilton Burns, Herman Njoroge Chege, and Mahalia Clark"
 date: "12/2/2019"
 output: 
   pdf_document:
@@ -52,10 +52,16 @@ How does lake size (area/depth) affect which drivers may be relatively important
   + buoy sensor data (MC)
   + meteorological station data (WB): air temp, solar radiation, wind speed, wind direction (WB)
   + discharge data (WB)
-* data analysis - feature important 
+  
+### Feature Importance
 
-Feature importance Is a way of understanding the factors that most contribute to the mechanisms of a system. In our studty we used XGBOOST a machine learning technique that has been shown to be most accurate in tabular and structured data. It replaces Multiple Additive Regression Trees(MARTs) and uses gradient boosted decision trees and is built for speed and perfomance and hence is more accurate than alternatives.
-We created the model using R and then used the createde model to get the feature importance that helps us understand the most important features. These features will help further down the road in developing a predictive model. 
+Feature importance is a technique to understand the factors that most contribute to the mechanisms of a system. In our studty we used XGBOOST a machine learning technique that has been shown to be most accurate in tabular and structured data. 
+
+It uses gradient boosted decision trees and is built for speed and perfomance and hence is more accurate than alternatives.A benefit of using ensembles of decision tree methods like gradient boosting is that they can automatically provide estimates of feature importance from a trained predictive model. After, we train the model we are then able to access the feature importances.
+
+Generally, importance provides a score that indicates how useful or valuable each feature was in the construction of the boosted decision trees within the model. The more an attribute is used to make key decisions with decision trees, the higher its relative importance.This importance is calculated explicitly for each attribute in the dataset, allowing attributes to be ranked and compared to each other.
+
+Importance is calculated for a single decision tree by the amount that each attribute split point improves the performance measure, weighted by the number of observations the node is responsible for. The performance measure may be the purity (Gini index) used to select the split points or another more specific error function.The feature importances are then averaged across all of the the decision trees within the model @hastie2009elements. These features will help further down the road in developing a predictive model. 
 
 
 
