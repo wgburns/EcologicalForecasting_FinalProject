@@ -55,7 +55,7 @@ How does lake size (area/depth) affect which drivers may be relatively important
   
 ### Feature Importance
 
-Feature importance is a technique to understand the factors that most contribute to the mechanisms of a system. In our studty we used XGBOOST a machine learning technique that has been shown to be most accurate in tabular and structured data. 
+Feature importance is a technique to understand the factors that most contribute to the mechanisms of a system. In our study we used XGBOOST a machine learning technique that has been shown to be most accurate in tabular and structured data. 
 
 It uses gradient boosted decision trees and is built for speed and perfomance and hence is more accurate than alternatives.A benefit of using ensembles of decision tree methods like gradient boosting is that they can automatically provide estimates of feature importance from a trained predictive model. After, we train the model we are then able to access the feature importances.
 
