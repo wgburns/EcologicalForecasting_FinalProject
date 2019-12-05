@@ -47,33 +47,34 @@ How does lake size (area/depth) affect which drivers may be relatively important
 
 ## 2. Methods 
 
-* study sites (WB)
-* data used and how prepped 
+* 2.1 study sites (WB)
+* 2.2 data used and how prepped 
   + buoy sensor data (MC)
   + meteorological station data (WB): air temp, solar radiation, wind speed, wind direction (WB)
   + discharge data (WB)
-  
-### Feature Importance
-
-Feature importance is a technique to understand the factors that most contribute to the mechanisms of a system. In our study we used XGBOOST a machine learning technique that has been shown to be most accurate in tabular and structured data. 
-
-It uses gradient boosted decision trees and is built for speed and perfomance and hence is more accurate than alternatives.A benefit of using ensembles of decision tree methods like gradient boosting is that they can automatically provide estimates of feature importance from a trained predictive model. After, we train the model we are then able to access the feature importances.
-
-Generally, importance provides a score that indicates how useful or valuable each feature was in the construction of the boosted decision trees within the model. The more an attribute is used to make key decisions with decision trees, the higher its relative importance.This importance is calculated explicitly for each attribute in the dataset, allowing attributes to be ranked and compared to each other.
-
-Importance is calculated for a single decision tree by the amount that each attribute split point improves the performance measure, weighted by the number of observations the node is responsible for. The performance measure may be the purity (Gini index) used to select the split points or another more specific error function.The feature importances are then averaged across all of the the decision trees within the model @hastie2009elements. These features will help further down the road in developing a predictive model. 
-
-
+* 2.3 Feature Importance
 
 ### 2.2.1 Preparing the high frequency buoy data (MC)
 
-High frequency water quality data was collected from May through October in 2017 and 2018 by sensors on two buoys in Lake Champlain: one in St. Albans Bay, and one in Missisquoi Bay. Each buoy had sensors at multiple depths, placed every 0.5m from a depth of 0.5m to the bottom (2.5m depth in Missisquoi Bay, 4.5m depth in St. Albans Bay). Sensors measured temperature, conductivity, pH, dissolved oxygen, chlorophyll (Chl), phycocyanin (PC), and turbidity. DeltaTemp was also calculated for each time point as a measure of lake stratification by subtracting the temperature at the bottom from that at the surface.
+High frequency water quality data was collected from May through October in 2017 and 2018 by sensors on two buoys in Lake Champlain: one in St. Albans Bay, and one in Missisquoi Bay. Each buoy had sensors that took measurements at multiple depths: every 0.5m, from 0.5m below the surface down to the bottom (2.5m depth in Missisquoi Bay, 4.5m depth in St. Albans Bay). Sensors measured temperature, conductivity, pH, dissolved oxygen, chlorophyll (Chl), phycocyanin (PC), and turbidity. DeltaTemp was also calculated for each time point as a measure of lake stratification by subtracting the temperature at the bottom from that at the surface.
 
-Since the buoys collect data at multiple depths, we first considered whether to focus exclusively on the sensors nearest the surface, or to aggregate data from whichever depth had the highest concentration of PC at a given time, so as to track a bloom as it moves up and down in the water column. For each bay and year, we explored how PC values varied with depth. First, for each bay and year, we used R to create a correlation matrix with Pearson correlation coefficients for the PC levels at each depth. We found PC levels across depths to be moderately to highly correlated in each case (0.38-1.00), indicating that PC levels near the surface would most likely be representative of those throughout the water column. We also used R to compare the PC levels across depths at each time point, and find out at what depth the PC level was maximized. We found that for periods of low PC levels, the maximum might be found at any depth, but for periods of high PC levels, such as during a cyanobacteria bloom, maximum PC levels where most often found near the surface. For these reasons, we decided to limit ourselves to the data collected by sensors nearest the surface (0.5m depth), augmented with the deltaTemp as a measure of stratification.
+*Since the buoys collect data at multiple depths, we first considered whether to focus exclusively on the sensors nearest the surface, or to aggregate data from whichever depth had the highest concentration of PC at a given time, so as to track a bloom as it moves up and down in the water column. For each bay and year, we explored how PC values varied with depth. First, for each bay and year, we used R to create a correlation matrix with Pearson correlation coefficients for the PC levels at each depth. We found PC levels across depths to be moderately to highly correlated in each case (0.38-1.00), indicating that PC levels near the surface would most likely be representative of those throughout the water column. We also used R to compare the PC levels across depths at each time point, and find out at what depth the PC level was maximized. We found that for periods of low PC levels, the maximum might be found at any depth, but for periods of high PC levels, such as during a cyanobacteria bloom, maximum PC levels where most often found near the surface. For these reasons,* we decided to limit ourselves to the data collected by sensors nearest the surface (0.5m depth), augmented with the deltaTemp as a measure of stratification. *See the the markdown file or pdf "Exploring_PC_Depths" for details.*
 
-In order to run a forecasting model or look at feature importance with time lags, we needed to collapse this hourly data into daily data, so that daily cycles would not confound predictions or time lags. We explored whether to use daily averages or daily maximums. R was used to calculate daily averages and maximums for each buoy variable, and to create time plots of the daily and hourly data. After inspecting the time plots, we decided to use daily averages rather than daily maximums, as the later were unduly influenced by sudden brief peaks or high-valued outliers in the hourly data.
+In order to run a forecasting model or look at feature importance with time lags, we needed to collapse this hourly data into daily data, so that daily cycles would not confound predictions or time lags. *We explored whether to use daily averages or daily maximums. R was used to calculate daily averages and maximums for each buoy variable, and to create time plots of the daily and hourly data. After inspecting the time plots,* we decided to use daily averages rather than daily maximums, as the later were unduly influenced by sudden brief peaks or high-valued outliers in the hourly data.
 
 In addition to collapsing our hourly buoy data into daily averages for each environmental variable, we wanted to explore how water quality data related to PC values over different time lags. In order to include this lag, we used R to append the daily average PC levels 1-6 days in the future to the data for each time step.
+
+*See pdf/Rmd "DailyTimeLags" for details*
+
+### 2.3 Feature Importance
+
+Feature importance is a technique to understand the factors that most contribute to the mechanisms of a system. In our study we used XGBOOST a machine learning technique that has been shown to be most accurate in tabular and structured data. 
+
+It uses gradient boosted decision trees and is built for speed and performance and hence is more accurate than alternatives. A benefit of using ensembles of decision tree methods like gradient boosting is that they can automatically provide estimates of feature importance from a trained predictive model. After we train the model we are then able to access the feature importances.
+
+Generally, importance provides a score that indicates how useful or valuable each feature was in the construction of the boosted decision trees within the model. The more an attribute is used to make key decisions with decision trees, the higher its relative importance. This importance is calculated explicitly for each attribute in the data set, allowing attributes to be ranked and compared to each other.
+
+Importance is calculated for a single decision tree by the amount that each attribute split point improves the performance measure, weighted by the number of observations the node is responsible for. The performance measure may be the purity (Gini index) used to select the split points or another more specific error function.The feature importances are then averaged across all of the the decision trees within the model @hastie2009elements. These features will help further down the road in developing a predictive model. 
 
 ## 3. Results (WB) 
 
