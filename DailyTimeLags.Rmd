@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Calculating Daily Averages
 
-First I read in the data: dataframes of hourly buoy data. I then created a function which that takes our hourly data and returns a dataframe of daily averages. It also appends columns with the PC averages 0-6 days into the future (so that all the environmental variables are lagged). Finally, I ran the function on our data so we could use daily averages for subsequent analyses.
+First I read in the data: data frames of hourly buoy data. I then created a function which that takes our hourly data and returns a data frame of daily averages. It also appends columns with the PC averages 0-6 days into the future (so that all the environmental variables are lagged). Finally, I ran the function on our data so we could use daily averages for subsequent analyses.
 
 ```{r daily, warning = FALSE, message = FALSE}
 # Load required packages
@@ -84,7 +84,7 @@ write.csv(SA18_daily, "SA18_daily.csv")
 
 ## Plotting the data
 
-Next, I made a function that creates (messy) timeplots of the data so we can just quickly visually inspect how PC varies with different environmental factors over time.
+Next, I made a function that creates (messy) time plots of the data so we can just quickly visually inspect how PC varies with different environmental factors over time.
 
 ```{r}
 #Function that creates a timeplot of the df (with unlagged PC)
@@ -107,6 +107,13 @@ plotify(MB18_daily)
 plotify(SA17_daily)
 plotify(SA18_daily)
 ```
+
+## Prettier Time Plots with ggPlot2?
+
+```{r}
+ggplot(MB17_daily, aes( x = date, y = PCMean1)) + geom_line(size = 0.75) + labs(title = " PC over Time") + xlab("Time") + ylab("PC") + geom_line(data = MB17_daily, aes(x = date, y = DeltaTempMean), color = "red") + geom_line(data = MB17_daily, aes(x = date, y = SpCondMean), color = "green")
+```
+Y-axes are too different. Better to have separate plots.
 
 ## Investigate Correlations
 
