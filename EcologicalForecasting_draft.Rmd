@@ -55,7 +55,8 @@ How does lake size (area/depth) affect which drivers may be relatively important
 * data analysis - feature important 
 
 Feature importance Is a way of understanding the factors that most contribute to the mechanisms of a system. In our studty we used XGBOOST a machine learning technique that has been shown to be most accurate in tabular and structured data. It replaces Multiple Additive Regression Trees(MARTs) and uses gradient boosted decision trees and is built for speed and perfomance and hence is more accurate than alternatives.
-![Caption for the picture.]("/Users/chege/Desktop/EcologicalForecasting_FinalProject/SpeedFigure.png")
+We created the model using R and then used the createde model to get the feature importance that helps us understand the most important features. These features will help further down the road in developing a predictive model. 
+
 
 
 ### 2.2.1 Preparing the high frequency buoy data (MC)
