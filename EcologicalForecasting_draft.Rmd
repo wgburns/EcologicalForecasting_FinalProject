@@ -7,6 +7,8 @@ output:
     citation_package: natbib
 bibliography: EcologicalForecastingRefs.bib
 csl: limnology-and-oceanography.csl
+editor_options: 
+  chunk_output_type: console
 ---
 
 ## 1. Introduction (WB)
@@ -48,13 +50,10 @@ How does lake size (area/depth) affect which drivers may be relatively important
 ## 2. Methods 
 
 * 2.1 study sites (WB)
-* 2.2 data used and how prepped 
-  + buoy sensor data (MC)
   + meteorological station data (WB): air temp, solar radiation, wind speed, wind direction (WB)
   + discharge data (WB)
-* 2.3 Feature Importance
 
-### 2.2.1 Preparing the high frequency buoy data (MC)
+### 2.2 Preparing the high frequency buoy data (MC)
 
 High frequency water quality data was collected from May through October in 2017 and 2018 by sensors on two buoys in Lake Champlain: one in St. Albans Bay, and one in Missisquoi Bay. Each buoy had sensors that took measurements at multiple depths: every 0.5m, from 0.5m below the surface down to the bottom (2.5m depth in Missisquoi Bay, 4.5m depth in St. Albans Bay). Sensors measured temperature, conductivity, pH, dissolved oxygen, chlorophyll (Chl), phycocyanin (PC), and turbidity. DeltaTemp was also calculated for each time point as a measure of lake stratification by subtracting the temperature at the bottom from that at the surface.
 
@@ -66,7 +65,7 @@ In addition to collapsing our hourly buoy data into daily averages for each envi
 
 *See pdf/Rmd "DailyTimeLags" for details*
 
-### 2.3 Feature Importance
+### 2.3 Feature Importance (HC)
 
 Feature importance is a technique to understand the factors that most contribute to the mechanisms of a system. In our study we used XGBOOST a machine learning technique that has been shown to be most accurate in tabular and structured data. 
 
@@ -81,71 +80,124 @@ Importance is calculated for a single decision tree by the amount that each attr
 * fig of time series of the parameters to set the scene? 
 * which set of feature importance do we want to use? 
 
-Next steps for today 12/2/19: 
-- figure out way to make figure that is easy to digest --> take out Chl, pH, and ODO and then have a stacked bar graph with y axis of feature importance (all add up to 1) and x axis being days in future (0 - 6)
-- need to sep feature importance by bay and year AND figure out how to make a table with the results so i can make the stacked bar graph 
+```{r, echo = F, message = F}
 
-#### Brief typed out results for easier interpretation (NOT GOING TO INCLUDE)
+results_2 <- read.csv("allCombined.csv") 
 
-1) St AB both years 
+results_2 <- results_2 %>% 
+  select(-c(X))
 
-- 0 day lag: pH, spCond, temp, discharge, deltaTemp
-- 1 day lag: pH, spCond, discharge, temp 
-- 2 day lag: pH, spCond, discharge, ODO
-- 3 day lag: pH, spCond, discharge, deltaTemp
-- 4 day lag: pH, spCond, deltaTemp, ws
-- 5 day lag: pH, spCond, deltaTemp, wd, ODO 
-- 6 day lag: pH, spCond, ODO, ws, discharge
-
-
-2) MB both years 
-
-- 0 day lag: pH, ODO, discharge, wd (deltaTemp last)
-- 1 day lag: pH, discharge, ODO, spCond, wd (deltaTemp moves up)
-- 2 day lag: pH, ODO, wd, solar, spCond, 
-- 3 day lag: pH, spCond, temp, wd, deltaTemp
-- 4 day lag: spCond, pH, temp, ODO, ws, deltaTemp
-- 5 day lag: spCond, temp, pH, ODO, deltaTemp, wd
-- 6 day lag: spCond, temp, pH, ODO, wd, discharge, deltaTemp
+results_2 %>% 
+  ggplot() +
+  geom_bar(aes(x = as.factor(DayinFuture), y = FeatureImportance, fill = Parameter),
+           stat = 'identity') +
+  scale_y_continuous(limits = c(0, 1.01),
+                     name = "Feature importance") + 
+  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Water temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed", "Year"))+
+  xlab("Days in the future")+
+  #expand = c(0,0))+
+  theme_bw()+
+  theme(
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size =10, colour = "black"),
+        legend.text = element_text(size = 10),
+        legend.text.align = 0,
+        axis.text.x = element_text(angle = 45, hjust = 1))
 
 
-3) 2017 both bays 
+```
 
-- 0 day lag: discharge, spCond, pH, ODO 
-- 1 day lag: spCond, ODO, discharge, pH, solar 
-- 2 day lag: pH, spCond, discharge, ws, ODO
-- 3 day lag: spCond, ODO, discharge, solar
-- 4 day lag: spCond, ODO, solar, wd, temp 
-- 5 day lag: spCond, deltaTemp, solar, wd, temp 
-- 6 day lag: deltaTemp, spCond, ODO, wd, discharge
+```{r, echo = F}
 
-4) 2018 both bays 
+library(ggplot2)
+library(RColorBrewer)
+library(dplyr)
 
-- 0 day lag: pH, spCond, ODO, discharge 
-- 1 day lag: pH, spCond, discharge, ODO 
-- 2 day lag: pH, discharge, temp, spCond
-- 3 day lag: pH, ODO, discharge, spCond, temp 
-- 4 day lag: pH, spCond, discharge, temp, deltaTemp 
-- 5 day lag: pH, spCond, temp, discharge, ODO
-- 6 day lag: pH, spCond, temp, solar, ODO 
+results_1 <- read.csv("Sep_bay_and_year.csv") 
 
-5) both bays both years 
+results_1 <- results_1 %>% 
+  select(-c(X))
 
-- 0 day lag: pH, spCond, year, discharge, solar
-- 1 day lag: pH, spCond, year, discharge, temp
-- 2 day lag: pH, spCond, discharge, year, deltaTemp
-- 3 day lag: pH, spCond, discharge, year, ODO 
-- 4 day lag: pH, spCond, year, discharge, ODO 
-- 5 day lag: pH, spCond, temp, ODO, year, discharge 
-- 6 day lag: pH, spCond, temp, year, deltaTemp, ODO 
+results_1 %>% 
+  ggplot() +
+  geom_bar(aes(x = as.factor(DayinFuture), y = FeatureImportance, fill = Parameter),
+           stat = 'identity')+
+  scale_y_continuous(limits = c(0, 1.01),
+                     name = "Feature importance") + 
+  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Water temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed"))+
+  xlab("Days in the future")+
+  #expand = c(0,0))+
+  theme_bw()+
+  theme(
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size =10, colour = "black"),
+        legend.text = element_text(size = 10),
+        legend.text.align = 0,
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  facet_wrap(~bay+year)
+
+```
 
 
 
-LOOK INTO 
-- is spCond just super highly correlated with PC? Why is it such an important feature? What is it highly correlated with? are the units different between the bays? 
-- wd (not speed) is important for MB! let's look at correlations 
-- should we run without pH? 
-- what's the significance in the difference in the cluster numbers?? 
+```{r, echo = F}
+
+results_3 <- read.csv("Sep_bay.csv") 
+
+results_3 <- results_3 %>% 
+  select(-c(X))
+
+results_3 %>% 
+  ggplot() +
+  geom_bar(aes(x = as.factor(DayinFuture), y = FeatureImportance, fill = Parameter),
+           stat = 'identity') +
+  scale_y_continuous(limits = c(0, 1.01),
+                     name = "Feature importance") + 
+  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Water temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed", "Year"))+
+  xlab("Days in the future")+
+  #expand = c(0,0))+
+  theme_bw()+
+  theme(
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size =10, colour = "black"),
+        legend.text = element_text(size = 10),
+        legend.text.align = 0,
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  facet_wrap(~bay, nrow = 2)
+
+
+```
+
+
+```{r, echo = F}
+
+results_4 <- read.csv("Sep_year.csv") 
+
+results_4 <- results_4 %>% 
+  select(-c(X))
+
+results_4 %>% 
+  ggplot() +
+  geom_bar(aes(x = as.factor(DayinFuture), y = FeatureImportance, fill = Parameter),
+           stat = 'identity') +
+  scale_y_continuous(limits = c(0, 1.01),
+                     name = "Feature importance") + 
+  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Water temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed"))+
+  xlab("Days in the future")+
+  #expand = c(0,0))+
+  theme_bw()+
+  theme(
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size =10, colour = "black"),
+        legend.text = element_text(size = 10),
+        legend.text.align = 0,
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  facet_wrap(~year, nrow = 2)
+
+
+```
+
+
 
 ## Discussion 
 

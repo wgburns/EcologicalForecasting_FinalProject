@@ -1,0 +1,504 @@
+---
+title: "Feature Importance"
+author: "WB"
+date: "12/3/2019"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+*going to use Chege's original feature importance code and try and figure out a way to loop the analysis through the 0 - 6 day into the future  data so that we don't have to copy and paste as much 
+
+***what i want to do:** 
+ + run a feature importance model for each bay and each year with PC daily mean as the predictor variable 0 - 6 days out 
+  + right now Chege has the code to do it one at a time but i want to add a column to each yearly dataset that has DayinFuture so then i can loop through the different predictor varaibles
+  + create an empty dataset that has the columns of Site (MB or AB), Year (2017 or 2018), DayinFuture (0-6), Parameter (Temp, ws, wd, ODO...etc.), FeatureImportance (0 - 1.0)
+  + right for loop that takes each dataset and runs feature importance for each of the PC daily means and then adds it to the table
+  
+###Preliminaries 
+
+```{r, warning = F, message = F}
+# libraries we're going to use
+library(xgboost) # for xgboost
+library(tidyverse) # general utility functions
+library(data.table)
+library(dplyr)
+library(Matrix)
+library(zoo)
+library(Ckmeans.1d.dp)
+library(RColorBrewer)
+
+```
+
+### Load in data 
+
+```{r, message = F, warning = F}
+###############################################################
+# FUNCTION: multMerge
+# creates: easy way to upload 4 sep files 
+# input: filepath for where data files are located
+# output: data frame with all four datasets 
+#--------------------------------------------------------------
+multmerge <- function(mypath){
+  filenames=list.files(path=mypath, full.names=TRUE)
+  datalist = lapply(filenames, function(x){read.csv(file=x,header=T)})
+  Reduce(function(x,y) {merge(x,y,all = TRUE)}, datalist)
+}
+###############################################################
+
+data <- multmerge("data/")
+
+# take out variables I don't want to use 
+# right now only including the non-correlated variables because we want to learn more about the mechanisms 
+dbFull <- data %>% 
+  select(-c(X, date, pHMean, TempMean, ODOMean, ChlMean, TurbMean, DeltaDOMean)) %>% 
+  mutate(year = as.factor(year)) 
+
+#put DayinFuture into long format so that we can loop through and store the results of the feature importance analysis for easy plotting 
+db <- dbFull %>% 
+  gather(key = "DayinFuture", value = "PCMean", PCMean1:PCMean7) %>% 
+  mutate(DayinFuture = as.numeric(str_sub(DayinFuture, -1))) %>% 
+  na.omit()
+
+
+
+
+
+```
+
+
+### Create function for feature importance model 
+
+```{r, }
+
+###############################################################
+# FUNCTION: featImportance
+# creates: runs featImportance code Chege wrote 
+# input: data frame with columns SpCondMean, DeltaTempMean, ws, wd, solar, temp, discharge, bay, year, DayinFuture, PCMean
+# output: data frame with 5 columns Site, Year, DayinFuture, Parameter, FeatureImportance 
+#--------------------------------------------------------------
+featImportance <- function(data = db1){
+  
+  # get training labels i.e our bloom variable
+  bloom_variable <- data %>%
+    select(PCMean)  # get the column with the bloom measurements
+  
+  
+  #Just have a dataframe with the target variable and lags removed
+  without_bloom_indicator <- data %>%
+    select(-starts_with("PCMean"))
+  
+  #Here i remove redundant columns and keep away whatever is not numeric
+  without_bloom_numeric <- without_bloom_indicator %>%
+     select_if(is.numeric) # select remaining numeric columns
+
+  #convert the dataframe into a matrix
+  without_bloom_matrix <- data.matrix(without_bloom_numeric)
+  
+  # get the numb 70/30 training test split
+  numberOfTrainingSamples <- round(nrow(bloom_variable)*.7)
+  
+  # training data
+  train_data <- without_bloom_matrix[1:numberOfTrainingSamples,]
+  train_labels <- bloom_variable[1:numberOfTrainingSamples,]
+  
+ 
+  # testing data
+  test_data <- without_bloom_matrix[-(1:numberOfTrainingSamples),]
+  test_labels <- bloom_variable[-(1:numberOfTrainingSamples),]
+  
+  
+  # put our testing & training data into two seperates Dmatrixs objects
+  dtrain <- xgb.DMatrix(data = train_data, label= train_labels)
+  dtest <- xgb.DMatrix(data = test_data, label= test_labels)
+  
+  # train a model using our training data
+  model <- xgboost(data = dtrain, # the data   
+                   nround = 2, # max number of boosting iterations
+                   objective = "reg:linear")  
+                   # the objective function
+  
+  # generate predictions for our held-out testing data
+  pred <- predict(model, dtest)
+  
+  # get information on how important each feature is
+  importance <- xgb.importance(names(without_bloom_matrix), model = model)
+  
+  results <- data.frame(list(Parameter = importance$Feature, 
+                   FeatureImportance = importance$Gain))
+  
+  # create output dataframe 
+  n <- nrow(results)
+  results <- results %>% 
+    mutate(bay = rep(data$bay[1], n),
+           year = rep(data$year[1], n), 
+           DayinFuture = rep(data$DayinFuture[1]-1, n))
+  return(results)
+  
+}
+
+###############################################################
+
+#useful code to see the unused parameters that got dropped 
+#unused_features <- setdiff(colnames(dtrain), importance$Feature)
+
+```
+
+
+### 1. Separate by year and bay 
+
+```{r, include = F}
+# splitting them up by bay because i want to run feature importance for each bay and year 
+db1 <- db %>%
+  filter(bay == "MB" & year == "2017")
+
+db2 <- db %>%
+  filter(bay == "MB" & year == "2018") 
+
+db3 <- db %>%
+  filter(bay == "AB" & year == "2017")
+
+db4 <- db %>%
+  filter(bay == "AB" & year == "2018")
+
+#necessary to run these first so i acn get oproper utputs for loops i will run 
+myList=NULL
+df=NULL
+datalist = list()
+
+######################MB 2017##############################
+for (i in 1:7) {
+  temp <- db1[(db1$DayinFuture == i),]
+  df <- featImportance(temp)
+  datalist[[i]] <- df
+  
+}
+
+mb17 <- do.call(rbind, datalist)
+###############################################################
+
+
+
+######################MB 2018##############################
+for (i in 1:7) {
+  temp <- db2[(db2$DayinFuture == i),]
+  df <- featImportance(temp)
+  datalist[[i]] <- df
+  
+}
+
+mb18 <- do.call(rbind, datalist)
+###############################################################
+
+
+######################AB 2017##############################
+for (i in 1:7) {
+  temp <- db3[(db3$DayinFuture == i),]
+  df <- featImportance(temp)
+  datalist[[i]] <- df
+  
+}
+
+ab17 <- do.call(rbind, datalist)
+###############################################################
+
+
+######################AB 2018##############################
+for (i in 1:7) {
+  temp <- db4[(db4$DayinFuture == i),]
+  df <- featImportance(temp)
+  datalist[[i]] <- df
+  
+}
+
+ab18 <- do.call(rbind, datalist)
+###############################################################
+
+
+
+```
+
+#### 1.1 Plot: stacked bar chart - separated by bay and year 
+
+```{r, }
+
+#combine outputs into one dataset to make plot 
+results_1 <- rbind(ab17, ab18, mb17, mb18)
+
+#write.csv(results_1, "Sep_bay_and_year.csv")
+
+results_1 %>% 
+  ggplot() +
+  geom_bar(aes(x = as.factor(DayinFuture), y = FeatureImportance, fill = Parameter),
+           stat = 'identity')+
+  scale_y_continuous(limits = c(0, 1),
+                     name = "Feature importance") + 
+  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Water temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed"))+
+  xlab("Days in the future")+
+  #expand = c(0,0))+
+  theme_bw()+
+  theme(
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size =10, colour = "black"),
+        legend.text = element_text(size = 10),
+        legend.text.align = 0,
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  facet_wrap(~bay+year)
+
+```
+
+
+### 2. Keep all data together - combined bay and year  
+
+- to-do: figure how to run chege's code with categorical variables, check the old, original code chege uploaded ! 
+- i figured out the function i wrote wasn't working with the bays and years combined because i had changed them to categorical varaibles for the above analysis to separate them and make 4 plots
+- now i need to go back and change "bay" and "year" to 0's and 1's: 2017 = 0, 2018 = 1, MB = 0, "AB" = 1. 
+
+```{r, }
+#first need to convert the categorical variables back into numeric
+#want to keep the original column to make sure it's correct
+db$bayNUM <- db$bay
+levels(db$bayNUM) <- c(0,1) #0 is MB, 1 is AB
+#now for year
+db$yearNUM <- db$year
+levels(db$yearNUM) <- c(0, 1) #0 is 2017, 1 is 2018
+
+#looks good, now i need to make them numbers and take out the categorical variables
+dbALL <- db %>%
+  mutate(bayNUM = as.numeric(bayNUM),
+         yearNUM = as.numeric(yearNUM))  %>%
+  select(-c(bay, year))
+#weird i automatically changed 0 and 1 to 1 and 2, not sure if that matters
+
+#i thought i needed to create a sparse matrix for the categorical variables to work but i'm 99% sure the results are exactly the same...here's the code but i didn't work it into the function because the test run i did with just one day of data was the same 
+
+# test <- db %>% 
+#   filter(DayinFuture == 1) %>% 
+#   select(-DayinFuture)
+# 
+# 
+# sparse_matrix <- sparse.model.matrix(PCMean ~ ., 
+#                                      data = test,
+#                                      contrasts.arg=list(bay=diag(nlevels(db$bay)), 
+#             year=diag(nlevels(db$year))))[,-1]
+# head(sparse_matrix)
+
+
+myList=NULL
+df=NULL
+datalist = list()
+######################all data ##############################
+for (i in 1:7) {
+  temp <- dbALL[(dbALL$DayinFuture == i),]
+  df <- featImportance(temp)
+  datalist[[i]] <- df
+
+}
+
+
+###############################################################
+
+
+
+```
+
+
+#### 2.1 Plot: stacked bar chart - all data combined  
+
+```{r, }
+
+#combine outputs into one dataset to make plot 
+results_2 <- do.call(rbind, datalist)
+#write.csv(results_2, "allCombined.csv")
+
+results_2 %>% 
+  ggplot() +
+  geom_bar(aes(x = as.factor(DayinFuture), y = FeatureImportance, fill = Parameter),
+           stat = 'identity') +
+  scale_y_continuous(limits = c(0, 1),
+                     name = "Feature importance") + 
+  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Water temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed", "Year"))+
+  xlab("Days in the future")+
+  #expand = c(0,0))+
+  theme_bw()+
+  theme(
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size =10, colour = "black"),
+        legend.text = element_text(size = 10),
+        legend.text.align = 0,
+        axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+### 3. Separate by bay
+
+```{r, include = F}
+#need to add back bay into categorical variable 
+#first need to convert the categorical variables back into numeric
+#want to keep the original column to make sure it's correct
+#now for year
+db$yearNUM <- db$year
+levels(db$yearNUM) <- c(0, 1) #0 is 2017, 1 is 2018
+
+#looks good, now i need to make them numbers and take out the categorical variables
+dbBAY<- db %>%
+  mutate(
+         yearNUM = as.numeric(yearNUM))  %>%
+  select(-c(year, bayNUM))
+
+# splitting them up by bay because i want to run feature importance for each bay and year 
+db5 <- dbBAY %>%
+  filter(bay == "MB")
+
+db6 <- dbBAY %>%
+  filter(bay == "AB")
+
+#necessary to run these first so i acn get oproper utputs for loops i will run 
+myList=NULL
+df=NULL
+datalist = list()
+
+###################### MB ##############################
+for (i in 1:7) {
+  temp <- db5[(db5$DayinFuture == i),]
+  df <- featImportance(temp)
+  datalist[[i]] <- df
+  
+}
+
+mb <- do.call(rbind, datalist)
+###############################################################
+
+
+
+###################### AB ##############################
+for (i in 1:7) {
+  temp <- db6[(db6$DayinFuture == i),]
+  df <- featImportance(temp)
+  datalist[[i]] <- df
+  
+}
+
+ab <- do.call(rbind, datalist)
+###############################################################
+
+
+
+```
+
+
+#### 3.1 Plot: stacked bar chart - separated by bay 
+
+```{r, }
+
+#combine outputs into one dataset to make plot 
+results_3 <- rbind(ab, mb)
+
+write.csv(results_3, "Sep_bay.csv")
+
+results_3 %>% 
+  ggplot() +
+  geom_bar(aes(x = as.factor(DayinFuture), y = FeatureImportance, fill = Parameter),
+           stat = 'identity') +
+  scale_y_continuous(limits = c(0, 1),
+                     name = "Feature importance") + 
+  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Water temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed", "Year"))+
+  xlab("Days in the future")+
+  #expand = c(0,0))+
+  theme_bw()+
+  theme(
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size =10, colour = "black"),
+        legend.text = element_text(size = 10),
+        legend.text.align = 0,
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  facet_wrap(~bay, nrow = 2)
+
+```
+
+### 4. Separate by year
+
+```{r, include = F}
+#need to add back bay into categorical variable 
+#first need to convert the categorical variables back into numeric
+#want to keep the original column to make sure it's correct
+#now for bay
+db$bayNUM <- db$bay
+levels(db$bayNUM) <- c(0, 1) #0 is 2017, 1 is 2018
+
+#looks good, now i need to make them numbers and take out the categorical variables
+dbYR <- db %>%
+  mutate(
+         bayNUM = as.numeric(bayNUM))  %>%
+  select(-c(bay, yearNUM))
+
+# splitting them up by bay because i want to run feature importance for each bay and year 
+db7 <- dbYR %>%
+  filter(year == "2017")
+
+db8 <- dbYR %>%
+  filter(year == "2018") 
+
+#necessary to run these first so i acn get oproper utputs for loops i will run 
+myList=NULL
+df=NULL
+datalist = list()
+
+###################### MB ##############################
+for (i in 1:7) {
+  temp <- db7[(db7$DayinFuture == i),]
+  df <- featImportance(temp)
+  datalist[[i]] <- df
+  
+}
+
+db17 <- do.call(rbind, datalist)
+###############################################################
+
+
+
+###################### AB ##############################
+for (i in 1:7) {
+  temp <- db8[(db8$DayinFuture == i),]
+  df <- featImportance(temp)
+  datalist[[i]] <- df
+  
+}
+
+db18 <- do.call(rbind, datalist)
+###############################################################
+
+
+
+```
+
+
+#### 4.1 Plot: stacked bar chart - separated by year 
+
+```{r, }
+
+#combine outputs into one dataset to make plot 
+results_4 <- rbind(db17, db18)
+
+write.csv(results_4, "Sep_year.csv")
+
+results_4 %>% 
+  ggplot() +
+  geom_bar(aes(x = as.factor(DayinFuture), y = FeatureImportance, fill = Parameter),
+           stat = 'identity') +
+  scale_y_continuous(limits = c(0, 1),
+                     name = "Feature importance") + 
+  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Water temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed"))+
+  xlab("Days in the future")+
+  #expand = c(0,0))+
+  theme_bw()+
+  theme(
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size =10, colour = "black"),
+        legend.text = element_text(size = 10),
+        legend.text.align = 0,
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  facet_wrap(~year, nrow = 2)
+
+```
