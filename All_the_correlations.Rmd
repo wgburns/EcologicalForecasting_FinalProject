@@ -1,0 +1,123 @@
+---
+title: "Correlations"
+author: "Mahalia Clark"
+date: "12/5/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Correlations
+Let's look at the correlations between each variable and PC across the different time lags. 
+
+First we will look at potentially confounding variables: pH, ODO, and Chl. These are the ones we think are probably driven by photosynthesis, so by phytoplankton and cyanobacteria. Then we will look at those variables we used to run Feature Importance.
+
+I only know how to make correlation matrices, so we'll do that for now (one for each variable with all 7 time steps of PC). By scanning across the top line of the matrix, we can see how the correlation of PC with that variable changes with increasing time lag.
+
+Obviously, if we only care about the top line, I should probably just figure out how to calculate correlation coefficients and spit them out into a data table, and then I could have a row for each variable and columns for PC1-7 (and beyond!), (or vice versa, swap the rows and columns?) and then we could even graph how the correlation coefficient changes over time (increased lag). But I didn't think of that until I'd already created the rest of this document, so that can be a future/never project.
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#Load relevant packages
+library(dplyr)
+library(tidyr)
+library(openair)
+library(ggplot2)
+library(viridis)
+library(PerformanceAnalytics)
+
+#Load Data
+MB17 <- read.csv("data/mbAll17.csv", header = T) 
+MB18 <- read.csv("data/mbAll18.csv", header = T)
+SA17 <- read.csv("data/abAll17.csv", header = T)
+SA18 <- read.csv("data/abAll18.csv", header = T)
+
+#Fix Date Format
+MB17 <- MB17 %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
+MB18 <- MB18 %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
+SA17 <- SA17 %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
+SA18 <- SA18 %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
+```
+
+# Confounding Variables
+
+## MB17
+```{r, echo = FALSE}
+for(i in 5:7){
+  chart.Correlation(MB17[,c(i,11:17)], histogram = T)
+}
+```
+
+## MB18
+```{r, echo = FALSE}
+for(i in 5:7){
+  chart.Correlation(MB18[,c(i,11:17)], histogram = T)
+}
+```
+
+## SA17
+```{r, echo = FALSE}
+for(i in 5:7){
+  chart.Correlation(SA17[,c(i,11:17)], histogram = T)
+}
+```
+## SA18
+```{r, echo = FALSE}
+for(i in 5:7){
+  chart.Correlation(SA18[,c(i,11:17)], histogram = T)
+}
+```
+
+If we scan along the top line of each matrix, we see how the correlation of a given variable with PC changes with increasing time lag.
+
+Most of these correlations become weaker and weaker with increasing time lag, although a couple remain steady (ODO in MB17, pH in SA18). Also interesting that ODO and PC are not at all correlated in MB2018.
+
+
+# Feature Importance variables
+
+## MB17
+```{r, echo = FALSE}
+for(i in c(10,22,20,4,21,19,18)){
+  chart.Correlation(MB17[,c(i,11:17)], histogram = T)
+}
+```
+
+## MB18
+```{r, echo = FALSE}
+for(i in c(10,22,20,4,21,19,18)){
+  chart.Correlation(MB18[,c(i,11:17)], histogram = T)
+}
+```
+
+## SA17
+```{r, echo = FALSE}
+for(i in c(10,22,20,4,21,19,18)){
+  chart.Correlation(SA17[,c(i,11:17)], histogram = T)
+}
+```
+
+## SA18
+```{r, echo = FALSE}
+for(i in c(10,22,20,4,21,19,18)){
+  chart.Correlation(SA18[,c(i,11:17)], histogram = T)
+}
+```
+
+These sometimes show the same trends as feature importance, but not always.
+
+**Incidentally, discharge and salinity are NOT correlated in MB, but ARE correlated in St. Albans.**
+```{r, echo = FALSE}
+  chart.Correlation(MB17[,c(22,4)], histogram = T)
+
+  chart.Correlation(MB18[,c(22,4)], histogram = T)
+
+  chart.Correlation(SA17[,c(22,4)], histogram = T)
+
+  chart.Correlation(SA18[,c(22,4)], histogram = T)
+```

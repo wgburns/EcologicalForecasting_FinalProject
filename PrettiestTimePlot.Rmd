@@ -1,0 +1,130 @@
+---
+title: "Which Method makes the Prettiest Time Plots"
+author: "Mahalia Clark"
+date: "12/4/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Time Plots
+
+We wanted to make some prettier time plots to better visualize the data. I tried three methods: basic built in plot function, timePlot function from openair package, and ggplot.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#Load relevant packages
+library(dplyr)
+library(tidyr)
+library(openair)
+library(ggplot2)
+library(viridis)
+
+#install.packages("padr")
+  library(padr)
+  library(zoo)
+
+#Load Data
+MB17 <- read.csv("data/mbAll17.csv", header = T) 
+MB18 <- read.csv("data/mbAll18.csv", header = T)
+SA17 <- read.csv("data/abAll17.csv", header = T)
+SA18 <- read.csv("data/abAll18.csv", header = T)
+
+#Fix Date Format
+MB17 <- MB17 %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
+MB17 <- pad(MB17, interval = "day")
+
+MB18 <- MB18 %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
+MB18 <- pad(MB17, interval = "day")
+
+SA17 <- SA17 %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
+SA17 <- pad(MB17, interval = "day")
+
+SA18 <- SA18 %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
+SA18 <- pad(MB17, interval = "day")
+
+```
+
+## First we can try with the basic plot function
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height = 6, fig.width = 7}
+plotf <- function(df, title){
+  par(mfrow = c(8, 1), oma = c(5,0,0,0) + 0.1, mar = c(0,5,1,0) + 0.1)
+  plot(MB17$date, MB17$PCMean1, type = "l", main = title, ylab = "PC", xaxt = "n")
+  plot(MB17$date, MB17$DeltaTempMean, type = "l", ylab = "Strat", xaxt = "n")
+  plot(MB17$date, MB17$discharge, type = "l", ylab = "Q", xaxt = "n")
+  plot(MB17$date, MB17$solar, type = "l", ylab = "Sun", xaxt = "n")
+  plot(MB17$date, MB17$SpCondMean, type = "l", ylab = "Sal", xaxt = "n")
+  plot(MB17$date, MB17$temp, type = "l", ylab = "Temp", xaxt = "n")
+  plot(MB17$date, MB17$wd, type = "l", ylab = "WD", xaxt = "n")
+  plot(MB17$date, MB17$ws, type = "l", ylab = "WS")
+}
+plotf(MB17, "MB17")
+```
+
+The graphs are a little short vertically. How can I get rid of all the space in between without losing my bottom x axis?
+
+## Next, we can try using the package Wilton suggested: openair.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height = 6, fig.width = 7}
+#Try with timePlot
+plotify <- function(df, title){
+    timePlot(df, pollutant = c("PCMean1",
+                                     "DeltaTempMean",
+                                     "discharge",
+                                     "SpCondMean",
+                                     "temp",
+                                     "solar",
+                                     "ws",
+                                     "wd"),
+           date.pad = TRUE,
+           key = FALSE,
+           name.pol = c("PC", "Strat", "Q", "Sal", "Temp", "Sun", "WS", "WD"),
+           ylab = " ",
+           main = title,
+           y.relation = "free") 
+           
+}
+plotify(MB17, "MB17")
+#plotify(MB18, "MB18")
+#plotify(SA17, "SA17")
+#plotify(SA18, "SA18")
+
+```
+This is pretty good. I just feel like the y axes look messy.
+
+## Finally, we can try using ggplot.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height = 6, fig.width = 7}
+#Select&Rename
+MB17_short <- MB17 %>% 
+  select(c(date, "PCMean1",
+                                     "DeltaTempMean",
+                                     "discharge",
+                                     "SpCondMean",
+                                     "temp",
+                                     "solar",
+                                     "ws",
+                                     "wd")) %>% 
+  rename(PC = PCMean1,
+         Strat = DeltaTempMean,
+         Q = discharge,
+         Sal = SpCondMean,
+         Temp = temp,
+         Sun = solar,
+         WS = ws,
+         WD = wd)
+
+#Tidy
+MB17_tidy <- gather(MB17_short, "PC":"WD", key = "Variable", value = "Value") 
+
+#Plot
+ggplot(MB17_tidy, aes(x = date, y = Value, group = Variable, color = Variable)) + labs(title = "MB17") + xlab("Time") + theme(axis.title.y = element_blank())  + geom_line(show.legend = FALSE) + facet_grid(rows = "Variable", scales = "free_y", switch = "both") 
+#Woah, it worked!! But can I move the labels to the right? Yes! (switch)
+```
+It's beautiful!

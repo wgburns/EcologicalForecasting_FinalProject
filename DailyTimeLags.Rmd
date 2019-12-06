@@ -87,6 +87,11 @@ write.csv(SA18_daily, "SA18_daily.csv")
 Next, I made a function that creates (messy) time plots of the data so we can just quickly visually inspect how PC varies with different environmental factors over time.
 
 ```{r}
+MB17_daily <- read.csv("MB17_daily.csv", header = T)
+MB18_daily <- read.csv("MB18_daily.csv", header = T)
+SA17_daily <- read.csv("SA17_daily.csv", header = T)
+SA18_daily <- read.csv("SA18_daily.csv", header = T)
+
 #Function that creates a timeplot of the df (with unlagged PC)
 plotify <- function(df){
   timePlot(df, pollutant = c("PCMean1",
