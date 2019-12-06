@@ -43,13 +43,9 @@ Anthropogenic eutrophication, meaning increases in nutrients entering aquatic sy
 How does lake size (area/depth) affect which drivers may be relatively important (shallow vs deep)? Lake trophic status? 
 
 
-
-
-
-
 ## 2. Methods 
 
-* 2.1 study sites (WB)
+### 2.1 study sites (WB)
   + meteorological station data (WB): air temp, solar radiation, wind speed, wind direction (WB)
   + discharge data (WB)
 
@@ -80,20 +76,17 @@ Importance is calculated for a single decision tree by the amount that each attr
 * fig of time series of the parameters to set the scene? 
 * which set of feature importance do we want to use? 
 
-```{r, echo = F, message = F}
-
-<<<<<<< HEAD
-library(ggplot2)
-library(RColorBrewer)
-library(dplyr)
-=======
 ### Time Series of the parameters to set the scene, maybe:
 
 *I went down a rabbit hole and tried some different ways of making time series: see PrettiestTimePlot.Rmd or pdf for details. If we want to include timeplots for one or all bays, I would go for the ggplot ones, but four sets of timeplots would take up a ton of space and might not be particularly relevant - MC*
 
-#### Brief typed out results for easier interpretation (NOT GOING TO INCLUDE)
->>>>>>> dddc3940efdb8033c1ce526386022e45938a069e
+#### Brief typed out results for easier interpretation? (NOT GOING TO INCLUDE)
 
+```{r, echo = F, message = F, warning= FALSE}
+
+library(ggplot2)
+library(RColorBrewer)
+library(dplyr)
 
 results_2 <- read.csv("allCombined.csv") 
 
@@ -120,7 +113,7 @@ results_2 %>%
 
 ```
 
-```{r, echo = F}
+```{r, echo = F, message = F, warning= FALSE}
 
 
 results_1 <- read.csv("Sep_bay_and_year.csv") 
@@ -150,7 +143,7 @@ results_1 %>%
 
 
 
-```{r, echo = F}
+```{r, echo = F, message = F, warning= FALSE}
 
 results_3 <- read.csv("Sep_bay.csv") 
 
@@ -179,7 +172,7 @@ results_3 %>%
 ```
 
 
-```{r, echo = F}
+```{r, echo = F, message = F, warning= FALSE}
 
 results_4 <- read.csv("Sep_year.csv") 
 
@@ -208,14 +201,11 @@ results_4 %>%
 ```
 
 
-<<<<<<< HEAD
-=======
 LOOK INTO 
 - is spCond just super highly correlated with PC? Why is it such an important feature? What is it highly correlated with? are the units different between the bays?
 - wd (not speed) is important for MB! let's look at correlations 
 - should we run without pH? 
 - what's the significance in the difference in the cluster numbers?? 
->>>>>>> dddc3940efdb8033c1ce526386022e45938a069e
 
 ### Correlations
 
