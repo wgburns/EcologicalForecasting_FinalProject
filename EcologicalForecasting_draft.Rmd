@@ -82,6 +82,11 @@ Importance is calculated for a single decision tree by the amount that each attr
 
 ```{r, echo = F, message = F}
 
+library(ggplot2)
+library(RColorBrewer)
+library(dplyr)
+
+
 results_2 <- read.csv("allCombined.csv") 
 
 results_2 <- results_2 %>% 
@@ -109,9 +114,6 @@ results_2 %>%
 
 ```{r, echo = F}
 
-library(ggplot2)
-library(RColorBrewer)
-library(dplyr)
 
 results_1 <- read.csv("Sep_bay_and_year.csv") 
 
