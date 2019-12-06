@@ -235,6 +235,18 @@ There is also satellite imagery available covering both bays, and it can be used
 
 Finally, our long term goal is to use this high frequency data to develop a forecasting model using machine learning techniques, in the hopes of predicting cyanobacteria blooms a few days before they occur. We would begin by inputting all available high frequency buoy, weather and discharge data, in order to predict PC levels (or a categorical variable for bloom presence or absence). If that proved successful, we would then begin to remove input variables one by one, to see what effect that has on the forecast accuracy. The goal would be to have a functional forecasting model with as few input variables as possible.
 
+## Easton comments
+
+Good job overall describing some background on the system and presenting interesting plots from your analyses. I think your future directions are great and that a lot could come out of this.
+
+A few things to change for the final project:
+
+- make sure the document can compile to a pdf or html
+- include figure captions
+- in your discussion bullet points, be sure to reference which figures support your claims
+
+I look forward to providing more feedback after the final project and next semester. 
+
 ## References 
 
 INFO ON HOW TO CITE in .Rmd from https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html : 
