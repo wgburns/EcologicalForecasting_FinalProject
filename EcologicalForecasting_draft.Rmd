@@ -82,9 +82,17 @@ Importance is calculated for a single decision tree by the amount that each attr
 
 ```{r, echo = F, message = F}
 
+<<<<<<< HEAD
 library(ggplot2)
 library(RColorBrewer)
 library(dplyr)
+=======
+### Time Series of the parameters to set the scene, maybe:
+
+*I went down a rabbit hole and tried some different ways of making time series: see PrettiestTimePlot.Rmd or pdf for details. If we want to include timeplots for one or all bays, I would go for the ggplot ones, but four sets of timeplots would take up a ton of space and might not be particularly relevant - MC*
+
+#### Brief typed out results for easier interpretation (NOT GOING TO INCLUDE)
+>>>>>>> dddc3940efdb8033c1ce526386022e45938a069e
 
 
 results_2 <- read.csv("allCombined.csv") 
@@ -200,6 +208,24 @@ results_4 %>%
 ```
 
 
+<<<<<<< HEAD
+=======
+LOOK INTO 
+- is spCond just super highly correlated with PC? Why is it such an important feature? What is it highly correlated with? are the units different between the bays?
+- wd (not speed) is important for MB! let's look at correlations 
+- should we run without pH? 
+- what's the significance in the difference in the cluster numbers?? 
+>>>>>>> dddc3940efdb8033c1ce526386022e45938a069e
+
+### Correlations
+
+*I made correlations matrices for pretty much every environmental parameter with the 7 time steps of PC data to look at trends of how correlations with PC change with increasing time lag... Sometimes they show similar trends as feature importance, but sometimes not. In theory I could summarize these correlations coefficients into a chart with environmental parameters by PC time steps, which could be interesting for looking at trends. I could even graph them! But I haven't yet. See All_the_correlations.Rmd/pdf for all the correlations. - MC*
+
+- Made lots of correlation tables
+
+- Haven't summarized trends yet: match feature importance somtimes, not always
+
+- Discharge and salinity are NOT correlated in MB, but ARE correlated in St. Albans.
 
 ## Discussion 
 
