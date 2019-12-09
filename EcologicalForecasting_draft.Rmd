@@ -46,8 +46,12 @@ How does lake size (area/depth) affect which drivers may be relatively important
 ## 2. Methods 
 
 ### 2.1 study sites (WB)
-  + meteorological station data (WB): air temp, solar radiation, wind speed, wind direction (WB)
-  + discharge data (WB)
+
+Missisquoi and St. Albans Bays are both shallow, eutrophic bays in the Northeastern arm of Lake Champlain. These two sites were chosen because of their proximity to one another and their unique geomorphometry, making this an interesting comparison of how external factors influence the timing and severity of cyanobacteria blooms. [insert information about the watershed characteristics for each bay]. 
+
+  + discharge data (WB): River discharge data was obtained from USGS gages in both the Missisquoi (Station 0429400, Missisquoi River at Swanton, Vermont) and St. Albans (Station 04292810, Jewett Brook near St. Albans, Vermont) watersheds. 
+  
+  + meterological data: In MB [insert info in here but I’m pretty sure I need to use the Venice Bay data for 2017 since the YSI met station was messing up but then midway through 2018 we deployed a HOBO met station, so not yet sure what to write].  The outer monitoring station in St. AB was equipped with a HOBO RX3000 remote monitoring station data logger (Onset Computer Corporation, 470 MacArthur Blvd., Bourne, MA 02532) that collected hourly data on wind speed and direction, air temperature, solar radiation, photosynthetic radiation, air pressure, and relative humidity.
 
 ### 2.2 Preparing the high frequency buoy data (MC)
 
