@@ -11,7 +11,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-## 1. Introduction (WB)
+## 1. Introduction 
 
 GENERAL NOTES:  
 
@@ -23,7 +23,7 @@ GENERAL NOTES:
   + map of study area 
   + bar graph of cyanobacteria bloom timing being different every year (long-term monitoring)
   
-Anthropogenic eutrophication of natural water bodies, meaning increased nutrient concentration due to human activities, is a global phenomenon that often leads to higher rates of primary production and decreased utility of aquatic ecosystems (eg. @reynolds_cyanobacterial_1987; @paerl_nuisance_1988; @paerl_controlling_2011). Blooms of cyanobacteria, a type of potentially toxic prokaryotic plankton, are becoming more prevalent in coastal oceans, some parts of the Laurentian Great Lakes, and thousands of inland lakes and ponds around the world (Paerl et al. 2001, 2011; Paerl and Huisman 2008). Phytoplankton play an integral role as the base of aquatic food webs in both freshwater and marine systems, however, when cyanobacteria growth is unchecked, blooms can be detrimental to organisms living in and around freshwater ecosystems and often cause problems that propagate up the food web (add REFS). The climate is changing, and environmental conditions are becoming more favorable for bloom-forming harmful cyanobacteria (Jöhnk et al. 2006; Paerl and Huisman 2008; Jeppesen et al. 2011; Huisman et al. 2018). Therefore, it is becoming increasingly important to understand cyanobacteria bloom onset and senescence. Understanding why and when severe cyanobacteria blooms occur will help inform mitigation efforts. 
+Anthropogenic eutrophication of natural water bodies, meaning increased nutrient concentration due to human activities, is a global phenomenon that often leads to higher rates of primary production and decreased utility of aquatic ecosystems (@reynolds_cyanobacterial_1987; @paerl_nuisance_1988; @paerl_controlling_2011). Eutrophication, coupled with warmer temperatures and higher CO2 concentrations, has caused increases in cyanobacteria blooms, a type of potentially toxic prokaryotic plankton, in coastal oceans, some parts of the Laurentian Great Lakes, and thousands of inland lakes and ponds (@paerl_harmful_2001, @paerl_controlling_2011; @paerl_blooms_2008). Phytoplankton play an integral role as the base of aquatic food webs in both freshwater and marine systems, however, when cyanobacteria growth is unchecked, blooms can be detrimental to organisms living in and around freshwater ecosystems and often cause problems that propagate up the food web (@karjalainen_ecosystem_2007, @arend_seasonal_2010). The climate is changing and environmental conditions are becoming more favorable for bloom-forming harmful cyanobacteria (@johnk_summer@2006; @paerl_blooms_2008; @jeppesen_climate_2011; @huisman_cyanobacterial_2018). Therefore, it is becoming increasingly important to understand cyanobacteria bloom onset and senescence. Understanding why and when severe cyanobacteria blooms occur will help inform mitigation efforts. 
 
 ### 1.1 Factors that drive cyanobacteria blooms 
 
@@ -45,17 +45,30 @@ How does lake size (area/depth) affect which drivers may be relatively important
 
 ## 2. Methods 
 
-### 2.1 study sites (WB)
+### 2.1 study sites
 
-Missisquoi and St. Albans Bays are both shallow, eutrophic bays in the Northeastern arm of Lake Champlain. These two sites were chosen because of their proximity to one another and their unique geomorphometry, making this an interesting comparison of how external factors influence the timing and severity of cyanobacteria blooms. [insert information about the watershed characteristics for each bay]. 
+Missisquoi (MB) and St. Albans (SA) bays are both shallow eutrophic bays 18 km apart in the Northeastern part of Lake Champlain (Fig. 1). MB and SA were chosen for this study because both started experiencing anthropogenic eutrophication in the early 20th century and frequently have cyanobacteria blooms in the late summer months (@levine_eutrophication_2011). Their proximity to one another and their differing geomorphometry make this an interesting comparison of how external factors influence the timing and severity of cyanobacteria blooms. Surface area of MB is ten times greater than SA (77.5 ha and 7 ha, respectively). 
 
-  + discharge data (WB): River discharge data was obtained from USGS gages in both the Missisquoi (Station 0429400, Missisquoi River at Swanton, Vermont) and St. Albans (Station 04292810, Jewett Brook near St. Albans, Vermont) watersheds. 
+### 2.2 High-frequency data   
+
+YSI monitoring platforms were deployed in MB and SA from late spring to late fall in 2017 and 2018. One platform was moored in MB (N 44˚59.511’, W 073˚06.777’) and equipped with a YSI 6-series sonde with sensors to measure water temperature, specific conductivity, optical dissolved oxygen, pH, phycocyanin, and chlorophyll a. Per recommendation from YSI, freshly calibrated 6-series sondes were swapped out every 4 to 6 weeks and cross-checked for continuity between sensors. Two platforms were moored in SA (one in the shallower, northeastern portion of SA, N 44˚47.588’, W 073˚09.308’, and one in the deeper, southern portion of the bay, N 44˚46.403’, W 073˚10.469’). In SA, the monitoring platforms were equipped with YSI EXO2 sondes with sensors that measured water temperature, conductivity, optical dissolved oxygen, pH, and phycocyanin/chlorophyll a. Per recommendation from YSI, pH and optical dissolved oxygen sensors were calibrated every 90 days. At all three sites, hourly depth profiles were made at 0.5 m increments. Profiles started 0.5 m from the surface and went down to ~1 m off the bottom sediment (bottom depth varied throughout the summer and at each monitoring station depending on lake water level). The difference between surface water tempertaure and bottom water temperature (\Delta Temperature) was calculated for each hourly profile and used as a proxy for stratification.
+
+River discharge data was obtained from USGS gages in both the Missisquoi (Station 0429400, Missisquoi River at Swanton, Vermont) and St. Albans (Station 04292810, Jewett Brook near St. Albans, Vermont) watersheds. Meteorological data was obtained using a a HOBO RX3000 remote monitoring station data logger (Onset Computer Corporation, 470 MacArthur Blvd., Bourne, MA 02532) deployed at the outer YSI water quality monitoring station in SA. Data was collected every 1 min - 15 min on wind speed and direction, air temperature, and solar radiation. 
   
-  + meterological data: In MB [insert info in here but I’m pretty sure I need to use the Venice Bay data for 2017 since the YSI met station was messing up but then midway through 2018 we deployed a HOBO met station, so not yet sure what to write].  The outer monitoring station in St. AB was equipped with a HOBO RX3000 remote monitoring station data logger (Onset Computer Corporation, 470 MacArthur Blvd., Bourne, MA 02532) that collected hourly data on wind speed and direction, air temperature, solar radiation, photosynthetic radiation, air pressure, and relative humidity.
+```{r, message = F, echo = F, out.width = "75%", fig.align="center", fig.cap = "Bathymetric map of Missisquoi and St. Albans Bays with the associated watersheds outlined in green and pink, respectively. Yellow triangles indicate Vermont EPSCoR high-frequency monitoring stations. Black dots indicate Vermont DEC long-term monitoring stations. The largest rivers flowing into Missisquoi Bay (Missisquoi, Rock, and Pike Rivers) are labeled and the two largest brooks flowing into St. Ablans Bay (Jewett and Stevens Brook) are labeled. Land use categories are depicted for each watershed." } 
+library(knitr)
 
-### 2.2 Preparing the high frequency buoy data (MC)
+img1_path <- "data/Presentation_Map_EPSCOR_Lake_Sites2018-1-6.jpg"
 
-High frequency water quality data was collected from May through October in 2017 and 2018 by sensors on two buoys in Lake Champlain: one in St. Albans Bay, and one in Missisquoi Bay. Each buoy had sensors that took measurements at multiple depths: every 0.5m, from 0.5m below the surface down to the bottom (2.5m depth in Missisquoi Bay, 4.5m depth in St. Albans Bay). Sensors measured temperature, conductivity, pH, dissolved oxygen, chlorophyll (Chl), phycocyanin (PC), and turbidity. DeltaTemp was also calculated for each time point as a measure of lake stratification by subtracting the temperature at the bottom from that at the surface.
+include_graphics(img1_path)
+
+
+```
+
+
+### 2.2 Preparing data for analysis 
+
+#### 2.2.1 Buoy sensor data  
 
 *Since the buoys collect data at multiple depths, we first considered whether to focus exclusively on the sensors nearest the surface, or to aggregate data from whichever depth had the highest concentration of PC at a given time, so as to track a bloom as it moves up and down in the water column. For each bay and year, we explored how PC values varied with depth. First, for each bay and year, we used R to create a correlation matrix with Pearson correlation coefficients for the PC levels at each depth. We found PC levels across depths to be moderately to highly correlated in each case (0.38-1.00), indicating that PC levels near the surface would most likely be representative of those throughout the water column. We also used R to compare the PC levels across depths at each time point, and find out at what depth the PC level was maximized. We found that for periods of low PC levels, the maximum might be found at any depth, but for periods of high PC levels, such as during a cyanobacteria bloom, maximum PC levels where most often found near the surface. For these reasons,* we decided to limit ourselves to the data collected by sensors nearest the surface (0.5m depth), augmented with the deltaTemp as a measure of stratification. *See the the markdown file or pdf "Exploring_PC_Depths" for details.*
 
@@ -65,7 +78,11 @@ In addition to collapsing our hourly buoy data into daily averages for each envi
 
 *See pdf/Rmd "DailyTimeLags" for details*
 
-### 2.3 Feature Importance (HC)
+#### 2.2.2 Meteorological and river discharge data 
+
+
+
+### 2.3 Data analysis - feature importance 
 
 Feature importance is a technique to understand the factors that most contribute to the mechanisms of a system. In our study we used XGBOOST a machine learning technique that has been shown to be most accurate in tabular and structured data. 
 
@@ -75,7 +92,7 @@ Generally, importance provides a score that indicates how useful or valuable eac
 
 Importance is calculated for a single decision tree by the amount that each attribute split point improves the performance measure, weighted by the number of observations the node is responsible for. The performance measure may be the purity (Gini index) used to select the split points or another more specific error function.The feature importances are then averaged across all of the the decision trees within the model @hastie2009elements. These features will help further down the road in developing a predictive model. 
 
-## 3. Results (WB) 
+## 3. Results  
 
 
 ### Time Series of the parameters to set the scene, maybe:
