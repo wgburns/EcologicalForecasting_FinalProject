@@ -102,7 +102,6 @@ This is pretty good. I just feel like the y axes look messy.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height = 6, fig.width = 7}
 #Select&Rename
-
 shorten <- function(df){
   newdf <- df %>% 
     select(c(date, "PCMean1",
