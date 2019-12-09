@@ -1,0 +1,62 @@
+---
+title: "Stacked Bar Graph"
+author: "WB"
+date: "12/2/2019"
+output: html_document
+---
+
+#### Code from previous project where i made a stacked bar graph: 
+
+```{r, } 
+
+# how i organized the data frame,  not sure if helpful 
+db2 <- db %>% 
+  group_by(Date, Site, Genus, Vo, Vc, nFOV, FOVmL, Year) %>% 
+  summarize(nCells = sum(nCells)) %>% 
+  mutate(cellsFOV = nCells/nFOV,
+         cellsmLConc = cellsFOV/FOVmL, 
+         cellsmL = ((cellsmLConc*Vc)/Vo))
+#making the plot 
+db2 %>% 
+  ggplot() +
+  geom_bar(aes(x = as.factor(Date), y = cellsmL, fill = Names),
+           stat = 'identity') +
+  scale_y_continuous(limits = c(0, 200000),name = expression("Phytoplankton"~(cells~mL^-1)))+ #expand = c(0,0))+
+  theme_bw()+
+  theme(axis.title.x = element_blank(),
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size =10, colour = "black"),
+        legend.text = element_text(size = 10),
+        legend.text.align = 0,
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  facet_wrap(~Site+Year)
+
+```
+
+
+### Now ammend the code to match my data 
+
+- I want the x-axis to be "Days in the future" and the y-axis to be "Feature importance" and there will be 7 stacked bar plots that add up to 1 for days 0 - 6 in the future with all the relative importance of the parameters 
+- want 4 plots (one for each year and bay)
+- so input data frame should be one data frame with the colomns of Site, Year, DayInFuture, Parameter, FeatureImportance
+
+```{r, }
+
+all %>% 
+  ggplot() +
+  geom_bar(aes(x = as.factor(DayinFuture), y = FeatureImportance, fill = Parameter),
+           stat = 'identity') +
+  scale_y_continuous(limits = c(0, 1),
+                     name = "Feature importance") + 
+  xlab("Days in the future")+
+  #expand = c(0,0))+
+  theme_bw()+
+  theme(
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size =10, colour = "black"),
+        legend.text = element_text(size = 10),
+        legend.text.align = 0,
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  facet_wrap(~bay+year)
+
+```
