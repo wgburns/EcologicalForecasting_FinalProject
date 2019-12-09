@@ -99,9 +99,8 @@ results_2 %>%
            stat = 'identity') +
   scale_y_continuous(limits = c(0, 1.01),
                      name = "Feature Importance") + 
-  scale_fill_brewer(palette = "Paired", labels = c("Stratification", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed", "Year")) +
+  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed", "Year")) +
   xlab("Days in the Future") +
-  labs(title = "Feature Importance for Combined Bays & Years") +
   #expand = c(0,0)) +
   theme_bw() +
   theme(
@@ -113,36 +112,6 @@ results_2 %>%
 
 
 ```
-
-```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance for each  bay and year. Air Temperature, Discharge, and Specific Conductivity were most important for AB17. Discharge was the dominant feature in AB18, with some contribution from Solar Radiation. For MB17, discharge was the most important feature for contemporaneous and short-term PC levels, while Stratification became increasingly important with increased time lag. Solar Radiation and Air Temperature were important features ... in progress... "}
-
-
-results_1 <- read.csv("data/Sep_bay_and_year.csv") 
-
-results_1 <- results_1 %>% 
-  select(-c(X))
-
-results_1 %>% 
-  ggplot() +
-  geom_bar(aes(x = as.factor(DayinFuture), y = FeatureImportance, fill = Parameter),
-           stat = 'identity')+
-  scale_y_continuous(limits = c(0, 1.01),
-                     name = "Feature Importance") + 
-  scale_fill_brewer(palette = "Paired", labels = c("Stratification", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed"))+
-  xlab("Days in the future")+
-    labs(title = "Feature Importance for each Bay & Year") +
-  #expand = c(0,0))+
-  theme_bw()+
-  theme(
-        axis.title = element_text(size = 12),
-        axis.text = element_text(size =10, colour = "black"),
-        legend.text = element_text(size = 10),
-        legend.text.align = 0,
-        axis.text.x = element_text(angle = 45, hjust = 1))+
-  facet_wrap(~bay+year)
-
-```
-
 
 
 ```{r, echo = F, message = F, warning= FALSE}
@@ -158,9 +127,8 @@ results_3 %>%
            stat = 'identity') +
   scale_y_continuous(limits = c(0, 1.01),
                      name = "Feature Importance") + 
-  scale_fill_brewer(palette = "Paired", labels = c("Stratification", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed", "Year"))+
+  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed", "Year"))+
   xlab("Days in the future")+
-  labs(title = "Feature Importance for each Bay (Years Combined)") +
   #expand = c(0,0))+
   theme_bw()+
   theme(
@@ -188,9 +156,8 @@ results_4 %>%
            stat = 'identity') +
   scale_y_continuous(limits = c(0, 1.01),
                      name = "Feature Importance") + 
-  scale_fill_brewer(palette = "Paired", labels = c("Stratification", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed"))+
+  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed"))+
   xlab("Days in the future")+
-  labs(title = "Feature Importance for each Year (Bays Combined)") +
   #expand = c(0,0))+
   theme_bw()+
   theme(
@@ -204,6 +171,34 @@ results_4 %>%
 
 ```
 
+
+```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance for each  bay and year. Air Temperature, Discharge, and Specific Conductivity were most important for AB17. Discharge was the dominant feature in AB18, with some contribution from Solar Radiation. For MB17, discharge was the most important feature for contemporaneous and short-term PC levels, while Stratification became increasingly important with increased time lag. Solar Radiation and Air Temperature were important features ... in progress... "}
+
+
+results_1 <- read.csv("data/Sep_bay_and_year.csv") 
+
+results_1 <- results_1 %>% 
+  select(-c(X))
+
+results_1 %>% 
+  ggplot() +
+  geom_bar(aes(x = as.factor(DayinFuture), y = FeatureImportance, fill = Parameter),
+           stat = 'identity')+
+  scale_y_continuous(limits = c(0, 1.01),
+                     name = "Feature Importance") + 
+  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed"))+
+  xlab("Days in the future")+
+  #expand = c(0,0))+
+  theme_bw()+
+  theme(
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size =10, colour = "black"),
+        legend.text = element_text(size = 10),
+        legend.text.align = 0,
+        axis.text.x = element_text(angle = 45, hjust = 1))+
+  facet_wrap(~bay+year)
+
+```
 
 LOOK INTO 
 - is spCond just super highly correlated with PC? Why is it such an important feature? What is it highly correlated with? are the units different between the bays?
