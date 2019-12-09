@@ -225,18 +225,17 @@ Discharge, solar radiation, and specific conductivity were the most important fe
 
 
 - Feature importance for each bay with years combined (Figure 2): 
-Discharge was the dominant feature in AB. Solar radiation was somewhat important in the near-term, but became less so with increasing lag. Delta~ Temperature was also somewhat important, particularly 2-5 days in the future. For MB, there was no single dominant feature. Discharge was most important for contemporaneous PC levels (0-1 days out), wind direction was most important in the near-term (2 days out), and specific conductivity was most important 4-6 days out. Air temperature was somewhat important throughout. Wind speed was somewhat important in the mid-term (particularly 2-4 days out), and Delta~ Temperature was somewhat important for contemporaneous levels (0-1 day out).
+Discharge was the dominant feature in AB. Solar radiation was somewhat important in the near-term, but became less so with increasing lag. $\Delta$ temperature was also somewhat important, particularly 2-5 days in the future. For MB, there was no single dominant feature. Discharge was most important for contemporaneous PC levels (0-1 days out), wind direction was most important in the near-term (2 days out), and specific conductivity was most important 4-6 days out. Air temperature was somewhat important throughout. Wind speed was somewhat important in the mid-term (particularly 2-4 days out), and $\Delta$ temperature was somewhat important for contemporaneous levels (0-1 day out).
 
 
 - Feature importance for each year with bays combined (Figure 3): 
-In 2017, discharge was the most important feature for explaining contemporaneous PC levels (0-1 days out). Air temperature and solar radiation were important in the mid-term (peaking in importance around 4 days out), and Delta~ temperature and specific conductivity became increasingly important over time. 
-In 2018, the importance of each feature was more uniform across time. Air temperature was the dominant feature, followed by solar radiation, discharge, and wind speed. Delta~ temperature was somewhat important in the short-term.
+In 2017, discharge was the most important feature for explaining contemporaneous PC levels (0-1 days out). Air temperature and solar radiation were important in the mid-term (peaking in importance around 4 days out), and $\Delta$ temperature and specific conductivity became increasingly important over time. 
+In 2018, the importance of each feature was more uniform across time. Air temperature was the dominant feature, followed by solar radiation, discharge, and wind speed. $\Delta$ temperature was somewhat important in the short-term.
 
 
 - Feature importance for each  bay and year (Figure 4):
-Air temperature, discharge, and specific conductivity were most important for AB17.
-
-Discharge was the dominant feature in AB18, followed by solar radiation. For MB17, discharge was the most important feature for contemporaneous and short-term PC levels, while Stratification became increasingly important with increased time lag. Solar Radiation and Air Temperature were important features ... in progress... 
+Air temperature, discharge, and specific conductivity were most important for AB17. For MB17, discharge was the most important feature for contemporaneous and short-term PC levels (0-1 days), while $\Delta$ temperature became increasingly dominant with increased time lag. Solar radiation and air temperature were also important in the mid-term (2-4 days). 
+Discharge was the dominant feature throughout time in AB18, followed by solar radiation. Air temperature was the dominant feature throughout time in MB18, although $\Delta$ temperature and wind direction were important in the short-term (1 day out and 2 days out, respectively), wind speed was increasingly important with increased lag, and solar radiation was somewhat important throughout time.
 
 - what we know right now is that 6 days out, pH is IMPORTANT for PC but the next step is figuring out if it's PREDICTIVE of a bloom --> need to build model 
 - We got kinda hung up on the fact that there were parameters in the feature analysis results that were highly correlated with PC (response variable) but Easton reminded us that if our main goal is to predict a bloom, Chl or PC levels 6 days before is important to include if we are building a predictive model because that's still useful info ! Like it'd be great if we could predict if a bloom would start in 6 days just by knowing PC or Chl levels. 
