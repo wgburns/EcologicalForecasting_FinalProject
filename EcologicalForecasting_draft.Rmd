@@ -23,7 +23,7 @@ GENERAL NOTES:
   + map of study area 
   + bar graph of cyanobacteria bloom timing being different every year (long-term monitoring)
   
-Anthropogenic eutrophication, meaning increases in nutrients entering aquatic systems due to human activity, of natural water bodies is a global phenomenon that often leads to decreased utility of affected ecosystems (eg. Reynolds 1987; Paerl 1988; Paerl et al. 2011). One problem associated with eutrophication is that harmful cyanobacteria blooms are becoming more prevalent in coastal oceans and thousands of inland lakes and ponds (Paerl et al. 2001, 2011; Paerl and Huisman 2008). Phytoplankton play an integral role as the base of aquatic food webs in both freshwater and marine systems, however, when cyanobacteria growth is unchecked, blooms can be detrimental to organisms living in and around freshwater ecosystems and often cause problems that propagate up the food web (add REFS). The climate is changing, and environmental conditions are becoming more favorable for bloom-forming harmful cyanobacteria (Jöhnk et al. 2006; Paerl and Huisman 2008; Jeppesen et al. 2011; Huisman et al. 2018). Therefore, it is becoming increasingly important to understand cyanobacteria bloom onset and senescence. Understanding why and when severe cyanobacteria blooms occur will help inform mitigation efforts. 
+Anthropogenic eutrophication of natural water bodies, meaning increased nutrient concentration due to human activities, is a global phenomenon that often leads to higher rates of primary production and decreased utility of aquatic ecosystems (eg. @reynolds_cyanobacterial_1987; @paerl_nuisance_1988; @paerl_controlling_2011). Blooms of cyanobacteria, a type of potentially toxic prokaryotic plankton, are becoming more prevalent in coastal oceans, some parts of the Laurentian Great Lakes, and thousands of inland lakes and ponds around the world (Paerl et al. 2001, 2011; Paerl and Huisman 2008). Phytoplankton play an integral role as the base of aquatic food webs in both freshwater and marine systems, however, when cyanobacteria growth is unchecked, blooms can be detrimental to organisms living in and around freshwater ecosystems and often cause problems that propagate up the food web (add REFS). The climate is changing, and environmental conditions are becoming more favorable for bloom-forming harmful cyanobacteria (Jöhnk et al. 2006; Paerl and Huisman 2008; Jeppesen et al. 2011; Huisman et al. 2018). Therefore, it is becoming increasingly important to understand cyanobacteria bloom onset and senescence. Understanding why and when severe cyanobacteria blooms occur will help inform mitigation efforts. 
 
 ### 1.1 Factors that drive cyanobacteria blooms 
 
@@ -256,7 +256,7 @@ INFO ON HOW TO CITE in .Rmd from https://rmarkdown.rstudio.com/authoring_bibliog
 
 * Citations go inside square brackets and are separated by semicolons. Each citation must have a key, composed of ‘@’ + the citation identifier from the database, and may optionally have a prefix, a locator, and a suffix. Here are some examples:
   + Blah blah [@isles_modeling_2017].
-* Then in Zotero create a `.BibTex` file by going to File --> Export Library --> change to BibTex
+* Then in Zotero create a `.BibTex` file by going to the library --> Export Library --> change to BibTex
 
 
 
