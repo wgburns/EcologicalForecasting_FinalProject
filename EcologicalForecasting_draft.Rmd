@@ -95,11 +95,105 @@ Importance is calculated for a single decision tree by the amount that each attr
 ## 3. Results  
 
 
-### Time Series of the parameters to set the scene, maybe:
+### 3.1 Time Series
 
-*I went down a rabbit hole and tried some different ways of making time series: see PrettiestTimePlot.Rmd or pdf for details. If we want to include timeplots for one or all bays, I would go for the ggplot ones, but four sets of timeplots would take up a ton of space and might not be particularly relevant - MC*
+```{r, echo = F, message = F, warning= FALSE, fig.height = 6, fig.width = 7, fig.cap= "Timeseries of PC levels and environmental factors in MB. 2017: solid line. 2018: dashed line."}
+#Load relevant packages
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+#install.packages("padr")
+library(padr)
+library(zoo)
 
-### Feature Importance Results
+#Load Data
+MB17 <- read.csv("data/mbAll17.csv", header = T) 
+MB18 <- read.csv("data/mbAll18.csv", header = T)
+SA17 <- read.csv("data/abAll17.csv", header = T)
+SA18 <- read.csv("data/abAll18.csv", header = T)
+
+#Fix Date Format
+MB17 <- MB17 %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
+MB17 <- pad(MB17, interval = "day")
+
+MB18 <- MB18 %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
+MB18 <- pad(MB18, interval = "day")
+
+SA17 <- SA17 %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
+SA17 <- pad(SA17, interval = "day")
+
+SA18 <- SA18 %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
+SA18 <- pad(SA18, interval = "day")
+
+#Select&Rename
+shorten <- function(df){
+  newdf <- df %>% 
+    select(c(date, "PCMean1",
+                                     "DeltaTempMean",
+                                     "discharge",
+                                     "SpCondMean",
+                                     "temp",
+                                     "solar",
+                                     "ws",
+                                     "wd")) %>% 
+    rename(PC = PCMean1,
+         Strat = DeltaTempMean,
+         Q = discharge,
+         Sal = SpCondMean,
+         Temp = temp,
+         Sun = solar,
+         WS = ws,
+         WD = wd)
+    return(newdf)
+}
+
+MB17_short <- shorten(MB17)
+MB17_short$day <- strftime(MB17_short$date, format = "%j", tz = "Etc/GMT-4")
+MB18_short <- shorten(MB18)
+MB18_short$day <- strftime(MB18_short$date, format = "%j", tz = "Etc/GMT-4")
+
+SA17_short <- shorten(SA17)
+SA17_short$day <- strftime(SA17_short$date, format = "%j", tz = "Etc/GMT-4")
+SA18_short <- shorten(SA18)
+SA18_short$day <- strftime(SA18_short$date, format = "%j", tz = "Etc/GMT-4")
+
+#Tidy
+MB17_tidy <- gather(MB17_short, "PC":"WD", key = "Variable", value = "Value") 
+MB18_tidy <- gather(MB18_short, "PC":"WD", key = "Variable", value = "Value") 
+SA17_tidy <- gather(SA17_short, "PC":"WD", key = "Variable", value = "Value") 
+SA18_tidy <- gather(SA18_short, "PC":"WD", key = "Variable", value = "Value") 
+
+#Plot MB
+ggplot(NULL, aes(x = day, y = Value, group = Variable, color = Variable)) +
+  geom_line(data = MB17_tidy, show.legend = FALSE) + 
+  geom_line(data = MB18_tidy, show.legend = FALSE, linetype = "dashed") + 
+  labs(title = "MB") + xlab("Day of year") + 
+  facet_grid(rows = "Variable", scales = "free_y", switch = "both") +
+  scale_x_discrete(breaks = seq(120,310,30))+
+  theme_light() 
+```
+
+
+```{r, echo = F, message = F, warning= FALSE, fig.height = 6, fig.width = 7, fig.cap= "Timeseries of PC levels and environmental factors in SA. 2017: solid line. 2018: dashed line."}
+#Plot SA
+ggplot(NULL, aes(x = day, y = Value, group = Variable, color = Variable)) +
+  geom_line(data = SA17_tidy, show.legend = FALSE) + 
+  geom_line(data = SA18_tidy, show.legend = FALSE, linetype = "dashed") + 
+  labs(title = "SA") + xlab("Day of year") + 
+  facet_grid(rows = "Variable", scales = "free_y", switch = "both") +
+  scale_x_discrete(breaks = seq(120,310,30))+
+  theme_light() 
+```
+
+
+*Ideally we should fix the parameter labels on these and include a key with solid vs dotted...*
+
+
+### 3.2 Feature Importance Results
 
 ```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance with all  bays and years combined."}
 
@@ -219,47 +313,41 @@ results_1 %>%
 
 ```
 
-LOOK INTO 
-- is spCond just super highly correlated with PC? Why is it such an important feature? What is it highly correlated with? are the units different between the bays?
-- wd (not speed) is important for MB! let's look at correlations 
-- should we run without pH? 
-- what's the significance in the difference in the cluster numbers?? 
 
-### Correlations
+### 3.3 Correlations
 
-*I made correlations matrices for pretty much every environmental parameter with the 7 time steps of PC data to look at trends of how correlations with PC change with increasing time lag... Sometimes they show similar trends as feature importance, but sometimes not. In theory I could summarize these correlations coefficients into a chart with environmental parameters by PC time steps, which could be interesting for looking at trends. I could even graph them! But I haven't yet. See All_the_correlations.Rmd/pdf for all the correlations. - MC*
+*I made correlations matrices for pretty much every environmental parameter with the 7 time steps of PC data to look at trends of how correlations with PC change with increasing time lag... Sometimes they show similar trends as feature importance, but sometimes not. In theory I could summarize these correlations coefficients into a chart with environmental parameters by PC time steps, which could be interesting for looking at trends. I could even graph them! But I haven't yet because I don't know enough about the statistics behind correlation coefficients to know if I'm using them properly. Like do we need to normalize the data first? Probably? See All_the_correlations.Rmd/pdf for all the correlations. - MC*
 
-- Made lots of correlation tables
+- Made lots of correlation matrices. Not sure if they're statistically legit.
 
 - Haven't summarized trends yet: match feature importance somtimes, not always
 
 - Discharge and salinity are NOT correlated in MB, but ARE correlated in St. Albans.
 
-## Discussion 
+## 4. Discussion 
 
 - Feature importance with all  bays and years combined (Figure 1):
 Discharge, solar radiation, and specific conductivity were the most important features for explaining contemporaneous PC levels, while air temperature, solar radiation and wind speed were most important for future PC levels. Year was an important feature, while Bay was not.
 
 
 - Feature importance for each bay with years combined (Figure 2): 
-Discharge was the dominant feature in AB. Solar radiation was somewhat important in the near-term, but became less so with increasing lag. Delta~ Temperature was also somewhat important, particularly 2-5 days in the future. For MB, there was no single dominant feature. Discharge was most important for contemporaneous PC levels (0-1 days out), wind direction was most important in the near-term (2 days out), and specific conductivity was most important 4-6 days out. Air temperature was somewhat important throughout. Wind speed was somewhat important in the mid-term (particularly 2-4 days out), and Delta~ Temperature was somewhat important for contemporaneous levels (0-1 day out).
+Discharge was the dominant feature in AB. Solar radiation was somewhat important in the near-term, but became less so with increasing lag. $\Delta$ temperature was also somewhat important, particularly 2-5 days in the future. For MB, there was no single dominant feature. Discharge was most important for contemporaneous PC levels (0-1 days out), wind direction was most important in the near-term (2 days out), and specific conductivity was most important 4-6 days out. Air temperature was somewhat important throughout. Wind speed was somewhat important in the mid-term (particularly 2-4 days out), and $\Delta$ temperature was somewhat important for contemporaneous levels (0-1 day out).
 
 
 - Feature importance for each year with bays combined (Figure 3): 
-In 2017, discharge was the most important feature for explaining contemporaneous PC levels (0-1 days out). Air temperature and solar radiation were important in the mid-term (peaking in importance around 4 days out), and Delta~ temperature and specific conductivity became increasingly important over time. 
-In 2018, the importance of each feature was more uniform across time. Air temperature was the dominant feature, followed by solar radiation, discharge, and wind speed. Delta~ temperature was somewhat important in the short-term.
+In 2017, discharge was the most important feature for explaining contemporaneous PC levels (0-1 days out). Air temperature and solar radiation were important in the mid-term (peaking in importance around 4 days out), and $\Delta$ temperature and specific conductivity became increasingly important over time. 
+In 2018, the importance of each feature was more uniform across time. Air temperature was the dominant feature, followed by solar radiation, discharge, and wind speed. $\Delta$ temperature was somewhat important in the short-term.
 
 
 - Feature importance for each  bay and year (Figure 4):
-Air temperature, discharge, and specific conductivity were most important for AB17.
-
-Discharge was the dominant feature in AB18, followed by solar radiation. For MB17, discharge was the most important feature for contemporaneous and short-term PC levels, while Stratification became increasingly important with increased time lag. Solar Radiation and Air Temperature were important features ... in progress... 
+Air temperature, discharge, and specific conductivity were most important for AB17. For MB17, discharge was the most important feature for contemporaneous and short-term PC levels (0-1 days), while $\Delta$ temperature became increasingly dominant with increased time lag. Solar radiation and air temperature were also important in the mid-term (2-4 days). 
+Discharge was the dominant feature throughout time in AB18, followed by solar radiation. Air temperature was the dominant feature throughout time in MB18, although $\Delta$ temperature and wind direction were important in the short-term (1 day out and 2 days out, respectively), wind speed was increasingly important with increased lag, and solar radiation was somewhat important throughout time.
 
 - what we know right now is that 6 days out, pH is IMPORTANT for PC but the next step is figuring out if it's PREDICTIVE of a bloom --> need to build model 
 - We got kinda hung up on the fact that there were parameters in the feature analysis results that were highly correlated with PC (response variable) but Easton reminded us that if our main goal is to predict a bloom, Chl or PC levels 6 days before is important to include if we are building a predictive model because that's still useful info ! Like it'd be great if we could predict if a bloom would start in 6 days just by knowing PC or Chl levels. 
 - IMPORTANT POINT: there is a difference between mechanistic models and predictive models. Depending on how we decide to move forward (ie. which model we choose) we might not really need to understand the mechanisms driving the blooms because we might just try throwing all the data into a machine learning algorithm that tells us the relative predictive power of each of the parameters (I think...). 
 
-## Future Work (MC)
+## 5. Future Work (MC)
 
 We could build on this work in a number of ways, by expanding our data set, correlating our phycocyanin measurements with satellite data or volunteer observations, identifying a bloom threshold, and most importantly, by using our high frequency data to create a forecasting model that could predict cyanobacteria blooms.
 
@@ -283,7 +371,7 @@ A few things to change for the final project:
 
 I look forward to providing more feedback after the final project and next semester. 
 
-## References 
+## 6. References 
 
 INFO ON HOW TO CITE in .Rmd from https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html : 
 
