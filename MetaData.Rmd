@@ -1,0 +1,66 @@
+---
+title: "meta data"
+author: "WB"
+date: "10/28/2019"
+output: html_document
+---
+
+### Meta data 
+
+Quick descriptions of the data we have access to use written up at the beginning of the project. 
+
+#### 1. High-frequency buoys (data collected hourly) 
+  + Water quality data at 2 sites at multiple depths from ~May/June - November 2017, 2018, 2019
+    - Missisquoi Bay (MB)
+    - St. Albans Bay (StAB or AB)
+  + I’ve shared the data at 0.5m to start (surface of the lake). 
+  + Response variables that I want to model (they’re the biological signals): 
+    - PC_RFU (phycocyanin relative fluorescence units): a proxy for the amount of cyanobacteria only (not the eukaryotes) 
+    - CHL_RFU (chlorophyll relative fluorescence units): a proxy for the amount of all phytoplankton (both eukaryotes and prokaryotes) 
+  + Other important parameters in the files: 
+    - TIMESTAMP: date, time, hour data was collected with sensors
+    - TEMP: temperature (Celsius)
+    - SPCOND: specific conductivity 
+    - PH: pH 
+    - TURB: turbidity 
+    - ODO_SAT: % saturation of dissolved oxygen (%)
+    - ODO_CONC: concentration of dissolved oxygen (mg/L) 
+    - deltaDO: ΔDO, proxy for stratification (bottom dissolved oxygen concentration - surface dissolved oxygen concentration)
+    - deltaTEMP: ΔTemp, proxy for stratification (bottom temperature - surface temperature)
+    - windSpeed: m/s (meterological station on the buoy) *don’t have in one csv yet for 2018 and 2019* 
+    - windDir: 1 - 360 degrees (meterological station on the buoy) *don’t have in one csv yet for 2018 and 2019* 
+    - FDOM_RFU: fluorescent dissolved organic matter relative fluorescence units, a proxy for organic matter in the water column 
+  + There’s more QAQC that we need to do with the data, but depending on what analyses we want to do they will change, let’s discuss in person
+
+#### 2. Long-term monitoring record (1992 - present, data collected by VT DEC every ~2 weeks from June to October) 
+  + All data available online, we can pick which parameters we want to use: https://anrweb.vermont.gov/dec/_dec/LongTermMonitoringLakes.aspx
+  + There are 3 stations that we will look at the data for:
+    - Missisquoi Bay has two sites, Station 50 and 51 (the DEC added a second station in MB because they realized the original station 50 wasn’t always getting cyanobacteria blooms) 
+    - St. Albans Bay data is just one site, Station 40
+  + Parameters we will likely want to use that I already have downloaded/worked with (1992 - 2018): 
+    - Chlorophyll a concentration 
+    - Cyanobacteria biovolume (2006 - 2016, so not as long of a record unfortunately) 
+    - TP, total phosphorus
+    - DP, dissolved phosphorus
+    - TN, total nitrogen
+  + I’ve done multiple linear regression analysis with TN, TP, air temperature, and discharge before but the results of the analysis weren’t very interesting, no clear relationships 
+  + Parameters we may want to use that I haven’t worked with/downloaded
+    - Secchi depth
+    - Temperature 
+    - Dissolved oxygen 
+    - Total suspended solids 
+
+
+
+#### 3. Haven’t shared this data yet but we have access to it: 
+  + Precipitation (collected daily from WeatherUnderground) 
+  + Discharge (collected daily from USGS) 
+  + Nutrient chemistry for 2017 and 2018 
+    + DAILY total nitrogen and total phosphorus at the surface and bottom of the lake (kinda spotty, indicates the entire pool of N and P in the lake so that includes inorganic and organic forms) 
+    + WEEKLY dissolved phosphorus and nitrogen data for surface and bottom of the lake (fraction of nutrients available for the phytoplankton to use for growth, so only inorganic forms) 
+  + Satellite images 
+    + WEEKLY composite images of the maximum cyanobacteria signal for 300m grid in both bays
+    + I also have access to the chlorophyll signal, I just haven’t worked with it yet
++ Meteorological station (data collected hourly) 
+  + Solar radiation 
+  + Air temperature
