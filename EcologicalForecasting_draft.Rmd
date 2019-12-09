@@ -77,16 +77,14 @@ Importance is calculated for a single decision tree by the amount that each attr
 
 ## 3. Results (WB) 
 
-* fig of time series of the parameters to set the scene? 
-* which set of feature importance do we want to use? 
 
 ### Time Series of the parameters to set the scene, maybe:
 
 *I went down a rabbit hole and tried some different ways of making time series: see PrettiestTimePlot.Rmd or pdf for details. If we want to include timeplots for one or all bays, I would go for the ggplot ones, but four sets of timeplots would take up a ton of space and might not be particularly relevant - MC*
 
-#### Brief typed out results for easier interpretation? (NOT GOING TO INCLUDE)
+### Feature Importance Results
 
-```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance with all  bays and years combined. Discharge, Solar Radiation, and Specific Conductivity were the most important features for explaining contemporaneous PC levels, while Air Temperature, Solar Radiation and Wind Speed were most important for future PC levels. Year was an important feature, while Bay was not."}
+```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance with all  bays and years combined."}
 
 library(ggplot2)
 library(RColorBrewer)
@@ -118,7 +116,7 @@ results_2 %>%
 ```
 
 
-```{r, echo = F, message = F, warning= FALSE}
+```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance for each bay with years combined."}
 
 results_3 <- read.csv("data/Sep_bay.csv") 
 
@@ -147,7 +145,7 @@ results_3 %>%
 ```
 
 
-```{r, echo = F, message = F, warning= FALSE}
+```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance for each year with bays combined."}
 
 results_4 <- read.csv("data/Sep_year.csv") 
 
@@ -176,7 +174,7 @@ results_4 %>%
 ```
 
 
-```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance for each  bay and year. Air Temperature, Discharge, and Specific Conductivity were most important for AB17. Discharge was the dominant feature in AB18, with some contribution from Solar Radiation. For MB17, discharge was the most important feature for contemporaneous and short-term PC levels, while Stratification became increasingly important with increased time lag. Solar Radiation and Air Temperature were important features ... in progress... "}
+```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance for each  bay and year."}
 
 
 results_1 <- read.csv("data/Sep_bay_and_year.csv") 
@@ -221,6 +219,24 @@ LOOK INTO
 - Discharge and salinity are NOT correlated in MB, but ARE correlated in St. Albans.
 
 ## Discussion 
+
+- Feature importance with all  bays and years combined (Figure 1):
+Discharge, solar radiation, and specific conductivity were the most important features for explaining contemporaneous PC levels, while air temperature, solar radiation and wind speed were most important for future PC levels. Year was an important feature, while Bay was not.
+
+
+- Feature importance for each bay with years combined (Figure 2): 
+Discharge was the dominant feature in AB. Solar radiation was somewhat important in the near-term, but became less so with increasing lag. Delta~ Temperature was also somewhat important, particularly 2-5 days in the future. For MB, there was no single dominant feature. Discharge was most important for contemporaneous PC levels (0-1 days out), wind direction was most important in the near-term (2 days out), and specific conductivity was most important 4-6 days out. Air temperature was somewhat important throughout. Wind speed was somewhat important in the mid-term (particularly 2-4 days out), and Delta~ Temperature was somewhat important for contemporaneous levels (0-1 day out).
+
+
+- Feature importance for each year with bays combined (Figure 3): 
+In 2017, discharge was the most important feature for explaining contemporaneous PC levels (0-1 days out). Air temperature and solar radiation were important in the mid-term (peaking in importance around 4 days out), and Delta~ temperature and specific conductivity became increasingly important over time. 
+In 2018, the importance of each feature was more uniform across time. Air temperature was the dominant feature, followed by solar radiation, discharge, and wind speed. Delta~ temperature was somewhat important in the short-term.
+
+
+- Feature importance for each  bay and year (Figure 4):
+Air temperature, discharge, and specific conductivity were most important for AB17.
+
+Discharge was the dominant feature in AB18, followed by solar radiation. For MB17, discharge was the most important feature for contemporaneous and short-term PC levels, while Stratification became increasingly important with increased time lag. Solar Radiation and Air Temperature were important features ... in progress... 
 
 - what we know right now is that 6 days out, pH is IMPORTANT for PC but the next step is figuring out if it's PREDICTIVE of a bloom --> need to build model 
 - We got kinda hung up on the fact that there were parameters in the feature analysis results that were highly correlated with PC (response variable) but Easton reminded us that if our main goal is to predict a bloom, Chl or PC levels 6 days before is important to include if we are building a predictive model because that's still useful info ! Like it'd be great if we could predict if a bloom would start in 6 days just by knowing PC or Chl levels. 
