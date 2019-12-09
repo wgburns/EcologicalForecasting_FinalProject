@@ -38,15 +38,15 @@ MB17 <- pad(MB17, interval = "day")
 
 MB18 <- MB18 %>% 
   mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
-MB18 <- pad(MB17, interval = "day")
+MB18 <- pad(MB18, interval = "day")
 
 SA17 <- SA17 %>% 
   mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
-SA17 <- pad(MB17, interval = "day")
+SA17 <- pad(SA17, interval = "day")
 
 SA18 <- SA18 %>% 
   mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
-SA18 <- pad(MB17, interval = "day")
+SA18 <- pad(SA18, interval = "day")
 
 ```
 
@@ -102,8 +102,9 @@ This is pretty good. I just feel like the y axes look messy.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height = 6, fig.width = 7}
 #Select&Rename
-MB17_short <- MB17 %>% 
-  select(c(date, "PCMean1",
+shorten <- function(df){
+  newdf <- df %>% 
+    select(c(date, "PCMean1",
                                      "DeltaTempMean",
                                      "discharge",
                                      "SpCondMean",
@@ -111,7 +112,7 @@ MB17_short <- MB17 %>%
                                      "solar",
                                      "ws",
                                      "wd")) %>% 
-  rename(PC = PCMean1,
+    rename(PC = PCMean1,
          Strat = DeltaTempMean,
          Q = discharge,
          Sal = SpCondMean,
@@ -119,12 +120,32 @@ MB17_short <- MB17 %>%
          Sun = solar,
          WS = ws,
          WD = wd)
+    return(newdf)
+}
+
+MB17_short <- shorten(MB17)
+MB17_short$day <- strftime(MB17_short$date, format = "%j", tz = "Etc/GMT-4")
+
+MB18_short <- shorten(MB18)
+MB18_short$day <- strftime(MB18_short$date, format = "%j", tz = "Etc/GMT-4")
+
 
 #Tidy
 MB17_tidy <- gather(MB17_short, "PC":"WD", key = "Variable", value = "Value") 
+MB18_tidy <- gather(MB18_short, "PC":"WD", key = "Variable", value = "Value") 
 
 #Plot
-ggplot(MB17_tidy, aes(x = date, y = Value, group = Variable, color = Variable)) + labs(title = "MB17") + xlab("Time") + theme(axis.title.y = element_blank())  + geom_line(show.legend = FALSE) + facet_grid(rows = "Variable", scales = "free_y", switch = "both") 
+#ggplot(MB17_tidy, aes(x = date, y = Value, group = Variable, color = Variable)) + geom_line(show.legend = FALSE) + labs(title = "MB17") + xlab("Time") + theme(axis.title.y = element_blank())  + facet_grid(rows = "Variable", scales = "free_y", switch = "both") 
+
+#Trying to combine years onto one plot...
+ggplot(NULL, aes(x = day, y = Value, group = Variable, color = Variable)) +
+  geom_line(data = MB17_tidy, show.legend = FALSE) + 
+  geom_line(data = MB18_tidy, show.legend = FALSE, linetype = "dashed") + 
+  labs(title = "MB") + xlab("Day of year") + 
+  facet_grid(rows = "Variable", scales = "free_y", switch = "both") +
+  scale_x_discrete(breaks = seq(120,310,30))+
+  theme_light() 
+
 #Woah, it worked!! But can I move the labels to the right? Yes! (switch)
 ```
 It's beautiful!
