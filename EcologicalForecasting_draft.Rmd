@@ -82,13 +82,13 @@ Importance is calculated for a single decision tree by the amount that each attr
 
 #### Brief typed out results for easier interpretation? (NOT GOING TO INCLUDE)
 
-```{r, echo = F, message = F, warning= FALSE}
+```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance with all  bays and years combined. Discharge, Solar Radiation, and Specific Conductivity were the most important features for explaining contemporaneous PC levels, while Air Temperature, Solar Radiation and Wind Speed were most important for future PC levels. Year was an important feature, while Bay was not."}
 
 library(ggplot2)
 library(RColorBrewer)
 library(dplyr)
 
-results_2 <- read.csv("allCombined.csv") 
+results_2 <- read.csv("data/allCombined.csv") 
 
 results_2 <- results_2 %>% 
   select(-c(X))
@@ -98,11 +98,12 @@ results_2 %>%
   geom_bar(aes(x = as.factor(DayinFuture), y = FeatureImportance, fill = Parameter),
            stat = 'identity') +
   scale_y_continuous(limits = c(0, 1.01),
-                     name = "Feature importance") + 
-  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Water temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed", "Year"))+
-  xlab("Days in the future")+
-  #expand = c(0,0))+
-  theme_bw()+
+                     name = "Feature Importance") + 
+  scale_fill_brewer(palette = "Paired", labels = c("Stratification", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed", "Year")) +
+  xlab("Days in the Future") +
+  labs(title = "Feature Importance for Combined Bays & Years") +
+  #expand = c(0,0)) +
+  theme_bw() +
   theme(
         axis.title = element_text(size = 12),
         axis.text = element_text(size =10, colour = "black"),
@@ -113,10 +114,10 @@ results_2 %>%
 
 ```
 
-```{r, echo = F, message = F, warning= FALSE}
+```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance for each  bay and year. Air Temperature, Discharge, and Specific Conductivity were most important for AB17. Discharge was the dominant feature in AB18, with some contribution from Solar Radiation. For MB17, discharge was the most important feature for contemporaneous and short-term PC levels, while Stratification became increasingly important with increased time lag. Solar Radiation and Air Temperature were important features ... in progress... "}
 
 
-results_1 <- read.csv("Sep_bay_and_year.csv") 
+results_1 <- read.csv("data/Sep_bay_and_year.csv") 
 
 results_1 <- results_1 %>% 
   select(-c(X))
@@ -126,9 +127,10 @@ results_1 %>%
   geom_bar(aes(x = as.factor(DayinFuture), y = FeatureImportance, fill = Parameter),
            stat = 'identity')+
   scale_y_continuous(limits = c(0, 1.01),
-                     name = "Feature importance") + 
-  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Water temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed"))+
+                     name = "Feature Importance") + 
+  scale_fill_brewer(palette = "Paired", labels = c("Stratification", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed"))+
   xlab("Days in the future")+
+    labs(title = "Feature Importance for each Bay & Year") +
   #expand = c(0,0))+
   theme_bw()+
   theme(
@@ -145,7 +147,7 @@ results_1 %>%
 
 ```{r, echo = F, message = F, warning= FALSE}
 
-results_3 <- read.csv("Sep_bay.csv") 
+results_3 <- read.csv("data/Sep_bay.csv") 
 
 results_3 <- results_3 %>% 
   select(-c(X))
@@ -155,9 +157,10 @@ results_3 %>%
   geom_bar(aes(x = as.factor(DayinFuture), y = FeatureImportance, fill = Parameter),
            stat = 'identity') +
   scale_y_continuous(limits = c(0, 1.01),
-                     name = "Feature importance") + 
-  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Water temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed", "Year"))+
+                     name = "Feature Importance") + 
+  scale_fill_brewer(palette = "Paired", labels = c("Stratification", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed", "Year"))+
   xlab("Days in the future")+
+  labs(title = "Feature Importance for each Bay (Years Combined)") +
   #expand = c(0,0))+
   theme_bw()+
   theme(
@@ -174,7 +177,7 @@ results_3 %>%
 
 ```{r, echo = F, message = F, warning= FALSE}
 
-results_4 <- read.csv("Sep_year.csv") 
+results_4 <- read.csv("data/Sep_year.csv") 
 
 results_4 <- results_4 %>% 
   select(-c(X))
@@ -184,9 +187,10 @@ results_4 %>%
   geom_bar(aes(x = as.factor(DayinFuture), y = FeatureImportance, fill = Parameter),
            stat = 'identity') +
   scale_y_continuous(limits = c(0, 1.01),
-                     name = "Feature importance") + 
-  scale_fill_brewer(palette = "Paired", labels = c(Delta~"Water temperature", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed"))+
+                     name = "Feature Importance") + 
+  scale_fill_brewer(palette = "Paired", labels = c("Stratification", "Discharge", "Solar radiation", "Specific conductivity", "Air temperature", "Wind direction", "Wind speed"))+
   xlab("Days in the future")+
+  labs(title = "Feature Importance for each Year (Bays Combined)") +
   #expand = c(0,0))+
   theme_bw()+
   theme(
