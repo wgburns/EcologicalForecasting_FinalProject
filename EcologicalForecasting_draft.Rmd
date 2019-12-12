@@ -112,7 +112,7 @@ Importance is calculated for a single decision tree by the amount that each attr
 
 ### 3.1 Time series
 
-2017 was a wet and stormy summer and the timing of the blooms was later in the summer than is typical (insert stat about the usual timing of the blooms either form LT monitoring data ie. can get an average DOY for the start of blooms and/or average DOY for peak cyano biovolume) and blooms were temporally offset between the bays (Figs 2 and 3). Conversely, 2018 was a drought summer (insert cumulative rainfall or discharge values here comparing the 2 years). From July 1, 2017 to September 1, 2017 there were seven discharge events in the Missisquoi River that had a flow rate higher than 40 $m^3/s$ and in 2018 during that same time period there was only one event with a flow rate higher than 40 $m^3/s$. Cyanobacteria optimally grow in water temperatures at or higher than 20°C, and growth rates increase with temperature, however in both bays the water temperature was at or above 20°C starting in early July (except for a cold front the first two weeks of September), suggesting that temperature was not the limiting factor delaying the cyanobacteria blooms. 
+2017 was a wet and stormy summer and the timing of the blooms was later in the summer than is typical (insert stat about the usual timing of the blooms either form LT monitoring data ie. can get an average DOY for the start of blooms and/or average DOY for peak cyano biovolume) and blooms were temporally offset between the bays (Figs 2 and 3). Conversely, 2018 was a drought summer. In 2017, average discharge rates were `rQMB`% higher than in 2018 in Mississquoi Bay, and `rQAB`% higher in St. Albans Bay. From July 1, 2017 to September 1, 2017 there were seven discharge events in the Missisquoi River that had a flow rate higher than 40 $m^3/s$ and in 2018 during that same time period there was only one event with a flow rate higher than 40 $m^3/s$. Cyanobacteria optimally grow in water temperatures at or higher than 20°C, and growth rates increase with temperature, however in both bays the water temperature was at or above 20°C starting in early July (except for a cold front the first two weeks of September), suggesting that temperature was not the limiting factor delaying the cyanobacteria blooms. 
 
 #### 3.1.1 2017 Cyanobacteria bloom development 
 
@@ -158,7 +158,7 @@ db <- multmerge("buoyData/")
 
 #Fix Date Format
 db2 <- db %>% 
-  select(-c(X, pHMean, TempMean, ODOMean, ChlMean, TurbMean, DeltaDOMean, PCMean2:PCMean7)) %>% 
+  select(-c(X, pHMean, temp, ODOMean, ChlMean, TurbMean, DeltaDOMean, PCMean2:PCMean7)) %>% 
   mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")),
          doy = as.numeric(strftime(date, format = "%j", tz = "Etc/GMT-4"))) %>% 
   rename(PC = PCMean1,
@@ -166,12 +166,12 @@ db2 <- db %>%
          Discharge = discharge,
          Solar = solar,
          SpCond = SpCondMean,
-         AirTemp = temp) %>% 
+         WaterTemp = TempMean) %>% 
   gather(key = "parameter", value = "value", 
-         c(PC, DeltaTemp, Discharge, Solar, SpCond, AirTemp, wd, ws))  
+         c(PC, DeltaTemp, Discharge, Solar, SpCond, WaterTemp, wd, ws))  
 
 #reordering the parameters so when i plot it matches the colors of the stacked bar graphs 
-db2$parameter <- factor(db2$parameter, c("PC", "DeltaTemp", "Discharge", "Solar", "SpCond", "AirTemp", "wd", "ws"))
+db2$parameter <- factor(db2$parameter, c("PC", "DeltaTemp", "Discharge", "Solar", "SpCond", "WaterTemp", "wd", "ws"))
 
 # the "paired" rColorBrewer palette is the one i use later for the stacked bar graphs, however, those didn't include PC as a parameter (because that was the predictor).
 # so i got the values from the "paired" palette using brewer.pal and then added black to the beginning to make myCols
@@ -181,7 +181,7 @@ myCols <- c("black", "#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C", "#FB9A99", "#E3
 #Plot MB
 db2 %>% 
   filter(bay == "MB") %>% 
-  ggplot(aes(x = doy, y = value, group = year, color = parameter)) +
+  ggplot(aes(x = as.Date(doy, tz = "Etc/GMT-4"), y = value, group = year, color = parameter)) +
   geom_line(aes(linetype = as.factor(year)))+
   scale_color_manual(values = myCols, 
                      labels = c("PC (RFU)", 
@@ -189,7 +189,7 @@ db2 %>%
                                 expression("Discharge ("~m^3~"/"~"s"~")"), 
                                 expression("Solar Radiation ("~"W"~"/"~m^2~")"), 
                                 expression("Specific Conductivity ("~"mS"~"/"~cm~")"), 
-                                "Air temperature (°C)",
+                                "Water temperature (°C)",
                                 "Wind direction (°)",
                                 "Wind speed (m/s)")) +
   labs(title = "Missisquoi Bay") + xlab("Day of year") + 
@@ -206,9 +206,13 @@ db2 %>%
         legend.position = "bottom", 
         legend.box = "vertical")
 
-
-
-
+#While we're got all the data loaded in, I'm gonna go ahead and calculate a mean Q for each year to use for a rough comparison in the discussion.
+MeanQ <- db %>% 
+  group_by(year, bay) %>% 
+  summarize(mean(discharge))
+# 2017 was what % higher than 2018?
+QMB <- 100*MeanQ[2,3]/MeanQ[4,3]
+QAB <- 100*MeanQ[1,3]/MeanQ[3,3]
 
 ```
 
@@ -219,7 +223,7 @@ db2 %>%
 #Plot SA
 db2 %>% 
   filter(bay == "AB") %>% 
-  ggplot(aes(x = doy, y = value, group = year, color = parameter)) +
+  ggplot(aes(x = as.Date(doy, tz = "Etc/GMT-4"), y = value, group = year, color = parameter)) +
   geom_line(aes(linetype = as.factor(year)))+
   scale_color_manual(values = myCols, 
                      labels = c("PC (RFU)", 
@@ -227,7 +231,7 @@ db2 %>%
                                 expression("Discharge ("~m^3~"/"~"s"~")"), 
                                 expression("Solar Radiation ("~"W"~"/"~m^2~")"), 
                                 expression("Specific Conductivity ("~mu~"S"~"/"~cm~")"), 
-                                "Air temperature (°C)",
+                                "Water temperature (°C)",
                                 "Wind direction (°)",
                                 "Wind speed (m/s)")) +
   labs(title = "St. Albans Bay") + xlab("Day of year") + 
