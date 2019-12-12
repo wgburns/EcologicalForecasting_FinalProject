@@ -4,12 +4,27 @@ author: "Wilton Burns, Herman Njoroge Chege, and Mahalia Clark"
 date: "12/2/2019"
 output: 
   pdf_document:
+    latex_engine: xelatex
     citation_package: natbib
 bibliography: EcologicalForecastingRefs.bib
 csl: limnology-and-oceanography.csl
 editor_options: 
   chunk_output_type: console
 ---
+
+```{r, message = F, echo = F }
+#Preliminaries 
+library(knitr)
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(zoo)
+library(RColorBrewer)
+
+
+
+```
 
 ## 1. Introduction 
 
@@ -23,7 +38,8 @@ GENERAL NOTES:
   + map of study area 
   + bar graph of cyanobacteria bloom timing being different every year (long-term monitoring)
   
-Anthropogenic eutrophication of natural water bodies, meaning increased nutrient concentration due to human activities, is a global phenomenon that often leads to higher rates of primary production and decreased utility of aquatic ecosystems (@reynolds_cyanobacterial_1987; @paerl_nuisance_1988; @paerl_controlling_2011). Eutrophication, coupled with warmer temperatures and higher CO2 concentrations, has caused increases in cyanobacteria blooms, a type of potentially toxic prokaryotic plankton, in coastal oceans, some parts of the Laurentian Great Lakes, and thousands of inland lakes and ponds (@paerl_harmful_2001, @paerl_controlling_2011; @paerl_blooms_2008). Phytoplankton play an integral role as the base of aquatic food webs in both freshwater and marine systems, however, when cyanobacteria growth is unchecked, blooms can be detrimental to organisms living in and around freshwater ecosystems and often cause problems that propagate up the food web (@karjalainen_ecosystem_2007, @arend_seasonal_2010). The climate is changing and environmental conditions are becoming more favorable for bloom-forming harmful cyanobacteria (@johnk_summer@2006; @paerl_blooms_2008; @jeppesen_climate_2011; @huisman_cyanobacterial_2018). Therefore, it is becoming increasingly important to understand cyanobacteria bloom onset and senescence. Understanding why and when severe cyanobacteria blooms occur will help inform mitigation efforts. 
+Anthropogenic eutrophication of natural water bodies, meaning increased nutrient concentration due to human activities, is a global phenomenon that often leads to higher rates of primary production and decreased utility of aquatic ecosystems (@reynolds_cyanobacterial_1987; @paerl_nuisance_1988; @paerl_controlling_2011). Eutrophication, coupled with warmer temperatures and higher CO2 concentrations, has caused increases in cyanobacteria blooms, a type of potentially toxic prokaryotic plankton, in coastal oceans, some parts of the Laurentian Great Lakes, and thousands of inland lakes and ponds (@paerl_harmful_2001, @paerl_controlling_2011; @paerl_blooms_2008). Phytoplankton play an integral role as the base of aquatic food webs in both freshwater and marine systems, however, when cyanobacteria growth is unchecked, blooms can be detrimental to organisms living in and around freshwater ecosystems and often cause problems that propagate up the food web (@karjalainen_ecosystem_2007, @arend_seasonal_2011). The climate is changing and environmental conditions are becoming more favorable for bloom-forming harmful cyanobacteria (@johnk_summer_2006; @paerl_blooms_2008; @jeppesen_climate_2011; @huisman_cyanobacterial_2018). Therefore, it is becoming increasingly important to understand cyanobacteria bloom onset and senescence. Understanding why and when severe cyanobacteria blooms occur will help inform mitigation efforts. 
+
 
 ### 1.1 Factors that drive cyanobacteria blooms 
 
@@ -47,18 +63,17 @@ How does lake size (area/depth) affect which drivers may be relatively important
 
 ### 2.1 study sites
 
-Missisquoi (MB) and St. Albans (SA) bays are both shallow eutrophic bays 18 km apart in the Northeastern part of Lake Champlain (Fig. 1). MB and SA were chosen for this study because both started experiencing anthropogenic eutrophication in the early 20th century and frequently have cyanobacteria blooms in the late summer months (@levine_eutrophication_2011). Their proximity to one another and their differing geomorphometry make this an interesting comparison of how external factors influence the timing and severity of cyanobacteria blooms. Surface area of MB is ten times greater than SA (77.5 ha and 7 ha, respectively). 
+Missisquoi (MB) and St. Albans (SA) bays are both shallow eutrophic bays 18 km apart in the Northeastern part of Lake Champlain (Fig. 1). MB and SA were chosen for this study because both started experiencing anthropogenic eutrophication in the early 20th century and frequently have cyanobacteria blooms in the late summer months (@levine_eutrophication_2012). Their proximity to one another and their differing geomorphometry make this an interesting comparison of how external factors influence the timing and severity of cyanobacteria blooms. Surface area of MB is ten times greater than SA (77.5 ha and 7 ha, respectively). 
 
 ### 2.2 High-frequency data   
 
-YSI monitoring platforms were deployed in MB and SA from late spring to late fall in 2017 and 2018. One platform was moored in MB (N 44˚59.511’, W 073˚06.777’) and equipped with a YSI 6-series sonde with sensors to measure water temperature, specific conductivity, optical dissolved oxygen, pH, phycocyanin, and chlorophyll a. Per recommendation from YSI, freshly calibrated 6-series sondes were swapped out every 4 to 6 weeks and cross-checked for continuity between sensors. Two platforms were moored in SA (one in the shallower, northeastern portion of SA, N 44˚47.588’, W 073˚09.308’, and one in the deeper, southern portion of the bay, N 44˚46.403’, W 073˚10.469’). In SA, the monitoring platforms were equipped with YSI EXO2 sondes with sensors that measured water temperature, conductivity, optical dissolved oxygen, pH, and phycocyanin/chlorophyll a. Per recommendation from YSI, pH and optical dissolved oxygen sensors were calibrated every 90 days. At all three sites, hourly depth profiles were made at 0.5 m increments. Profiles started 0.5 m from the surface and went down to ~1 m off the bottom sediment (bottom depth varied throughout the summer and at each monitoring station depending on lake water level). The difference between surface water tempertaure and bottom water temperature (\Delta Temperature) was calculated for each hourly profile and used as a proxy for stratification.
+YSI monitoring platforms were deployed in MB and SA from late spring to late fall in 2017 and 2018. One platform was moored in MB (N 44˚59.511’, W 073˚06.777’) and equipped with a YSI 6-series sonde with sensors to measure water temperature, specific conductivity, optical dissolved oxygen, pH, phycocyanin, and chlorophyll a. Per recommendation from YSI, freshly calibrated 6-series sondes were swapped out every 4 to 6 weeks and cross-checked for continuity between sensors. Two platforms were moored in SA (one in the shallower, northeastern portion of SA, N 44˚47.588’, W 073˚09.308’, and one in the deeper, southern portion of the bay, N 44˚46.403’, W 073˚10.469’). In SA, the monitoring platforms were equipped with YSI EXO2 sondes with sensors that measured water temperature, conductivity, optical dissolved oxygen, pH, and phycocyanin/chlorophyll a. Per recommendation from YSI, pH and optical dissolved oxygen sensors were calibrated every 90 days. At all three sites, hourly depth profiles were made at 0.5 m increments. Profiles started 0.5 m from the surface and went down to ~1 m off the bottom sediment (bottom depth varied throughout the summer and at each monitoring station depending on lake water level). The difference between surface water tempertaure and bottom water temperature ($\Delta$ Temperature) was calculated for each hourly profile and used as a proxy for stratification.
 
-River discharge data was obtained from USGS gages in both the Missisquoi (Station 0429400, Missisquoi River at Swanton, Vermont) and St. Albans (Station 04292810, Jewett Brook near St. Albans, Vermont) watersheds. Meteorological data was obtained using a a HOBO RX3000 remote monitoring station data logger (Onset Computer Corporation, 470 MacArthur Blvd., Bourne, MA 02532) deployed at the outer YSI water quality monitoring station in SA. Data was collected every 1 min - 15 min on wind speed and direction, air temperature, and solar radiation. 
+Riverine discharge data was obtained from USGS gages in both the Missisquoi (Station 0429400, Missisquoi River at Swanton, Vermont) and St. Albans (Station 04292810, Jewett Brook near St. Albans, Vermont) watersheds. Meteorological data was obtained using a a HOBO RX3000 remote monitoring station data logger (Onset Computer Corporation, 470 MacArthur Blvd., Bourne, MA 02532) deployed at the outer YSI water quality monitoring station in SA. Data was collected every 1 min - 15 min on wind speed and direction, air temperature, and solar radiation. 
   
 ```{r, message = F, echo = F, out.width = "75%", fig.align="center", fig.cap = "Bathymetric map of Missisquoi and St. Albans Bays with the associated watersheds outlined in green and pink, respectively. Yellow triangles indicate Vermont EPSCoR high-frequency monitoring stations. Black dots indicate Vermont DEC long-term monitoring stations. The largest rivers flowing into Missisquoi Bay (Missisquoi, Rock, and Pike Rivers) are labeled and the two largest brooks flowing into St. Ablans Bay (Jewett and Stevens Brook) are labeled. Land use categories are depicted for each watershed." } 
-library(knitr)
 
-img1_path <- "data/Presentation_Map_EPSCOR_Lake_Sites2018-1-6.jpg"
+img1_path <- "figData/Presentation_Map_EPSCOR_Lake_Sites2018-1-6.jpg"
 
 include_graphics(img1_path)
 
@@ -80,6 +95,7 @@ In addition to collapsing our hourly buoy data into daily averages for each envi
 
 #### 2.2.2 Meteorological and river discharge data 
 
+- daily averages, comparison between MB met data 
 
 
 ### 2.3 Data analysis - feature importance 
@@ -92,116 +108,153 @@ Generally, importance provides a score that indicates how useful or valuable eac
 
 Importance is calculated for a single decision tree by the amount that each attribute split point improves the performance measure, weighted by the number of observations the node is responsible for. The performance measure may be the purity (Gini index) used to select the split points or another more specific error function.The feature importances are then averaged across all of the the decision trees within the model @hastie2009elements. These features will help further down the road in developing a predictive model. 
 
-## 3. Results  
+## 3. Results and Discussion 
+
+### 3.1 Time series
+
+2017 was a wet and stormy summer and the timing of the blooms was later in the summer than is typical (insert stat about the usual timing of the blooms either form LT monitoring data ie. can get an average DOY for the start of blooms and/or average DOY for peak cyano biovolume) and blooms were temporally offset between the bays (Figs 2 and 3). Conversely, 2018 was a drought summer (insert cumulative rainfall or discharge values here comparing the 2 years). From July 1, 2017 to September 1, 2017 there were seven discharge events in the Missisquoi River that had a flow rate higher than 40 $m^3/s$ and in 2018 during that same time period there was only one event with a flow rate higher than 40 $m^3/s$. Cyanobacteria optimally grow in water temperatures at or higher than 20°C, and growth rates increase with temperature, however in both bays the water temperature was at or above 20°C starting in early July (except for a cold front the first two weeks of September), suggesting that temperature was not the limiting factor delaying the cyanobacteria blooms. 
+
+#### 3.1.1 2017 Cyanobacteria bloom development 
+
+The timing of the bloom in SA was temporally offset from the bloom in MB (Figs 2 and 3). There was a short three-day increase in PC levels from 1 RFU to 12 RFU in SA the second week of August (*note: this small August bloom is not shown on the graphs in this paper because the buoy PC sensor wasn't turned on yet accidentally and I have to manually enter the weekly data I have from that time period, but the small bloom was confirmed via satellite imagery, which also isn't included yet in this paper*). There were no cyanobacteria present in MB during this period. PC levels began to increase again in SA on September 1, 2017, coinciding with the 5°C drop in water temperature and a well-mixed water column (Fig. 3). Highest PC values in SA were on September 7, 2017 and they steadily declined until September 18, 2017. PC levels remained low, ranging from 2 to 4 RFU for the remainder of the field season. PC levels were low in MB from mid-June until mid-September when the bloom started after the first extended period of stratification developed (Fig. 2). Previous research suggests that water column stratification is an important driver of cyanobacteria blooms in shallow systems, such as MB and SA, and blooms often begin directly after the onset of water stratification because of the biogeochemical processes that promote internal loading of P from the sediment under anoxic conditions (@isles_dynamic_2015; @giles_mobility_2016). In 2017, the bloom in MB responded similarly as in previous years and spiked immediately following the extended period of stratification, however, the opposite was true in SA where peak PC levels were just before the water column stratified and declined during the period of water column stratification (Fig. 3). Buoy data from the 2017 cyanobacteria bloom in MB suggests that water stratification was the main driver of bloom development. This mechanism for bloom development agrees with our understanding of this system and similarly configured shallow, eutrophic systems (@isles_dynamic_2015; @giles_mobility_2016). The wet, stormy nature of the 2017 summer meant the water column was well-mixed until late in the summer. Water temperatures stay above 20°C until October, and the bloom continued into the fall, eventually being shut down by the cold temperatures and well-mixed water column. Timing of the 2017 cyanobacteria blooms in SA did not closely follow periods of stratification, indicating a marked difference in the drivers of blooms in these two systems (Figs. 2 and 3). 
+
+#### 3.1.2 2018 Cyanobacteria bloom development 
+
+[haven't done this for 2018 yet]
+
+### 3.2 Feature importance 
+
+Feature importance with both bays and years combined suggests that discharge, solar radiation, and specific conductivity were the most important features for explaining contemporaneous PC levels, while air temperature, solar radiation and wind speed were most important for future PC levels (Fig. 4). Year was an important feature, while Bay was not.
+
+Feature importance for each bay with years combined (Figure 2): 
+Discharge was the dominant feature in AB. Solar radiation was somewhat important in the near-term, but became less so with increasing lag. $\Delta$ temperature was also somewhat important, particularly 2-5 days in the future. For MB, there was no single dominant feature. Discharge was most important for contemporaneous PC levels (0-1 days out), wind direction was most important in the near-term (2 days out), and specific conductivity was most important 4-6 days out. Air temperature was somewhat important throughout. Wind speed was somewhat important in the mid-term (particularly 2-4 days out), and $\Delta$ temperature was somewhat important for contemporaneous levels (0-1 day out).
 
 
-### 3.1 Time Series
+- Feature importance for each year with bays combined (Figure 3): 
+In 2017, discharge was the most important feature for explaining contemporaneous PC levels (0-1 days out). Air temperature and solar radiation were important in the mid-term (peaking in importance around 4 days out), and $\Delta$ temperature and specific conductivity became increasingly important over time. 
+In 2018, the importance of each feature was more uniform across time. Air temperature was the dominant feature, followed by solar radiation, discharge, and wind speed. $\Delta$ temperature was somewhat important in the short-term.
 
-```{r, echo = F, message = F, warning= FALSE, fig.height = 6, fig.width = 7, fig.cap= "Timeseries of PC levels and environmental factors in MB. 2017: solid line. 2018: dashed line."}
-#Load relevant packages
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-#install.packages("padr")
-library(padr)
-library(zoo)
+
+- Feature importance for each  bay and year (Figure 4):
+Air temperature, discharge, and specific conductivity were most important for AB17. For MB17, discharge was the most important feature for contemporaneous and short-term PC levels (0-1 days), while $\Delta$ temperature became increasingly dominant with increased time lag. Solar radiation and air temperature were also important in the mid-term (2-4 days). 
+Discharge was the dominant feature throughout time in AB18, followed by solar radiation. Air temperature was the dominant feature throughout time in MB18, although $\Delta$ temperature and wind direction were important in the short-term (1 day out and 2 days out, respectively), wind speed was increasingly important with increased lag, and solar radiation was somewhat important throughout time.
+
+- what we know right now is that 6 days out, pH is IMPORTANT for PC but the next step is figuring out if it's PREDICTIVE of a bloom --> need to build model 
+- We got kinda hung up on the fact that there were parameters in the feature analysis results that were highly correlated with PC (response variable) but Easton reminded us that if our main goal is to predict a bloom, Chl or PC levels 6 days before is important to include if we are building a predictive model because that's still useful info ! Like it'd be great if we could predict if a bloom would start in 6 days just by knowing PC or Chl levels. 
+- IMPORTANT POINT: there is a difference between mechanistic models and predictive models. Depending on how we decide to move forward (ie. which model we choose) we might not really need to understand the mechanisms driving the blooms because we might just try throwing all the data into a machine learning algorithm that tells us the relative predictive power of each of the parameters (I think...). 
+
+```{r, echo = F, message = F, warning= FALSE, fig.height = 6, fig.width = 7, fig.cap= "Timeseries of PC and environmental parameters in MB. Data from 2017 is the solid line and data from 2018 is the dashed lined." }
+
 
 #Load Data
-MB17 <- read.csv("data/mbAll17.csv", header = T) 
-MB18 <- read.csv("data/mbAll18.csv", header = T)
-SA17 <- read.csv("data/abAll17.csv", header = T)
-SA18 <- read.csv("data/abAll18.csv", header = T)
+multmerge <- function(mypath){
+  filenames=list.files(path=mypath, full.names=TRUE)
+  datalist = lapply(filenames, function(x){read.csv(file=x,header=T)})
+  Reduce(function(x,y) {merge(x,y,all = TRUE)}, datalist)
+}
+###############################################################
+
+db <- multmerge("buoyData/")
 
 #Fix Date Format
-MB17 <- MB17 %>% 
-  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
-MB17 <- pad(MB17, interval = "day")
+db2 <- db %>% 
+  select(-c(X, pHMean, TempMean, ODOMean, ChlMean, TurbMean, DeltaDOMean, PCMean2:PCMean7)) %>% 
+  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")),
+         doy = as.numeric(strftime(date, format = "%j", tz = "Etc/GMT-4"))) %>% 
+  rename(PC = PCMean1,
+         DeltaTemp = DeltaTempMean,
+         Discharge = discharge,
+         Solar = solar,
+         SpCond = SpCondMean,
+         AirTemp = temp) %>% 
+  gather(key = "parameter", value = "value", 
+         c(PC, DeltaTemp, Discharge, Solar, SpCond, AirTemp, wd, ws))  
 
-MB18 <- MB18 %>% 
-  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
-MB18 <- pad(MB18, interval = "day")
+#reordering the parameters so when i plot it matches the colors of the stacked bar graphs 
+db2$parameter <- factor(db2$parameter, c("PC", "DeltaTemp", "Discharge", "Solar", "SpCond", "AirTemp", "wd", "ws"))
 
-SA17 <- SA17 %>% 
-  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
-SA17 <- pad(SA17, interval = "day")
-
-SA18 <- SA18 %>% 
-  mutate(date = as.POSIXct(strptime(date, format = "%m/%d/%Y", tz = "Etc/GMT-4")))
-SA18 <- pad(SA18, interval = "day")
-
-#Select&Rename
-shorten <- function(df){
-  newdf <- df %>% 
-    select(c(date, "PCMean1",
-                                     "DeltaTempMean",
-                                     "discharge",
-                                     "SpCondMean",
-                                     "temp",
-                                     "solar",
-                                     "ws",
-                                     "wd")) %>% 
-    rename(PC = PCMean1,
-         Strat = DeltaTempMean,
-         Q = discharge,
-         Sal = SpCondMean,
-         Temp = temp,
-         Sun = solar,
-         WS = ws,
-         WD = wd)
-    return(newdf)
-}
-
-MB17_short <- shorten(MB17)
-MB17_short$day <- strftime(MB17_short$date, format = "%j", tz = "Etc/GMT-4")
-MB18_short <- shorten(MB18)
-MB18_short$day <- strftime(MB18_short$date, format = "%j", tz = "Etc/GMT-4")
-
-SA17_short <- shorten(SA17)
-SA17_short$day <- strftime(SA17_short$date, format = "%j", tz = "Etc/GMT-4")
-SA18_short <- shorten(SA18)
-SA18_short$day <- strftime(SA18_short$date, format = "%j", tz = "Etc/GMT-4")
-
-#Tidy
-MB17_tidy <- gather(MB17_short, "PC":"WD", key = "Variable", value = "Value") 
-MB18_tidy <- gather(MB18_short, "PC":"WD", key = "Variable", value = "Value") 
-SA17_tidy <- gather(SA17_short, "PC":"WD", key = "Variable", value = "Value") 
-SA18_tidy <- gather(SA18_short, "PC":"WD", key = "Variable", value = "Value") 
+# the "paired" rColorBrewer palette is the one i use later for the stacked bar graphs, however, those didn't include PC as a parameter (because that was the predictor).
+# so i got the values from the "paired" palette using brewer.pal and then added black to the beginning to make myCols
+#brewer.pal(7, "Paired") 
+myCols <- c("black", "#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C", "#FB9A99", "#E31A1C", "#FDBF6F")
 
 #Plot MB
-ggplot(NULL, aes(x = day, y = Value, group = Variable, color = Variable)) +
-  geom_line(data = MB17_tidy, show.legend = FALSE) + 
-  geom_line(data = MB18_tidy, show.legend = FALSE, linetype = "dashed") + 
-  labs(title = "MB") + xlab("Day of year") + 
-  facet_grid(rows = "Variable", scales = "free_y", switch = "both") +
-  scale_x_discrete(breaks = seq(120,310,30))+
-  theme_light() 
+db2 %>% 
+  filter(bay == "MB") %>% 
+  ggplot(aes(x = doy, y = value, group = year, color = parameter)) +
+  geom_line(aes(linetype = as.factor(year)))+
+  scale_color_manual(values = myCols, 
+                     labels = c("PC (RFU)", 
+                                expression(Delta~"Temperature"),
+                                expression("Discharge ("~m^3~"/"~"s"~")"), 
+                                expression("Solar Radiation ("~"W"~"/"~m^2~")"), 
+                                expression("Specific Conductivity ("~"mS"~"/"~cm~")"), 
+                                "Air temperature (°C)",
+                                "Wind direction (°)",
+                                "Wind speed (m/s)")) +
+  labs(title = "Missisquoi Bay") + xlab("Day of year") + 
+  facet_grid(rows = "parameter", scales = "free_y", switch = "both")+
+  theme_light()+
+  theme(title = element_text(size = 10), 
+        axis.text = element_text(size = 10),
+        axis.title.y = element_blank(), 
+        strip.background = element_blank(), 
+        strip.text = element_blank(),
+        axis.text.y = element_text(size = 6),
+        legend.title = element_blank(),
+        legend.text.align = 0, 
+        legend.position = "bottom", 
+        legend.box = "vertical")
+
+
+
+
+
 ```
 
 
-```{r, echo = F, message = F, warning= FALSE, fig.height = 6, fig.width = 7, fig.cap= "Timeseries of PC levels and environmental factors in SA. 2017: solid line. 2018: dashed line."}
+
+```{r, echo = F, message = F, warning= FALSE, fig.height = 6, fig.width = 7, fig.cap= "Timeseries of PC and environmental parameters in SA. Data from 2017 is the solid line and data from 2018 is the dashed lined." }
+
 #Plot SA
-ggplot(NULL, aes(x = day, y = Value, group = Variable, color = Variable)) +
-  geom_line(data = SA17_tidy, show.legend = FALSE) + 
-  geom_line(data = SA18_tidy, show.legend = FALSE, linetype = "dashed") + 
-  labs(title = "SA") + xlab("Day of year") + 
-  facet_grid(rows = "Variable", scales = "free_y", switch = "both") +
-  scale_x_discrete(breaks = seq(120,310,30))+
-  theme_light() 
+db2 %>% 
+  filter(bay == "AB") %>% 
+  ggplot(aes(x = doy, y = value, group = year, color = parameter)) +
+  geom_line(aes(linetype = as.factor(year)))+
+  scale_color_manual(values = myCols, 
+                     labels = c("PC (RFU)", 
+                                expression(Delta~"Temperature"),
+                                expression("Discharge ("~m^3~"/"~"s"~")"), 
+                                expression("Solar Radiation ("~"W"~"/"~m^2~")"), 
+                                expression("Specific Conductivity ("~mu~"S"~"/"~cm~")"), 
+                                "Air temperature (°C)",
+                                "Wind direction (°)",
+                                "Wind speed (m/s)")) +
+  labs(title = "St. Albans Bay") + xlab("Day of year") + 
+  facet_grid(rows = "parameter", scales = "free_y", switch = "both")+
+  theme_light()+
+  theme(title = element_text(size = 10), 
+        axis.text = element_text(size = 10),
+        axis.title.y = element_blank(), 
+        strip.background = element_blank(), 
+        strip.text = element_blank(),
+        axis.text.y = element_text(size = 6),
+        legend.title = element_blank(),
+        legend.text.align = 0, 
+        legend.position = "bottom", 
+        legend.box = "vertical")
+
 ```
 
-
-*Ideally we should fix the parameter labels on these and include a key with solid vs dotted...*
 
 
 ### 3.2 Feature Importance Results
 
-```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance with all  bays and years combined."}
+```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance with all  bays and years combined." }
 
-library(ggplot2)
-library(RColorBrewer)
-library(dplyr)
 
-results_2 <- read.csv("data/allCombined.csv") 
+
+results_2 <- read.csv("figData/allCombined.csv") 
 
 results_2 <- results_2 %>% 
   select(-c(X))
@@ -227,9 +280,9 @@ results_2 %>%
 ```
 
 
-```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance for each bay with years combined."}
+```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance for each bay with years combined." }
 
-results_3 <- read.csv("data/Sep_bay.csv") 
+results_3 <- read.csv("figData/Sep_bay.csv") 
 
 results_3 <- results_3 %>% 
   select(-c(X))
@@ -256,9 +309,9 @@ results_3 %>%
 ```
 
 
-```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance for each year with bays combined."}
+```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance for each year with bays combined." }
 
-results_4 <- read.csv("data/Sep_year.csv") 
+results_4 <- read.csv("figData/Sep_year.csv") 
 
 results_4 <- results_4 %>% 
   select(-c(X))
@@ -285,10 +338,10 @@ results_4 %>%
 ```
 
 
-```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance for each  bay and year."}
+```{r, echo = F, message = F, warning= FALSE, fig.cap= "Feature importance for each  bay and year." }
 
 
-results_1 <- read.csv("data/Sep_bay_and_year.csv") 
+results_1 <- read.csv("figData/Sep_bay_and_year.csv") 
 
 results_1 <- results_1 %>% 
   select(-c(X))
@@ -326,26 +379,7 @@ results_1 %>%
 
 ## 4. Discussion 
 
-- Feature importance with all  bays and years combined (Figure 1):
-Discharge, solar radiation, and specific conductivity were the most important features for explaining contemporaneous PC levels, while air temperature, solar radiation and wind speed were most important for future PC levels. Year was an important feature, while Bay was not.
 
-
-- Feature importance for each bay with years combined (Figure 2): 
-Discharge was the dominant feature in AB. Solar radiation was somewhat important in the near-term, but became less so with increasing lag. $\Delta$ temperature was also somewhat important, particularly 2-5 days in the future. For MB, there was no single dominant feature. Discharge was most important for contemporaneous PC levels (0-1 days out), wind direction was most important in the near-term (2 days out), and specific conductivity was most important 4-6 days out. Air temperature was somewhat important throughout. Wind speed was somewhat important in the mid-term (particularly 2-4 days out), and $\Delta$ temperature was somewhat important for contemporaneous levels (0-1 day out).
-
-
-- Feature importance for each year with bays combined (Figure 3): 
-In 2017, discharge was the most important feature for explaining contemporaneous PC levels (0-1 days out). Air temperature and solar radiation were important in the mid-term (peaking in importance around 4 days out), and $\Delta$ temperature and specific conductivity became increasingly important over time. 
-In 2018, the importance of each feature was more uniform across time. Air temperature was the dominant feature, followed by solar radiation, discharge, and wind speed. $\Delta$ temperature was somewhat important in the short-term.
-
-
-- Feature importance for each  bay and year (Figure 4):
-Air temperature, discharge, and specific conductivity were most important for AB17. For MB17, discharge was the most important feature for contemporaneous and short-term PC levels (0-1 days), while $\Delta$ temperature became increasingly dominant with increased time lag. Solar radiation and air temperature were also important in the mid-term (2-4 days). 
-Discharge was the dominant feature throughout time in AB18, followed by solar radiation. Air temperature was the dominant feature throughout time in MB18, although $\Delta$ temperature and wind direction were important in the short-term (1 day out and 2 days out, respectively), wind speed was increasingly important with increased lag, and solar radiation was somewhat important throughout time.
-
-- what we know right now is that 6 days out, pH is IMPORTANT for PC but the next step is figuring out if it's PREDICTIVE of a bloom --> need to build model 
-- We got kinda hung up on the fact that there were parameters in the feature analysis results that were highly correlated with PC (response variable) but Easton reminded us that if our main goal is to predict a bloom, Chl or PC levels 6 days before is important to include if we are building a predictive model because that's still useful info ! Like it'd be great if we could predict if a bloom would start in 6 days just by knowing PC or Chl levels. 
-- IMPORTANT POINT: there is a difference between mechanistic models and predictive models. Depending on how we decide to move forward (ie. which model we choose) we might not really need to understand the mechanisms driving the blooms because we might just try throwing all the data into a machine learning algorithm that tells us the relative predictive power of each of the parameters (I think...). 
 
 ## 5. Future Work (MC)
 
