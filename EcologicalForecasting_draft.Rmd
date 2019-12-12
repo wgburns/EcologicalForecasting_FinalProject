@@ -15,14 +15,11 @@ editor_options:
 ```{r, message = F, echo = F }
 #Preliminaries 
 library(knitr)
-
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(zoo)
 library(RColorBrewer)
-
-
 
 ```
 
@@ -53,13 +50,23 @@ How does lake size (area/depth) affect which drivers may be relatively important
 
 ## 2.1 Study sites
 
+<<<<<<< HEAD
 Missisquoi (MB) and St. Albans (AB) bays are both shallow eutrophic bays 18 km apart in the Northeastern part of Lake Champlain (Fig. 1). MB and AB were chosen for this study because both started experiencing anthropogenic eutrophication in the early 20th century and frequently have cyanobacteria blooms in the late summer months (@levine_eutrophication_2012). Their proximity to one another and their differing geomorphometry make this an interesting comparison of how external factors influence the timing and severity of cyanobacteria blooms. Surface area of MB is ten times greater than AB (77.5 ha and 7 ha, respectively). *[insert more information here about differences between the bays]*
+=======
+Missisquoi (MB) and St. Albans (SA) bays are both shallow eutrophic bays 18 km apart in the Northeastern part of Lake Champlain (Fig. 1). MB and SA were chosen for this study because both started experiencing anthropogenic eutrophication in the early 20th century and frequently have cyanobacteria blooms in the late summer months (@levine_eutrophication_2012). Their proximity to one another and their differing geomorphology make this an interesting comparison of how external factors influence the timing and severity of cyanobacteria blooms. Surface area of MB is ten times greater than SA (77.5 ha and 7 ha, respectively). 
+>>>>>>> 32406c1cc4b67a9c5bee22ccc2d03ac21bfbaead
 
 ## 2.2 High-frequency data   
 
+<<<<<<< HEAD
 YSI monitoring platforms were deployed in MB and AB from late spring to late fall in 2017 and 2018. One platform was moored in MB (N 44˚59.511’, W 073˚06.777’) and equipped with a YSI 6-series sonde with sensors to measure water temperature, specific conductivity, optical dissolved oxygen, pH, phycocyanin, and chlorophyll a. Per recommendation from YSI, freshly calibrated 6-series sondes were swapped out every 4 to 6 weeks and cross-checked for continuity between sensors. Two platforms were moored in AB (one in the shallower, northeastern portion of AB, N 44˚47.588’, W 073˚09.308’, and one in the deeper, southern portion of the bay, N 44˚46.403’, W 073˚10.469’). In AB, the monitoring platforms were equipped with YSI EXO2 sondes with sensors that measured water temperature, conductivity, optical dissolved oxygen, pH, and phycocyanin/chlorophyll a. Per recommendation from YSI, pH and optical dissolved oxygen sensors were calibrated every 90 days. At all three sites, hourly depth profiles were made at 0.5 m increments. Profiles started 0.5 m from the surface and went down to ~1 m off the bottom sediment (bottom depth varied throughout the summer and at each monitoring station depending on lake water level). The difference between surface water tempertaure and bottom water temperature ($\Delta$ Temperature) was calculated for each hourly profile and used as a proxy for stratification.
 
 Riverine discharge data was obtained from USGS gages in both the Missisquoi (Station 0429400, Missisquoi River at Swanton, Vermont) and St. Albans (Station 04292810, Jewett Brook near St. Albans, Vermont) watersheds. Meteorological data was obtained using a a HOBO RX3000 remote monitoring station data logger (Onset Computer Corporation, 470 MacArthur Blvd., Bourne, MA 02532) deployed at the outer YSI water quality monitoring station in AB. Data was collected every 1 min - 15 min on wind speed and direction, air temperature, and solar radiation. 
+=======
+YSI monitoring platforms were deployed in MB and SA from late spring to late fall in 2017 and 2018. One platform was moored in MB (N 44˚59.511’, W 073˚06.777’) and equipped with a YSI 6-series sonde with sensors to measure water temperature, specific conductivity, optical dissolved oxygen, pH, phycocyanin, and chlorophyll a. Per recommendation from YSI, freshly calibrated 6-series sondes were swapped out every 4 to 6 weeks and cross-checked for continuity between sensors. Two platforms were moored in SA (one in the shallower, northeastern portion of SA, N 44˚47.588’, W 073˚09.308’, and one in the deeper, southern portion of the bay, N 44˚46.403’, W 073˚10.469’). In SA, the monitoring platforms were equipped with YSI EXO2 sondes with sensors that measured water temperature, conductivity, optical dissolved oxygen, pH, and phycocyanin/chlorophyll a. Per recommendation from YSI, pH and optical dissolved oxygen sensors were calibrated every 90 days. At all three sites, hourly depth profiles were made at 0.5 m increments. Profiles started 0.5 m from the surface and went down to ~1 m off the bottom sediment (bottom depth varied throughout the summer and at each monitoring station depending on lake water level). The difference between surface water temperature and bottom water temperature ($\Delta$ Temperature) was calculated for each hourly profile and used as a proxy for stratification.
+
+Riverine discharge data was obtained from USGS gauges in both the Missisquoi (Station 0429400, Missisquoi River at Swanton, Vermont) and St. Albans (Station 04292810, Jewett Brook near St. Albans, Vermont) watersheds. Meteorological data was obtained using a a HOBO RX3000 remote monitoring station data logger (Onset Computer Corporation, 470 MacArthur Blvd., Bourne, MA 02532) deployed at the outer YSI water quality monitoring station in SA. Data was collected every 1 min - 15 min on wind speed and direction, air temperature, and solar radiation. 
+>>>>>>> 32406c1cc4b67a9c5bee22ccc2d03ac21bfbaead
   
 
 ## 2.2 Preparing data for analysis 
@@ -95,7 +102,8 @@ Importance is calculated for a single decision tree by the amount that each attr
 
 ## 3.1 Description of environmental parameters 
 
-2017 was a wet and stormy summer and the bloom timing was later in the summer than usual and different between the bays (insert stat about the usual timing of the blooms either form LT monitoring data ie. can get an average DOY for the start of blooms and/or average DOY for peak cyano biovolume). Conversely, 2018 was a drought summer. In 2017, average discharge rates were `rQMB`% higher than in 2018 in the Mississquoi River, and `rQAB`% higher in Jewett Brook (that flows into AB). There were seven discharge events in the Missisquoi River that had a flow rate higher than 40 $m^3/s$ from July 1, 2017 to September 1, 2017 and in 2018 during that same time period, there was only one event with a flow rate higher than 40 $m^3/s$. Cyanobacteria optimally grow in water temperatures at or higher than 20°C, and growth rates increase with temperature, however water temperature in both bays during 2017 was at or above 20°C starting in early July (except for a cold front the first two weeks of September), suggesting that temperature was not the limiting factor delaying the cyanobacteria blooms (Fig. 2). 
+2017 was a wet and stormy summer and the bloom timing was later in the summer than usual and differed between the bays (insert stat about the usual timing of the blooms either form LT monitoring data ie. can get an average DOY for the start of blooms and/or average DOY for peak cyano biovolume). Conversely, 2018 was a drought summer. In 2017, average discharge rates were 1.7 higher than in 2018 in the  Mississquoi River, and 6.6 higher in Jewett Brook (that flows into AB). There were seven discharge events in the Missisquoi River that had a flow rate higher than 40 $m^3/s$ from July 1, 2017 to September 1, 2017 and in 2018 during that same time period, there was only one event with a flow rate higher than 40 $m^3/s$. Cyanobacteria optimally grow in water temperatures at or higher than 20°C, and growth rates increase with temperature, however water temperature in both bays during 2017 was at or above 20°C starting in early July (except for a cold front the first two weeks of September), suggesting that temperature was not the limiting factor delaying the cyanobacteria blooms (Fig. 2). 
+
 
 #### 3.1.1 Cyanobacteria bloom development in 2017 
 
@@ -396,3 +404,57 @@ results_1 %>%
   facet_wrap(~bay+year)
 
 ```
+<<<<<<< HEAD
+=======
+
+
+### 3.3 Correlations
+
+*I made correlations matrices for pretty much every environmental parameter with the 7 time steps of PC data to look at trends of how correlations with PC change with increasing time lag... Sometimes they show similar trends as feature importance, but sometimes not. In theory I could summarize these correlations coefficients into a chart with environmental parameters by PC time steps, which could be interesting for looking at trends. I could even graph them! But I haven't yet because I don't know enough about the statistics behind correlation coefficients to know if I'm using them properly. Like do we need to normalize the data first? Probably? See All_the_correlations.Rmd/pdf for all the correlations. - MC*
+
+- Made lots of correlation matrices. Not sure if they're statistically legit.
+
+- Haven't summarized trends yet: match feature importance sometimes, not always
+
+- Discharge and salinity are NOT correlated in MB, but ARE correlated in St. Albans.
+
+## 4. Discussion 
+
+
+
+## 5. Future Work (MC)
+
+We could build on this work in a number of ways, by expanding our data set, correlating our phycocyanin measurements with satellite data or volunteer observations, identifying a bloom threshold, and most importantly, by using our high frequency data to create a forecasting model that could predict cyanobacteria blooms.
+
+First, we could expand our data set by including cumulative degree days as another environmental variable, indicative of temperatures experienced throughout the season up to a given time point. We could collect mean daily temperatures for 2017 and 2018 for the nearest weather stations to the two bays from wunderground.com, and calculate the cumulative degrees above freezing (or above a biologically relevant temperature threshold such as 4&deg;C) for each day. We could then include this variable in analyses such as correlations, feature importance, or a forecasting model.
+
+Second, we could correlate the buoys' measure of PC levels with other indicators of bloom presence such as volunteer observations and satellite data. There is an online data set publicly available with volunteer observations at the two bays: biweekly observations of bloom presence or absence throughout the 2017 and 2018 seasons. Comparing these observations with the daily average PC levels from our buoy sensors on the days of the observations could help us identify a threshold for what PC levels indicate a cyanobacteria bloom for management purposes. 
+
+There is also satellite imagery available covering both bays, and it can be used to calculate a spectral index that's indicative of cyanobacteria presence. We could calculate this index at the position of each buoy for the time points of the available satellite imagery. We could then see how the index correlates with the daily average PC levels measured by the buoys, and examine whether there is a simple, consistent conversion between the two. If there are literature thresholds for what value of the spectral index constitutes a cyanobacteria bloom, we could then use a correlation or conversion to calculate an analogous bloom threshold for our buoy-measured PC levels. Having an accurate bloom threshold would be valuable for investigating bloom drivers and creating a forecasting model. It would give us the option to investigate continuous PC values directly, or convert them to categorical 'Bloom'/'No Bloom' data in case the later is easier to forecast or more strongly correlated with certain drivers.
+
+Finally, our long term goal is to use this high frequency data to develop a forecasting model using machine learning techniques, in the hopes of predicting cyanobacteria blooms a few days before they occur. We would begin by inputting all available high frequency buoy, weather and discharge data, in order to predict PC levels (or a categorical variable for bloom presence or absence). If that proved successful, we would then begin to remove input variables one by one, to see what effect that has on the forecast accuracy. The goal would be to have a functional forecasting model with as few input variables as possible.
+
+## Easton comments
+
+Good job overall describing some background on the system and presenting interesting plots from your analyses. I think your future directions are great and that a lot could come out of this.
+
+A few things to change for the final project:
+
+- make sure the document can compile to a pdf or html
+- include figure captions
+- in your discussion bullet points, be sure to reference which figures support your claims
+
+I look forward to providing more feedback after the final project and next semester. 
+
+## 6. References 
+
+INFO ON HOW TO CITE in .Rmd from https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html : 
+
+* Citations go inside square brackets and are separated by semicolons. Each citation must have a key, composed of ‘@’ + the citation identifier from the database, and may optionally have a prefix, a locator, and a suffix. Here are some examples:
+  + Blah blah [@isles_modeling_2017].
+* Then in Zotero create a `.BibTex` file by going to the library --> Export Library --> change to BibTex
+
+
+
+
+>>>>>>> 32406c1cc4b67a9c5bee22ccc2d03ac21bfbaead
