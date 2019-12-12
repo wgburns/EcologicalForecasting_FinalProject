@@ -15,14 +15,11 @@ editor_options:
 ```{r, message = F, echo = F }
 #Preliminaries 
 library(knitr)
-
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(zoo)
 library(RColorBrewer)
-
-
 
 ```
 
@@ -114,7 +111,7 @@ Importance is calculated for a single decision tree by the amount that each attr
 
 ### 3.1 Time series
 
-2017 was a wet and stormy summer and the timing of the blooms was later in the summer than is typical (insert stat about the usual timing of the blooms either form LT monitoring data ie. can get an average DOY for the start of blooms and/or average DOY for peak cyano biovolume) and blooms were temporally offset between the bays (Figs 2 and 3). Conversely, 2018 was a drought summer. In 2017, average discharge rates were `rQMB`% higher than in 2018 in Mississquoi Bay, and `rQAB`% higher in St. Albans Bay. From July 1, 2017 to September 1, 2017 there were seven discharge events in the Missisquoi River that had a flow rate higher than 40 $m^3/s$ and in 2018 during that same time period there was only one event with a flow rate higher than 40 $m^3/s$. Cyanobacteria optimally grow in water temperatures at or higher than 20°C, and growth rates increase with temperature, however in both bays the water temperature was at or above 20°C starting in early July (except for a cold front the first two weeks of September), suggesting that temperature was not the limiting factor delaying the cyanobacteria blooms. 
+2017 was a wet and stormy summer and the timing of the blooms was later in the summer than is typical (insert stat about the usual timing of the blooms either form LT monitoring data ie. can get an average DOY for the start of blooms and/or average DOY for peak cyano biovolume) and blooms were temporally offset between the bays (Figs 2 and 3). Conversely, 2018 was a drought summer. In 2017, average discharge rates were 167% higher than in 2018 in Mississquoi Bay, and 662% higher in St. Albans Bay. From July 1, 2017 to September 1, 2017 there were seven discharge events in the Missisquoi River that had a flow rate higher than 40 $m^3/s$ and in 2018 during that same time period there was only one event with a flow rate higher than 40 $m^3/s$. Cyanobacteria optimally grow in water temperatures at or higher than 20°C, and growth rates increase with temperature, however in both bays the water temperature was at or above 20°C starting in early July (except for a cold front the first two weeks of September), suggesting that temperature was not the limiting factor delaying the cyanobacteria blooms. 
 
 #### 3.1.1 Cyanobacteria bloom development in 2017 
 
